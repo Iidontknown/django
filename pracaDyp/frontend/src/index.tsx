@@ -6,9 +6,9 @@ import {
   Routes,
   Route,
 } from "react-router-dom";
-import App from './App';
-import Ala from './Ala';
-
+import App from './routes/App';
+import Ala from './routes/Ala';
+import ErrorPage from './routes/ErrorPage';
 const root:ReactDOM.Root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
@@ -19,8 +19,8 @@ root.render(
   <BrowserRouter>
   {/* <navbar /> */}
   <Routes>
-    <Route path="/" element={<App />}/>
-    <Route path="ala" element={<Ala />} />
+    <Route path="/" element={<Ala />}/>
+    <Route path="ala" element={<App />} />
     
   </Routes>
 </BrowserRouter>
