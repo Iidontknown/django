@@ -1,22 +1,29 @@
 import React from 'react';
-import ReactDOM from 'react-dom/client';
 import 'bootstrap/dist/css/bootstrap.css';
-import navbar from './navbar';
-// import App from './App';
+import ReactDOM from "react-dom/client";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+} from "react-router-dom";
+import App from './App';
+import Ala from './Ala';
 
-const root = ReactDOM.createRoot(
+const root:ReactDOM.Root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 
 
 root.render(
-  navbar
   
+  <BrowserRouter>
+  <navbar />
+  <Routes>
+    <Route path="/" element={<App />}/>
+    <Route path="ala" element={<Ala />} />
+    
+  </Routes>
+</BrowserRouter>
 
-   
-  // <React.StrictMode>
-  
-  //   {/* <App /> */}
-  // </React.StrictMode>
 );
 
