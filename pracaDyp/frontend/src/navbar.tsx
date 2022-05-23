@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Link} from 'react-router-dom';
-const navbar= () =>{
+export default function navbar():JSX.Element {
   return (
     <div>
 <h1>Menu</h1>
@@ -8,4 +8,3 @@ const navbar= () =>{
     </div>
   )
 }
-export default navbar

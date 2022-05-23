@@ -9,8 +9,6 @@
     "@types/bootstrap": "^5.1.12",
     "@types/jest": "^27.5.1",
     "@types/node": "^16.11.36",
-    "@types/react": "^18.0.9",
-    "@types/react-dom": "^18.0.4",
     "@types/react-router-dom": "^5.3.3",
     "bootstrap": "^4.6.1",
     "node-sass": "^7.0.1",
@@ -46,5 +44,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/react": "^18.0.9",
+    "@types/react-dom": "^18.0.4"
   }
 }

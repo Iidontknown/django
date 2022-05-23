@@ -17,7 +17,7 @@ const root:ReactDOM.Root = ReactDOM.createRoot(
 root.render(
   
   <BrowserRouter>
-  <navbar />
+  {/* <navbar /> */}
   <Routes>
     <Route path="/" element={<App />}/>
     <Route path="ala" element={<Ala />} />
