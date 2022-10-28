@@ -46,7 +46,18 @@ export default function Katalog():JSX.Element  {
     setCurrentIndex(index);
   };
 
- 
+  const findByTitle = () => {
+    TasksService.findByTitle(searchTitle)
+      .then((response: any) => {
+        settasks(response.data);
+        setCurrentTask(null);
+        setCurrentIndex(-1);
+        console.log(response.data);
+      })
+      .catch((e: Error) => {
+        console.log(e);
+      });
+  };
 
   
 
@@ -54,6 +65,19 @@ export default function Katalog():JSX.Element  {
   return (
     <> 
     <MenuBar/>
+    <input
+            type="text"
+            className="form-control"
+            placeholder="Search by title"
+            value={searchTitle}
+            onChange={onChangeSearchTitle}
+          /><button
+          className="btn btn-outline-secondary"
+          type="button"
+          onClick={findByTitle}
+        >
+          Search
+        </button>
     <ul className="list-group">
           {tasks &&
             tasks.map((task, index) => (
