@@ -1,2 +1,3 @@
 npm run dev
 python manage.py runserver
+.\dar\Scripts\activate  
