@@ -1,3 +1,1 @@
-npm run dev
-python manage.py runserver
-.\dar\Scripts\activate  
+.\env\Scripts\activate

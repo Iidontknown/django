@@ -2,8 +2,8 @@ import http from "../http-common";
 import TasksData from "../types/tasks";
 
 const getAll = () => {
-console.log(http.get<Array<TasksData>>("/tasks/"))
-  return http.get<Array<TasksData>>("/tasks/");
+console.log(http.get("/grupa/"))
+  return http.get("/grupa/");
 };
 
 const get = (id: any) => {

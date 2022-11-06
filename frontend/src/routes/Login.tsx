@@ -1,10 +1,64 @@
 import * as React from 'react';
-import { Link} from 'react-router-dom';
+import { Link, NavigateFunction, useNavigate} from 'react-router-dom';
 import MenuBar from './MenuBar';
-export default function Login():JSX.Element  {
+import { ErrorMessage, Field, Form, Formik} from 'formik';
+import * as Yup from "yup";
+import { login } from '../services/auth.service';
+import { useState } from 'react';
+type Props = {}
+
+const Login: React.FC<Props> = () => {
+  let navigate: NavigateFunction = useNavigate();
+  
+  const [loading, setLoading] = useState<boolean>(false);
+  const [message, setMessage] = useState<string>("");
+
+  const initialValues: {
+    username: string;
+    password: string;
+  } = {
+    username: "",
+    password: "",
+  };
+  const validationSchema = Yup.object().shape({
+    username: Yup.string().required("Pole wymagane"),
+    password: Yup.string().required("Pole wymagane"),
+  });
+  
+  const sendLogin = (formValue:{username:string; password:string})=>{
+   const { username,password}=formValue
+   console.log(username+ password)
+ 
+    login(username, password).then(
+      () => {
+
+        navigate("/konto");
+        window.location.reload();
+      },
+      (error) => {
+        const resMessage =
+          (error.response &&
+            error.response.data &&
+            error.response.data.message) ||
+          error.message ||
+          error.toString();
+
+        setLoading(false);
+        setMessage(resMessage);
+      }
+    );
+
+  }
+
   return (
     <> 
     <MenuBar/>
+    <Formik 
+    initialValues={initialValues}
+    validationSchema={validationSchema}
+    onSubmit={sendLogin}
+    >
+      <Form>
     <div className="container py-1 " >
     <div className="row d-flex justify-content-center align-items-center ">
       <div className="col-12 col-md-8 col-lg-6 col-xl-5">
@@ -16,19 +70,37 @@ export default function Login():JSX.Element  {
               <h2 className="fw-bold mb-2 text-uppercase">Logowanie</h2>
 
               <div className="form-outline form-white mb-4 py-2">
-                <input type="email" id="inputEmail" className="form-control form-control-lg" />
-                <label className="form-label" >Email</label>
+                
+              <label className="form-label" >Email</label>
+                <Field type="text" name="username" className="form-control form-control-lg" />
+                <ErrorMessage
+                          name="username"
+                          component="div"
+                          className="alert alert-danger"
+                        />
               </div>
 
               <div className="form-outline form-white mb-4">
-                <input type="password" id="inputPassword" className="form-control form-control-lg" />
-                <label className="form-label" >Hasło</label>
+                
+              <label className="form-label" >Hasło</label>
+                <Field type="password" name="password" className="form-control form-control-lg" />
+                <ErrorMessage
+                          name="password"
+                          component="div"
+                          className="alert alert-danger"
+                        />
               </div>
 
               <p className="small mb-5 pb-lg-2"><a className="text-white-50" href="#!">Zapomiałem hasło</a></p>
 
               <button className="btn btn-outline-light btn-lg px-5" type="submit">Login</button>
-
+              {message && (
+              <div className="form-group">
+                <div className="alert alert-danger" role="alert">
+                  {message}
+                </div>
+              </div>
+            )}
             </div>
 
             <div>
@@ -41,6 +113,10 @@ export default function Login():JSX.Element  {
       </div>
     </div>
   </div>
+  </Form>
+  </Formik>
       </>
   )
 }
+
+export default Login;
