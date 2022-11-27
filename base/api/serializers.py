@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from rest_framework.validators import UniqueValidator
 from django.contrib.auth.password_validation import validate_password
 from rest_framework.serializers import ModelSerializer
-from base.models import Grupa
+from base.models import Grupa, Modell,Producent
 
 class RegisterSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(
@@ -30,4 +30,46 @@ class RegisterSerializer(serializers.ModelSerializer):
 class GrupaSerializer(ModelSerializer):
     class Meta:
         model=Grupa
-        fields='__all__'
+        fields=('id','nazwa_grupa','user')
+
+class ProducentSerializer(ModelSerializer):
+    nazwa_producent = serializers.CharField(
+            required=True,
+            validators=[UniqueValidator(queryset=Producent.objects.all())]
+            )
+    class Meta:
+        model=Producent
+        fields=('nazwa_producent','id')
+    def create(self, validated_data):
+        producent = Producent.objects.create(
+            nazwa_producent=validated_data['nazwa_producent']
+        )
+        producent.save()
+        return producent
+
+class ModellSerializer(ModelSerializer):
+    class Meta:
+        model=Modell
+        fields=('id','nazwa_model','Producent')
+        
+    def create(self, validated_data):
+        modell = Modell.objects.create(
+            nazwa_model=validated_data['nazwa_model'],
+            Producent=validated_data['Producent'],
+        )
+        modell.save()
+        return modell
+
+class Katalog_nadrzednySerializer(ModelSerializer):
+    class Meta:
+        model=Modell
+        fields=('id','modell','nazwa_katalog','katalog_wlascicel')
+        
+    def create(self, validated_data):
+        katalog_nadrzedny = Modell.objects.create(
+            modell=validated_data['modell'],
+            nazwa_katalog=validated_data['nazwa_katalog'],
+            katalog_wlascicel=validated_data['katalog_wlascicel'],
+        )
+        katalog_nadrzedny.save()
+        return katalog_nadrzedny

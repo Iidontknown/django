@@ -71,4 +71,4 @@ export const getCurrentUser = () => {
 
 const timer: ReturnType<typeof setInterval> = setInterval(() => {
 refreshToken()
-}, 400000);
+}, 40000);

@@ -1,11 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { getCurrentUser } from "../services/auth.service";
 import MenuBar from "./MenuBar";
-import axios from "axios";
-import TasksService from "../services/TaskService";
-import authHeader from "../services/auth-header"
-import Grupa from "../types/grupa";
 import getGrupaall from "../services/GrupyService";
+import GrupaData from './../types/grupa';
 const API_URL = "http://localhost:8000/api/";
 
 
@@ -16,13 +13,34 @@ const Konto: React.FC = () => {
   let access = localStorage.getItem("access");
   
  
-  const [listaGrup, setlistaGrup] = useState<Grupa>();
-  console.log(getGrupaall)
+  const [listaGrup, setlistaGrup] = useState<Array<GrupaData>>();
+  // console.log(getGrupaall)
 
+  console.log(listaGrup)
+useEffect(() => {
+    getGrupaall().then(
+      (response) => {
+        setlistaGrup(response.data);
+        console.log(listaGrup)
+      },
+      (error) => {
+        const _content =
+          (error.response &&
+            error.response.data &&
+            error.response.data.message) ||
+          error.message ||
+          error.toString();
+            console.log(error);
+            
+      }
+    );
+    
+
+  
+}, [])
 
 
  
-console.log(currentUser)
   return (
     <><MenuBar/>
     <div className="container">
@@ -32,18 +50,21 @@ console.log(currentUser)
         </h3>
       </header>
      
-    <p>{refresh}</p>  
-       <strong>{access}</strong> 
-      <p>
+    {/* <p>{refresh}</p>  
+       <strong>{access}</strong>  */}
+      {/* <p>
         <strong>Id:</strong> {currentUser.user_id}
-      </p>
+      </p> */}
       <p>
         <strong>Email:</strong> {currentUser.email}
       </p>
       <strong>Grupy:</strong>
       <ul>
-        {currentUser.roles &&
-          currentUser.roles.map((role: string, index: number) => <li key={index}>{role}</li>)}
+       {typeof(listaGrup)!="undefined"  ? 
+       listaGrup.map(val=> <li> {val.nazwa_grupa}</li>):
+       <li> Brak</li>
+      
+      } 
       </ul>
     </div>
     </>
