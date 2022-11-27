@@ -20,4 +20,8 @@ urlpatterns = [
     path('modell/<int:pk>',views.getModell_pk),
     path('katalog_nadrzedny/',views.getKatalog_nadrzedny),
     path('katalog_nadrzedny/<int:pk>',views.getKatalog_nadrzedny_pk),
+    path('katalog_grupa/',views.getKatalog_Grupa),
+    path('katalog_grupa/<int:pk>',views.getKatalog_Grupa_pk),
+    path('strona_katalog/',views.getStrona_katalog),
+    path('strona_katalog/<int:pk>',views.getStrona_katalog_pk),
 ]
