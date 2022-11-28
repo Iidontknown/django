@@ -10,12 +10,12 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework import status
 
 from django.contrib.auth.models import User
-from .serializers import Katalog_GrupaSerializer, Katalog_nadrzednySerializer, ModellSerializer, ProducentSerializer, RegisterSerializer, Strona_katalogSerializer
+from .serializers import CzescSerializer, Katalog_GrupaSerializer, Katalog_nadrzednySerializer, ModellSerializer, Numer_katalogowy_CzescSerializer, Numer_katalogowySerializer, ProducentSerializer, RegisterSerializer, Strona_katalogSerializer
 from rest_framework import generics
 from rest_framework.permissions import AllowAny
 
 from .serializers import GrupaSerializer
-from base.models import Grupa, Katalog_Grupa, Katalog_nadrzedny, Modell, Producent, Strona_katalog
+from base.models import Czesc, Grupa, Katalog_Grupa, Katalog_nadrzedny, Modell, Numer_katalogowy, Numer_katalogowy_Czesc, Producent, Strona_katalog
 
 from rest_framework.parsers import JSONParser 
 
@@ -274,6 +274,135 @@ def getStrona_katalog_pk(request,pk):
         return Response(get_serializer.data) 
     elif request.method == 'PUT': 
         serializer = Strona_katalogSerializer(instance = model_get, data=request.data, partial = True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    elif request.method == 'DELETE': 
+        model_get.delete() 
+        return Response({'message': 'deleted successfully!'}, status=status.HTTP_200_OK)
+           
+#Numer_katalogowy view
+
+    
+@api_view(['GET', 'POST'])
+# @permission_classes([IsAuthenticated])
+def getNumer_katalogowy(request):
+    # user=request.producent
+    if request.method == 'GET':
+        model_get=Numer_katalogowy.objects.all()
+        serializer=Numer_katalogowySerializer(model_get,many=True)
+        return Response(serializer.data)
+    elif request.method == 'POST':
+        request_data = JSONParser().parse(request)
+        serializer = Numer_katalogowySerializer(data=request_data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'message': 'dodano'}) 
+        else:
+            return Response({'message': 'blad validaci'}) 
+       
+
+@api_view(['GET','PUT','DELETE'])
+# @permission_classes([IsAuthenticated])
+def getNumer_katalogowy_pk(request,pk):
+    try: 
+        model_get = Numer_katalogowy.objects.get(pk=pk) 
+    except : 
+        return Response({'message': 'nie istnieje'}) 
+ 
+    if request.method == 'GET': 
+        get_serializer = Numer_katalogowySerializer(model_get) 
+        return Response(get_serializer.data) 
+    elif request.method == 'PUT': 
+        serializer = Numer_katalogowySerializer(instance = model_get, data=request.data, partial = True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    elif request.method == 'DELETE': 
+        model_get.delete() 
+        return Response({'message': 'deleted successfully!'}, status=status.HTTP_200_OK)
+           
+#Czesc view
+
+    
+@api_view(['GET', 'POST'])
+# @permission_classes([IsAuthenticated])
+def getCzesc(request):
+    # user=request.producent
+    if request.method == 'GET':
+        model_get=Czesc.objects.all()
+        serializer=CzescSerializer(model_get,many=True)
+        return Response(serializer.data)
+    elif request.method == 'POST':
+        request_data = JSONParser().parse(request)
+        serializer = CzescSerializer(data=request_data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'message': 'dodano'}) 
+        else:
+            return Response({'message': 'blad validaci'}) 
+       
+
+@api_view(['GET','PUT','DELETE'])
+# @permission_classes([IsAuthenticated])
+def getCzesc_pk(request,pk):
+    try: 
+        model_get = Czesc.objects.get(pk=pk) 
+    except : 
+        return Response({'message': 'nie istnieje'}) 
+ 
+    if request.method == 'GET': 
+        get_serializer = CzescSerializer(model_get) 
+        return Response(get_serializer.data) 
+    elif request.method == 'PUT': 
+        serializer = CzescSerializer(instance = model_get, data=request.data, partial = True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    elif request.method == 'DELETE': 
+        model_get.delete() 
+        return Response({'message': 'deleted successfully!'}, status=status.HTTP_200_OK)
+           
+#Numer_katalogowy_Czesc view
+
+    
+@api_view(['GET', 'POST'])
+# @permission_classes([IsAuthenticated])
+def getNumer_katalogowy_Czesc(request):
+    # user=request.producent
+    if request.method == 'GET':
+        model_get=Numer_katalogowy_Czesc.objects.all()
+        serializer=Numer_katalogowy_CzescSerializer(model_get,many=True)
+        return Response(serializer.data)
+    elif request.method == 'POST':
+        request_data = JSONParser().parse(request)
+        serializer = Numer_katalogowy_CzescSerializer(data=request_data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'message': 'dodano'}) 
+        else:
+            return Response({'message': 'blad validaci'}) 
+       
+
+@api_view(['GET','PUT','DELETE'])
+# @permission_classes([IsAuthenticated])
+def getNumer_katalogowy_Czesc_pk(request,pk):
+    try: 
+        model_get = Numer_katalogowy_Czesc.objects.get(pk=pk) 
+    except : 
+        return Response({'message': 'nie istnieje'}) 
+ 
+    if request.method == 'GET': 
+        get_serializer = Numer_katalogowy_CzescSerializer(model_get) 
+        return Response(get_serializer.data) 
+    elif request.method == 'PUT': 
+        serializer = Numer_katalogowy_CzescSerializer(instance = model_get, data=request.data, partial = True)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)

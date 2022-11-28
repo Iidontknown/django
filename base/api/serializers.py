@@ -100,3 +100,45 @@ class Strona_katalogSerializer(ModelSerializer):
         )
         model_temp.save()
         return model_temp
+
+class Numer_katalogowySerializer(ModelSerializer):
+    class Meta:
+        model=Numer_katalogowy
+        fields=('id','strona_katalog','numer_katalogowy_strona','opis_Numer_katalogowy')
+        
+    def create(self, validated_data):
+        model_temp = Numer_katalogowy.objects.create(
+            strona_katalog=validated_data['strona_katalog'],
+            numer_strony=validated_data['numer_katalogowy_strona'],
+            opis_Numer_katalogowy=validated_data['opis_Numer_katalogowy'],
+        )
+        model_temp.save()
+        return model_temp
+
+class CzescSerializer(ModelSerializer):
+    class Meta:
+        model=Czesc
+        fields=('id','numer_katalogowy','nazwa_Czesc','opis_Czesc')
+        
+    def create(self, validated_data):
+        model_temp = Czesc.objects.create(
+            numer_katalogowy=validated_data['numer_katalogowy'],
+            nazwa_Czesc=validated_data['nazwa_Czesc'],
+            opis_Czesc=validated_data['opis_Czesc'],
+        )
+        model_temp.save()
+        return model_temp
+
+class Numer_katalogowy_CzescSerializer(ModelSerializer):
+    class Meta:
+        model=Numer_katalogowy_Czesc
+        fields=('id','numer_katalogowy','czesc','opis_Numer_katalogowy_Czesc')
+        
+    def create(self, validated_data):
+        model_temp = Numer_katalogowy_Czesc.objects.create(
+            numer_katalogowy=validated_data['numer_katalogowy'],
+            czesc=validated_data['czesc'],
+            opis_Numer_katalogowy_Czesc=validated_data['opis_Numer_katalogowy_Czesc'],
+        )
+        model_temp.save()
+        return model_temp

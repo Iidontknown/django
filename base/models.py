@@ -33,19 +33,19 @@ class Strona_katalog(models.Model):
     nazwa_strony=models.TextField()
 
 class Numer_katalogowy(models.Model):
-    Strona_katalog=models.ForeignKey(Strona_katalog,on_delete=models.CASCADE,null=True)
-    numer_strony=models.IntegerField()
+    strona_katalog=models.ForeignKey(Strona_katalog,on_delete=models.CASCADE,null=True)
+    numer_katalogowy_strona=models.TextField()
     opis_Numer_katalogowy=models.TextField()
 
 class Czesc(models.Model):
-    Strona_katalog=models.ForeignKey(Strona_katalog,on_delete=models.CASCADE,null=True)
-    numer_strony=models.IntegerField()
-    opis_Numer_katalogowy=models.TextField()
+    numer_katalogowy=models.ForeignKey(Numer_katalogowy,on_delete=models.CASCADE,null=True)
+    nazwa_Czesc=models.TextField()
+    opis_Czesc=models.TextField()
 
 class Numer_katalogowy_Czesc(models.Model):
-    numer_katalogowy=models.ForeignKey(Numer_katalogowy,on_delete=models.CASCADE,null=True)
+    numer_katalogowy=models.ForeignKey(Numer_katalogowy,on_delete=models.CASCADE)
     czesc=models.ForeignKey(Czesc,on_delete=models.CASCADE,null=True)
-    opis_Numer_katalogowy=models.TextField()
+    opis_Numer_katalogowy_Czesc=models.TextField()
 
 # def upload_to(instance, filename):
 #     return 'images/{filename}'.format(filename=filename)
