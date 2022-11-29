@@ -47,12 +47,12 @@ class Numer_katalogowy_Czesc(models.Model):
     czesc=models.ForeignKey(Czesc,on_delete=models.CASCADE,null=True)
     opis_Numer_katalogowy_Czesc=models.TextField()
 
-# def upload_to(instance, filename):
-#     return 'images/{filename}'.format(filename=filename)
+def upload_to(instance, filename):
+    return 'images/{filename}'.format(filename=filename)
 
 
 class Zdjecie(models.Model):
     wlasciciel=models.ForeignKey(User,on_delete=models.CASCADE,null=True)
     tytul_zdiecie=models.TextField()
     opis_zdjecie=models.TextField()
-    # image_url = models.ImageField(upload_to=upload_to, blank=True, null=True)
+    image_url = models.ImageField(upload_to=upload_to, blank=False, null=False)

@@ -10,12 +10,12 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework import status
 
 from django.contrib.auth.models import User
-from .serializers import CzescSerializer, Katalog_GrupaSerializer, Katalog_nadrzednySerializer, ModellSerializer, Numer_katalogowy_CzescSerializer, Numer_katalogowySerializer, ProducentSerializer, RegisterSerializer, Strona_katalogSerializer
+from .serializers import CzescSerializer, Katalog_GrupaSerializer, Katalog_nadrzednySerializer, ModellSerializer, Numer_katalogowy_CzescSerializer, Numer_katalogowySerializer, ProducentSerializer, RegisterSerializer, Strona_katalogSerializer, ZdjecieSerializer
 from rest_framework import generics
 from rest_framework.permissions import AllowAny
 
 from .serializers import GrupaSerializer
-from base.models import Czesc, Grupa, Katalog_Grupa, Katalog_nadrzedny, Modell, Numer_katalogowy, Numer_katalogowy_Czesc, Producent, Strona_katalog
+from base.models import Czesc, Grupa, Katalog_Grupa, Katalog_nadrzedny, Modell, Numer_katalogowy, Numer_katalogowy_Czesc, Producent, Strona_katalog, Zdjecie
 
 from rest_framework.parsers import JSONParser 
 
@@ -412,3 +412,38 @@ def getNumer_katalogowy_Czesc_pk(request,pk):
         model_get.delete() 
         return Response({'message': 'deleted successfully!'}, status=status.HTTP_200_OK)
            
+@api_view(['GET', 'POST'])
+# @permission_classes([IsAuthenticated])
+def getZdjecie(request):
+    
+    # user=request.producent
+    if request.method == 'GET':
+        model_get=Zdjecie.objects.all()
+        serializer=ZdjecieSerializer(model_get,many=True)
+        return Response(serializer.data)
+    elif request.method == 'POST':
+        
+        # request_data = JSONParser().parse(request)
+        # request_data.tytul_zdiecie="ala_makota"
+        serializer = ZdjecieSerializer(data=request.data)
+        
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'message': 'dodano'}) 
+        else:
+            return Response({'message': 'blad validaci'}) 
+@api_view(['GET','PUT','DELETE'])
+# @permission_classes([IsAuthenticated])
+def getZdjecie_pk(request,pk):
+    try: 
+        model_get = Numer_katalogowy_Czesc.objects.get(pk=pk) 
+    except : 
+        return Response({'message': 'nie istnieje'}) 
+ 
+    if request.method == 'GET': 
+        get_serializer = Numer_katalogowy_CzescSerializer(model_get) 
+        return Response(get_serializer.data) 
+    elif request.method == 'DELETE': 
+        model_get.delete() 
+        return Response({'message': 'deleted successfully!'}, status=status.HTTP_200_OK)
+ 

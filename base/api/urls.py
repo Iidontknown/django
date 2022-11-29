@@ -1,7 +1,10 @@
 
+from django.conf import settings
 from django.urls import path
 from . import views
 from .views import MyTokenObtainPairView,RegisterView
+
+from django.conf.urls.static import static
 from rest_framework_simplejwt.views import (
     
     TokenRefreshView,
@@ -28,4 +31,6 @@ urlpatterns = [
     path('czesc/<int:pk>',views.getCzesc_pk),
     path('numer_katalogowy_czesc/',views.getNumer_katalogowy_Czesc),
     path('numer_katalogowy_czesc/<int:pk>',views.getNumer_katalogowy_Czesc_pk),
-]
+    path('zdjecie/',views.getZdjecie),
+    path('zdjecie/<int:pk>',views.getZdjecie_pk),
+]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

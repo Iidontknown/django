@@ -142,3 +142,25 @@ class Numer_katalogowy_CzescSerializer(ModelSerializer):
         )
         model_temp.save()
         return model_temp
+
+
+class ZdjecieSerializer(ModelSerializer):
+    
+    image_url = serializers.ImageField(required=False)
+    class Meta:
+        model=Zdjecie
+        fields=('id','wlasciciel','tytul_zdiecie','opis_zdjecie','image_url')
+        
+    # def create(self, validated_data):
+    #     model_temp = Numer_katalogowy_Czesc.objects.create(
+    #         wlasciciel=validated_data['wlasciciel'],
+    #         tytul_zdiecie=validated_data['tytul_zdiecie'],
+    #         opis_zdjecie=validated_data['opis_zdjecie'],
+    #         image_url=validated_data['image_url'],
+    #     )
+    #     model_temp.save()
+    #     return model_temp
+    def save(self, *args, **kwargs):
+        if self.instance.image_url:
+            self.instance.image_url.delete()
+        return super().save(*args, **kwargs)
