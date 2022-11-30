@@ -1,4 +1,5 @@
 
+from django.forms import ImageField
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from rest_framework.validators import UniqueValidator
@@ -146,10 +147,11 @@ class Numer_katalogowy_CzescSerializer(ModelSerializer):
 
 class ZdjecieSerializer(ModelSerializer):
     
-    image_url = serializers.ImageField(required=False)
+    image = serializers.ImageField(required=False)
+    image_Thumbnails = serializers.ImageField(read_only=True)
     class Meta:
         model=Zdjecie
-        fields=('id','wlasciciel','tytul_zdiecie','opis_zdjecie','image_url')
+        fields=('id','wlasciciel','tytul_zdiecie','opis_zdjecie','image','image_Thumbnails')
         
     # def create(self, validated_data):
     #     model_temp = Numer_katalogowy_Czesc.objects.create(
@@ -160,7 +162,7 @@ class ZdjecieSerializer(ModelSerializer):
     #     )
     #     model_temp.save()
     #     return model_temp
-    def save(self, *args, **kwargs):
-        if self.instance.image_url:
-            self.instance.image_url.delete()
-        return super().save(*args, **kwargs)
+    # def save(self, *args, **kwargs):
+    #     if self.instance.image:
+    #         self.instance.image.delete()
+    #     return super().save(*args, **kwargs)

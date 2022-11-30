@@ -1,5 +1,15 @@
 from django.db import models
 from django.contrib.auth.models import User
+from PIL import ImageFont
+from PIL import ImageDraw
+import uuid
+# importing the library
+from PIL import Image
+import matplotlib.pyplot as plt
+import numpy as np
+
+from imagekit.models import ProcessedImageField,ImageSpecField
+from imagekit.processors import ResizeToFill
 
 class Grupa(models.Model):
     user=models.ForeignKey(User,on_delete=models.CASCADE,null=True)
@@ -48,11 +58,32 @@ class Numer_katalogowy_Czesc(models.Model):
     opis_Numer_katalogowy_Czesc=models.TextField()
 
 def upload_to(instance, filename):
-    return 'images/{filename}'.format(filename=filename)
+    name=uuid.uuid4().hex
+    return 'images/'+name+'.JPEG'
 
 
 class Zdjecie(models.Model):
     wlasciciel=models.ForeignKey(User,on_delete=models.CASCADE,null=True)
     tytul_zdiecie=models.TextField()
     opis_zdjecie=models.TextField()
-    image_url = models.ImageField(upload_to=upload_to, blank=False, null=False)
+    class Watermark(object):
+        def process(self, image):
+            draw = ImageDraw.Draw(image)
+            font = ImageFont.truetype("arial.ttf", 10)
+            draw.text((0, 0), "katalog", 
+                    (0, 0, 0), font=font)
+            
+            
+
+            return image
+    image = ProcessedImageField(upload_to=upload_to,
+                                           processors=[ResizeToFill(1000, 500),Watermark()],
+                                           format='JPEG',
+                                           options={'quality': 60})
+    image_Thumbnails  = ImageSpecField (source='image',
+                                           processors=[ResizeToFill(100, 50),Watermark()],
+                                           format='JPEG',
+                                           options={'quality': 60})
+    
+
+    

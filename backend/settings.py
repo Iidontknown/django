@@ -43,8 +43,11 @@ INSTALLED_APPS = [
      'rest_framework',
      'rest_framework_simplejwt.token_blacklist',
      "corsheaders",
+     'imagekit',
 
 ]
+
+IMAGEKIT_DEFAULT_CACHEFILE_STRATEGY = 'imagekit.cachefiles.strategies.Optimistic'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (

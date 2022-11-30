@@ -1,3 +1,6 @@
+import json
+import os
+from django.conf import settings
 from django.http import JsonResponse
 from rest_framework import permissions
 from rest_framework.response import Response
@@ -436,14 +439,20 @@ def getZdjecie(request):
 # @permission_classes([IsAuthenticated])
 def getZdjecie_pk(request,pk):
     try: 
-        model_get = Numer_katalogowy_Czesc.objects.get(pk=pk) 
+        model_get = Zdjecie.objects.get(pk=pk) 
     except : 
         return Response({'message': 'nie istnieje'}) 
  
     if request.method == 'GET': 
-        get_serializer = Numer_katalogowy_CzescSerializer(model_get) 
+        get_serializer = ZdjecieSerializer(model_get) 
         return Response(get_serializer.data) 
-    elif request.method == 'DELETE': 
-        model_get.delete() 
-        return Response({'message': 'deleted successfully!'}, status=status.HTTP_200_OK)
- 
+    elif request.method == 'DELETE':
+        get_serializer = ZdjecieSerializer(model_get,many=False) 
+
+        if os.path.exists(settings.MEDIA_ROOT+get_serializer.data['image']):
+            os.remove(settings.MEDIA_ROOT+get_serializer.data['image'])
+            Response(settings.MEDIA_ROOT+ get_serializer.data['image'])
+        if os.path.exists(settings.MEDIA_ROOT+get_serializer.data['image_Thumbnails']):
+            os.remove(settings.MEDIA_ROOT+get_serializer.data['image_Thumbnails'])
+        # model_get.delete() 
+        return Response( {'message': 'deleted successfully!'}, status=status.HTTP_200_OK)
