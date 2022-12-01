@@ -16,15 +16,19 @@ import Konto from './routes/Konto';
 import LogOut from './routes/LogOut';
 import { getCurrentUser } from './services/auth.service';
 import ProtectedRoutes from './routes/ProtectedRoutes';
+import GrupaLista from './components/GrupaLista';
+import MenuBar from './routes/MenuBar';
 const root: ReactDOM.Root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 
 const currentUser = getCurrentUser();
 root.render(
-
+<>
   <BrowserRouter>
+  <MenuBar/>
     <Routes>
+   
       <Route path="/" element={<App />} />
       <Route path="login/" element={<Login />} />
       <Route path="rejestracja" element={<Rejestracja />} />
@@ -33,6 +37,7 @@ root.render(
         <Route path="/lista" element={<Lista />} />
         <Route path="dodaj" element={<Dodaj />} />
         <Route path="konto" element={<Konto />} />
+        <Route path="grupa" element={<GrupaLista />} />
         <Route path="katalog" element={<Katalog />} />
         <Route path="logout" element={<LogOut />} />
         <Route path="dodaj" element={<Dodaj />} />
@@ -41,6 +46,6 @@ root.render(
       <Route path="*" element={<main style={{ padding: "1rem" }}> <p>404!</p></main>} />
     </Routes>
   </BrowserRouter>
-
+  </>
 );
 

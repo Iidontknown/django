@@ -29,9 +29,18 @@ class RegisterSerializer(serializers.ModelSerializer):
 
         return user
 class GrupaSerializer(ModelSerializer):
+    user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(),required=True)
+    nazwa_grupa = serializers.CharField(required=True, validators=[UniqueValidator(queryset=Grupa.objects.all())])
     class Meta:
         model=Grupa
         fields=('id','nazwa_grupa','user')
+    def create(self, validated_data):
+        producent = Grupa.objects.create(
+            nazwa_grupa=validated_data['nazwa_grupa'],
+            user=validated_data['user'],
+        )
+        producent.save()
+        return producent
 
 class ProducentSerializer(ModelSerializer):
     nazwa_producent = serializers.CharField(

@@ -52,12 +52,62 @@ def getRoutes(request):
     return Response(routes)
 
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])
-def getGrupa(request):
-    user=request.user
+# @permission_classes([IsAuthenticated])
+def getGrupaa(request):
+    user=2
     grupa=Grupa.objects.filter(user=user)
     serializer=GrupaSerializer(grupa,many=True)
     return Response(serializer.data)
+ 
+@api_view(['GET', 'POST'])
+@permission_classes([IsAuthenticated])
+def getGrupa(request):
+    user=request.user
+    if request.method == 'GET':
+        grupa=Grupa.objects.filter(user=user)
+        serializer=GrupaSerializer(grupa,many=True)
+        return Response(serializer.data)
+    elif request.method == 'POST':
+        data = {
+            'nazwa_grupa': request.data.get('nazwa_grupa'),
+            'user': request.user,
+
+        }
+        serializer = GrupaSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'message': 'dodano'}) 
+        else:
+            return Response(data, status=status.HTTP_400_BAD_REQUEST) 
+       
+
+@api_view(['GET','PUT','DELETE'])
+@permission_classes([IsAuthenticated])
+def getGrupa_pk(request,pk):
+    try: 
+        user=request.user
+        model_get = Grupa.objects.get(pk=pk,user=user) 
+    except : 
+        return Response({'message': 'nie istnieje'}, status=status.HTTP_204_NO_CONTENT) 
+ 
+    if request.method == 'GET': 
+        get_serializer = GrupaSerializer(model_get) 
+        return Response(get_serializer.data, status=status.HTTP_200_OK) 
+    elif request.method == 'PUT': 
+        data = {
+            'nazwa_grupa': request.data.get('nazwa_grupa')
+
+        }
+        serializer = GrupaSerializer(instance = model_get, data=data, partial = True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    elif request.method == 'DELETE': 
+        model_get.delete() 
+        return Response({'message': 'deleted successfully!'}, status=status.HTTP_200_OK)
+ # Producent view
 
 @api_view(['GET', 'POST'])
 @permission_classes([IsAuthenticated])
@@ -74,7 +124,7 @@ def getProducent(request):
             producent_serializer.save()
             return Response({'message': 'dodano'}) 
         else:
-            return Response({'message': 'błąd validaci'}) 
+            return Response({'message': 'błąd validaci'}, status=status.HTTP_400_BAD_REQUEST) 
        
 
 @api_view(['GET', 'POST','PUT','DELETE'])
@@ -83,7 +133,7 @@ def getProducent_pk(request,pk):
     try: 
         producent = Producent.objects.get(pk=pk) 
     except : 
-        return Response({'message': 'nie istnieje'}) 
+        return Response({'message': 'nie istnieje'}, status=status.HTTP_204_NO_CONTENT) 
  
     if request.method == 'GET': 
         Producent_serializer = ProducentSerializer(producent) 
@@ -107,7 +157,7 @@ def getProducent_pk(request,pk):
         try: 
             producent = Producent.objects.get(pk=pk) 
         except : 
-            return Response({'message': 'nie istnieje'})
+            return Response({'message': 'nie istnieje'}, status=status.http_204_no_content)
         producent.delete() 
         return Response({'message': 'Producent was deleted successfully!'})
            
@@ -136,7 +186,7 @@ def getModell_pk(request,pk):
     try: 
         modell = Modell.objects.get(pk=pk) 
     except : 
-        return Response({'message': 'nie istnieje'}) 
+        return Response({'message': 'nie istnieje'}, status=status.http_204_no_content) 
  
     if request.method == 'GET': 
         modell_serializer = ModellSerializer(modell) 
@@ -185,7 +235,7 @@ def getKatalog_nadrzedny_pk(request,pk):
     try: 
         model_get = Katalog_nadrzedny.objects.get(pk=pk) 
     except : 
-        return Response({'message': 'nie istnieje'}) 
+        return Response({'message': 'nie istnieje'}, status=status.http_204_no_content) 
  
     if request.method == 'GET': 
         get_serializer = Katalog_nadrzednySerializer(model_get) 
@@ -233,7 +283,7 @@ def getKatalog_Grupa_pk(request,pk):
     try: 
         model_get = Katalog_Grupa.objects.get(pk=pk) 
     except : 
-        return Response({'message': 'nie istnieje'}) 
+        return Response({'message': 'nie istnieje'}, status=status.http_204_no_content) 
  
     if request.method == 'GET': 
         get_serializer = Katalog_GrupaSerializer(model_get) 
@@ -270,7 +320,7 @@ def getStrona_katalog_pk(request,pk):
     try: 
         model_get = Strona_katalog.objects.get(pk=pk) 
     except : 
-        return Response({'message': 'nie istnieje'}) 
+        return Response({'message': 'nie istnieje'}, status=status.http_204_no_content) 
  
     if request.method == 'GET': 
         get_serializer = Strona_katalogSerializer(model_get) 
@@ -313,7 +363,7 @@ def getNumer_katalogowy_pk(request,pk):
     try: 
         model_get = Numer_katalogowy.objects.get(pk=pk) 
     except : 
-        return Response({'message': 'nie istnieje'}) 
+        return Response({'message': 'nie istnieje'}, status=status.http_204_no_content) 
  
     if request.method == 'GET': 
         get_serializer = Numer_katalogowySerializer(model_get) 
@@ -351,12 +401,12 @@ def getCzesc(request):
        
 
 @api_view(['GET','PUT','DELETE'])
-# @permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 def getCzesc_pk(request,pk):
     try: 
         model_get = Czesc.objects.get(pk=pk) 
     except : 
-        return Response({'message': 'nie istnieje'}) 
+        return Response({'message': 'nie istnieje'}, status=status.http_204_no_content) 
  
     if request.method == 'GET': 
         get_serializer = CzescSerializer(model_get) 
@@ -399,7 +449,7 @@ def getNumer_katalogowy_Czesc_pk(request,pk):
     try: 
         model_get = Numer_katalogowy_Czesc.objects.get(pk=pk) 
     except : 
-        return Response({'message': 'nie istnieje'}) 
+        return Response({'message': 'nie istnieje'}, status=status.http_204_no_content) 
  
     if request.method == 'GET': 
         get_serializer = Numer_katalogowy_CzescSerializer(model_get) 
@@ -441,7 +491,7 @@ def getZdjecie_pk(request,pk):
     try: 
         model_get = Zdjecie.objects.get(pk=pk) 
     except : 
-        return Response({'message': 'nie istnieje'}) 
+        return Response({'message': 'nie istnieje'}, status=status.HTTP_204_NO_CONTENT) 
  
     if request.method == 'GET': 
         get_serializer = ZdjecieSerializer(model_get) 
