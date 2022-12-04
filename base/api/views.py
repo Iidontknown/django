@@ -51,18 +51,19 @@ def getRoutes(request):
 
     return Response(routes)
 
-@api_view(['GET'])
-# @permission_classes([IsAuthenticated])
-def getGrupaa(request):
-    user=2
-    grupa=Grupa.objects.filter(user=user)
-    serializer=GrupaSerializer(grupa,many=True)
-    return Response(serializer.data)
+# @api_view(['GET'])
+# # @permission_classes([IsAuthenticated])
+# def getGrupaa(request):
+#     user=2
+#     grupa=Grupa.objects.filter(user=user)
+#     serializer=GrupaSerializer(grupa,many=True)
+#     return Response(serializer.data)
  
 @api_view(['GET', 'POST'])
 @permission_classes([IsAuthenticated])
 def getGrupa(request):
     user=request.user
+    user=2
     if request.method == 'GET':
         grupa=Grupa.objects.filter(user=user)
         serializer=GrupaSerializer(grupa,many=True)
@@ -70,7 +71,7 @@ def getGrupa(request):
     elif request.method == 'POST':
         data = {
             'nazwa_grupa': request.data.get('nazwa_grupa'),
-            'user': request.user,
+            'user': user,
 
         }
         serializer = GrupaSerializer(data=data)
@@ -78,7 +79,7 @@ def getGrupa(request):
             serializer.save()
             return Response({'message': 'dodano'}) 
         else:
-            return Response(data, status=status.HTTP_400_BAD_REQUEST) 
+            return Response({'message': 'sadasd'}, status=status.HTTP_400_BAD_REQUEST) 
        
 
 @api_view(['GET','PUT','DELETE'])

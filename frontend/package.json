@@ -20,6 +20,8 @@
     "react-dom": "^18.1.0",
     "react-router-dom": "^6.3.0",
     "react-scripts": "^2.1.8",
+    "react-toastify": "^9.0.3",
+    "reactjs-popup": "^2.0.5",
     "reactstrap": "^8.9.0",
     "typescript": "^4.6.4",
     "web-vitals": "^2.1.4",

@@ -1,4 +1,4 @@
-import { Field, Form, Formik } from "formik";
+import { Field, Form, Formik, FormikProps, useFormikContext } from "formik";
 import React, { useState, useEffect, ChangeEvent } from "react";
 import { Link } from "react-router-dom";
 import GrupaData from './../types/grupa';
@@ -7,13 +7,17 @@ import authHeader from '../services/auth-header';
 import * as Yup from "yup";
 import GrupyService from "../services/GrupyService";
 import axios from "axios";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import NotificationCenter from "./Popup";
 const GrupaLista: React.FC =  () => {
     const [grupy, setGrupy] = useState<Array<GrupaData>>([]);
     const [AktualnaGrupa, setAktualnaGrupa] = useState<GrupaData | null>(null);
     const [AktualnyId, setAktualnyId] = useState<number>(-1);
-    const [Szukany_nazwa_grupa, setSzukany_nazwa_grupa] = useState<string>("");
+    const [nazwa_grupa_dod, setnazwa_grupa_dod] = useState<string>("");
     const [ZmienNazweid, setZmienNazweid] = useState<number>();
 
+    const notify = () => toast("Wow so easy !");
     useEffect(() => {
         getallgrupa();
     }, []);
@@ -29,32 +33,72 @@ const GrupaLista: React.FC =  () => {
                     val.toString().length <= 25
             )
     });
-    const handle = (formValue: GrupaData) => {
-        console.log(formValue)
+    const addGrupa = (formValue: GrupaData) => {
+        GrupyService.create(formValue.nazwa_grupa).then((response: any) => {
+            console.log("dodano:"+ formValue.nazwa_grupa)
+            console.log(response.data)
+            
+        window.location.reload();
+        }).catch((e: Error) => {
+            console.log(e)
+        })
     }
-
+    const changeRow = (formValue: GrupaData) => {
+        const confirmBox = window.confirm(
+            "Czy zmienić nazwę grupy na:"+formValue.nazwa_grupa
+          )
+          if (confirmBox === true) {
+            GrupyService.change_id(formValue.nazwa_grupa,formValue.id).then((response: any) => {
+                window.alert('Zmieniono')
+            console.log(response.data)
+            
+        window.location.reload();
+        }).catch((e: Error) => {
+            console.log(e)
+        })
+          }
+    }
    
+    const deleteRow = (id: number,nazwa_grupa:string) => {
+        const confirmBox = window.confirm(
+            "Czy usunąć grupę:"+nazwa_grupa
+          )
+          if (confirmBox === true) {
+            GrupyService.delete_id(id).then((response: any) => {
+                window.alert('Usuniento')
+            console.log(response.data)
+            
+        window.location.reload();
+        }).catch((e: Error) => {
+            console.log(e)
+        })
+          }
+        
+    }
+    // const handle = (formValue: GrupaData) => {
+     
+    // }
+
     const getallgrupa = () => {
         
         GrupyService.getGrupaall().then((response: any) => {
             setGrupy(response.data)
             console.log(response.data)
+            
         }).catch((e: Error) => {
             console.log(e)
         })
 
-        GrupyService.create({nazwa_grupa:'asdasd'}).then((response: any) => {
-            setGrupy(response.data)
-            console.log(response.data)
-        }).catch((e: Error) => {
-            console.log(e)
-        })
+
+
+
     }
-
 
 
     return (<>
         <div className="container bg-light ">
+            
+      
 <hr />
             <h1>grupy</h1>
             <hr />
@@ -68,18 +112,20 @@ const GrupaLista: React.FC =  () => {
             </div>
 
             <Formik
+            enableReinitialize={true}
                 initialValues={{
                     nazwa_grupa: '',
                     id: ''
                 }}
                 validationSchema={validationSchema}
-                onSubmit={handle}>
+                onSubmit={addGrupa}>
                 <Form>
+               
                     <div className="row p-2">
 
                         <Field type="hidden" id="id" name='id' />
                         <div className="col ">
-                            <Field type="text" id='nazwa_grupa' name='nazwa_grupa' className="form-control" placeholder="nazwa grupa" aria-label="nazwa_grupa" />
+                            <Field    type="text" id='nazwa_grupa' name='nazwa_grupa' className="form-control" placeholder="nazwa grupa" aria-label="nazwa_grupa" />
 
                         </div>
                         <div className="col container">
@@ -92,7 +138,7 @@ const GrupaLista: React.FC =  () => {
 
                 </Form>
             </Formik>
-
+          
             {grupy &&
                 grupy.map((val, key) => (
                     <><hr /><Formik
@@ -102,7 +148,7 @@ const GrupaLista: React.FC =  () => {
                             key: key
                         }}
                         validationSchema={validationSchema}
-                        onSubmit={handle}>
+                        onSubmit={changeRow}>
                         <Form>
                             <div className="row p-2 pt-5" >
 
@@ -122,13 +168,13 @@ const GrupaLista: React.FC =  () => {
                                 <div className="col ">
                                     <div className=" btn-group d-flex justify-content-center">
                                         {ZmienNazweid == val.id ? (
-                                            <button className="btn btn-success p-1 " onClick={() => setZmienNazweid(val.id)}>Zaakceptuj </button>
+                                            <button className="btn btn-success p-1 " type="submit"  >Zaakceptuj </button>
                                            
                                         ) : (
-                                            <button className="btn btn-warning p-1 " onClick={() => setZmienNazweid(val.id)}>Zmień nazwę </button>
+                                            <button  type="button"  className="btn btn-warning p-1 " onClick={() => setZmienNazweid(val.id)}>Zmień nazwę </button>
                                         )}
 
-                                        <button className="btn btn-danger p-1">Usuń grupę</button>
+                                        <button className="btn btn-danger p-1" type="submit" onClick={() => deleteRow(val.id,val.nazwa_grupa)}>Usuń grupę</button>
                                     </div>
                                 </div>
 
