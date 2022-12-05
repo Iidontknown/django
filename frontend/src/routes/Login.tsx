@@ -52,7 +52,6 @@ const Login: React.FC<Props> = () => {
 
   return (
     <> 
-    <MenuBar/>
     <Formik 
     initialValues={initialValues}
     validationSchema={validationSchema}

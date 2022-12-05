@@ -36,8 +36,8 @@ async function getGrupaall() {
       
     };
     export const change_id = (nazwa_grupa:string,id:number) => {
-
-      return axios.put(API_URL + "grupa/", {id,
+      console.log(id+nazwa_grupa)
+      return axios.put(API_URL + "grupa/"+id, {id,
         nazwa_grupa,
       }, { headers: authHeader() });
 
