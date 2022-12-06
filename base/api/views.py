@@ -13,12 +13,12 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework import status
 
 from django.contrib.auth.models import User
-from .serializers import CzescSerializer, Katalog_GrupaSerializer, Katalog_nadrzednySerializer, ModellSerializer, Numer_katalogowy_CzescSerializer, Numer_katalogowySerializer, ProducentSerializer, RegisterSerializer, Strona_katalogSerializer, ZdjecieSerializer
+from .serializers import CzescSerializer, GrupaUserSerializer, Katalog_GrupaSerializer, Katalog_nadrzednySerializer, ModellSerializer, Numer_katalogowy_CzescSerializer, Numer_katalogowySerializer, ProducentSerializer, RegisterSerializer, Strona_katalogSerializer, ZdjecieSerializer
 from rest_framework import generics
 from rest_framework.permissions import AllowAny
 
 from .serializers import GrupaSerializer
-from base.models import Czesc, Grupa, Katalog_Grupa, Katalog_nadrzedny, Modell, Numer_katalogowy, Numer_katalogowy_Czesc, Producent, Strona_katalog, Zdjecie
+from base.models import Czesc, Grupa, GrupaUser, Katalog_Grupa, Katalog_nadrzedny, Modell, Numer_katalogowy, Numer_katalogowy_Czesc, Producent, Strona_katalog, Zdjecie
 
 from rest_framework.parsers import JSONParser 
 
@@ -108,6 +108,76 @@ def getGrupa_pk(request,pk):
     elif request.method == 'DELETE': 
         model_get.delete() 
         return Response({'message': 'deleted successfully!'}, status=status.HTTP_200_OK)
+
+#GrupaUser view
+
+    
+@api_view(['GET', 'POST'])
+# @permission_classes([IsAuthenticated])
+def getGrupaUser(request):
+    # user=request.producent
+    if request.method == 'GET':
+        model_get=GrupaUser.objects.all()
+        serializer=GrupaUserSerializer(model_get,many=True)
+        return Response(serializer.data)
+    elif request.method == 'POST':
+        request_data = JSONParser().parse(request)
+        serializer = GrupaUserSerializer(data=request_data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'message': 'dodano'}) 
+        else:
+            return Response({'message': 'blad validaci'}, status=status.HTTP_417_EXPECTATION_FAILED) 
+       
+
+@api_view(['GET','PUT','DELETE'])
+# @permission_classes([IsAuthenticated])
+def getGrupaUser_pk(request,pk):
+    try: 
+        model_get = GrupaUser.objects.get(pk=pk) 
+    except : 
+        return Response({'message': 'nie istnieje'}, status=status.http_204_no_content) 
+ 
+    if request.method == 'GET': 
+        get_serializer = GrupaUserSerializer(model_get) 
+        return Response(get_serializer.data) 
+    elif request.method == 'PUT': 
+        serializer = GrupaUserSerializer(instance = model_get, data=request.data, partial = True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    elif request.method == 'DELETE': 
+        model_get.delete() 
+        return Response({'message': 'deleted successfully!'}, status=status.HTTP_200_OK)
+
+@api_view(['GET','PUT','DELETE'])
+# @permission_classes([IsAuthenticated])
+def getGrupaUserGrupa_pk(request,pk):
+    try: 
+        model_get = GrupaUser.objects.all().filter(grupa=pk)
+        # model_get = GrupaUser.objects.filter 
+    except : 
+        return Response({'message': 'nie istnieje'}, status=status.HTTP_404_NOT_FOUND )
+ 
+    if request.method == 'GET': 
+        get_serializer = GrupaUserSerializer(model_get,many=True) 
+        return Response(get_serializer.data) 
+    elif request.method == 'PUT': 
+        serializer = GrupaUserSerializer(instance = model_get, data=request.data, partial = True)
+        if serializer.is_valid():
+            try:
+                serializer.save()
+            except:
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    elif request.method == 'DELETE': 
+        model_get.delete() 
+        return Response({'message': 'deleted successfully!'}, status=status.HTTP_200_OK)
+   
  # Producent view
 
 @api_view(['GET', 'POST'])

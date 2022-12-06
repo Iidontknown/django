@@ -1,12 +1,6 @@
-import React, { useEffect, ChangeEvent, useState } from "react";
+import React, {  useState } from "react";
 import { Form } from "react-bootstrap";
-import { Link } from "react-router-dom";
-import * as Yup from "yup";
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
 import GrupyService from "../services/GrupyService";
-import GrupaData from "../types/grupa";
-
 const Grupaadd: React.FC = () => {
     const [Error_nazwa_grupa, setError_nazwa_grupa] = useState<string>("");
     const [nazwa_grupa, setnazwa_grupa] = useState<string>("");
@@ -81,9 +75,9 @@ const Grupaadd: React.FC = () => {
               id="nazwa_grupa"
               onChange={handleChange}
               value={nazwa_grupa}
-              className={`form-control ${
-                Error_nazwa_grupa != "" ? "is-invalid" : ""
-              }`}
+              // className={`form-control ${
+              //   Error_nazwa_grupa != "" ? "is-invalid" : ""
+              // }`}
             />
             <div className="invalid-feedback">{Error_nazwa_grupa}</div>
           </div>

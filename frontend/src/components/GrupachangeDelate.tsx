@@ -1,11 +1,7 @@
-import React, { useEffect, ChangeEvent, useState } from "react";
-import { Form } from "react-bootstrap";
-import { Link } from "react-router-dom";
-import * as Yup from "yup";
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
+import React, {  useState } from "react";
 import GrupyService from "../services/GrupyService";
 import GrupaData from "../types/grupa";
+import GrupaUserchangeDelate from "./GrupaUserchangeDelate";
 
 function GrupachangeDelate({ id, nazwa_grupa }: GrupaData) {
   const [Error_nazwa_grupa, setError_nazwa_grupa] = useState<string>("");
@@ -148,33 +144,7 @@ console.log('asdsad'+id)
             </div>
           </div>
         </div>
-      <div className="row p-1">
-        <div className="container ml-5 mr-5 bg-light border">
-          <div className="row mt-2">
-            <div className="col">Użytkownik</div>
-            <div className="col">Opcje</div>
-          </div>
-          <hr />
-          <div className="row ">
-            <div className="col">user1</div>
-            <div className="col">
-              <div className=" btn-group d-flex justify-content-center">
-                <button className="btn btn-danger p-1">usuń </button>
-              </div>
-            </div>
-          </div>
-          <hr />
-          <div className="row "></div>
-          <div className="row ">
-            <div className="col">user1</div>
-            <div className="col">
-              <div className=" btn-group d-flex justify-content-center">
-                <button className="btn btn-success p-1">Zakceptuj </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+        <GrupaUserchangeDelate {...id} ></GrupaUserchangeDelate>
     </>
   );
 }
