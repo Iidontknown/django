@@ -5,8 +5,8 @@ import MenuBar from './MenuBar';
 export default function Dodaj():JSX.Element  {
   return (
     <> 
-    <MenuBar/>
     <>
+    <div className="container">
     <div className="p-2">
     <Row>
     <Form.Label column lg={2}>
@@ -54,6 +54,7 @@ export default function Dodaj():JSX.Element  {
   <Button variant="primary" size="lg">
    Dalej
   </Button>
+  </div>
 </>
     </>
   )

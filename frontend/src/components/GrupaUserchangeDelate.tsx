@@ -31,7 +31,7 @@ function GrupaUserchangeDelate({ id}: GrupaData) {
           </div>
           <hr />
           <div className="row ">
-            <div className="col">user1</div>
+            <div className="col">user: {id}</div>
             <div className="col">
               <div className=" btn-group d-flex justify-content-center">
                 <button className="btn btn-danger p-1">usuń </button>

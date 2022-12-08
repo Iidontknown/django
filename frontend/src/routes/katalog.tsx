@@ -19,7 +19,9 @@ const Katalog: React.FC = () => {
 
 
   return (
-    <MenuBar/>
+    <div className='contener'>
+      asd
+    </div>
   )
 }
 export default Katalog;
