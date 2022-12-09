@@ -22,6 +22,7 @@
     "react-hook-form": "^7.40.0",
     "react-router-dom": "^6.3.0",
     "react-scripts": "^2.1.8",
+    "react-select": "^5.7.0",
     "react-toastify": "^9.0.3",
     "reactjs-popup": "^2.0.5",
     "reactstrap": "^8.9.0",
