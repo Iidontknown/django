@@ -5,15 +5,16 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import App from "./routes/App";
 import Login from "./routes/Login";
 import Rejestracja from "./routes/Rejestracja";
-import Dodaj from "./routes/Dodaj";
 import Lista from "./routes/Lista";
-import Katalog from "./routes/katalog";
 import Konto from "./routes/Konto";
 import LogOut from "./routes/LogOut";
 import { getCurrentUser } from "./services/auth.service";
 import ProtectedRoutes from "./routes/ProtectedRoutes";
 import GrupaLista from "./components/GrupaLista";
 import MenuBar from "./routes/MenuBar";
+import Dodaj from "./components/katalog/Dodaj";
+import Katalog from "./routes/katalog copy";
+import Manage from "./components/katalog/Manage";
 const root: ReactDOM.Root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
@@ -37,6 +38,7 @@ root.render(
           <Route path="logout" element={<LogOut />} />
           <Route path="dodaj" element={<Dodaj />} />
           <Route path="konto" element={<Konto />} />
+          <Route path="manage" element={<Manage />} />
         </Route>
 
     

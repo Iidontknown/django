@@ -159,7 +159,7 @@ def getGrupaUserGrupa_pk(request,pk):
         model_get = GrupaUser.objects.all().filter(grupa=pk)
         # model_get = GrupaUser.objects.filter 
     except : 
-        return Response({'message': 'nie istnieje'}, status=status.HTTP_404_NOT_FOUND )
+        return Response({'message': 'nie istnieje'}, status=status.http_204_no_content )
  
     if request.method == 'GET': 
         get_serializer = GrupaUserSerializer(model_get,many=True) 

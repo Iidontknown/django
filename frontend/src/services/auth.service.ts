@@ -33,6 +33,8 @@ export const refreshToken = () => {
    let temp=localStorage.getItem("refresh")
   if(typeof(temp)!="string"){
     logout()
+    window.location.assign('/login');
+    window.location.reload();
     return
   }
   let refresh=JSON.parse(temp)
@@ -58,6 +60,7 @@ export const refreshToken = () => {
 export const logout = () => {
   localStorage.removeItem("user");
   localStorage.removeItem("access");
+ 
   localStorage.removeItem("refresh");
 };
 
@@ -71,4 +74,4 @@ export const getCurrentUser = () => {
 
 const timer: ReturnType<typeof setInterval> = setInterval(() => {
 refreshToken()
-}, 40000);
+}, 100000);
