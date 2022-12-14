@@ -63,7 +63,6 @@ def getRoutes(request):
 @permission_classes([IsAuthenticated])
 def getGrupa(request):
     user=request.user
-    user=2
     if request.method == 'GET':
         grupa=Grupa.objects.filter(user=user)
         serializer=GrupaSerializer(grupa,many=True)

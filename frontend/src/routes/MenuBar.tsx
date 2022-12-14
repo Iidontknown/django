@@ -25,11 +25,8 @@ const  MenuBar: React.FC = () => {
         {currentUser && (<>
         <Nav.Link href="/konto" className='text-white'>Konto</Nav.Link>
         <Nav.Link href="/katalog"className='text-white'>Zarządzaj Katalogami</Nav.Link>
-        <NavDropdown title="Admin" id="basic-nav-dropdown"className='text-white'>
-          <NavDropdown.Item href="/admin/user">Uzytkownicy</NavDropdown.Item>
-          <NavDropdown.Divider />
-          <NavDropdown.Item href="/admin/katalog">Katalogi</NavDropdown.Item>
-        </NavDropdown>
+        <Nav.Link href="/katalog"className='text-white'>Wyszukaj</Nav.Link>
+        
         
         <Nav.Link  onClick={wylogujsie} className='text-white'>Wyloguj się</Nav.Link>
         </>

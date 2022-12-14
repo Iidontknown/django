@@ -15,6 +15,7 @@ import MenuBar from "./routes/MenuBar";
 import Dodaj from "./components/katalog/Dodaj";
 import Manage from "./components/katalog/Manage";
 import KatalogMenu from "./components/katalog/KatalogMenu";
+import StronaKatalog from "./components/katalog/StronaKatalog";
 const root: ReactDOM.Root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
@@ -37,9 +38,10 @@ root.render(
           {/* <Route path="katalog" element={<Katalog />} /> */}
           <Route path="logout" element={<LogOut />} />
           <Route path="dodaj" element={<Dodaj />} />
-          <Route path="konto" element={<Konto />} />katalogMenu
+          <Route path="konto" element={<Konto />} />
           <Route path="manage" element={<Manage />} />
           <Route path="katalog" element={<KatalogMenu />} />
+          <Route path="StronaKatalog" element={<StronaKatalog />} />
         </Route>
 
     
