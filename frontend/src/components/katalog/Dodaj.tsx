@@ -7,6 +7,7 @@ import Select, { PropsValue, SingleValue } from "react-select";
 import ModellData from "../../types/modell";
 import ModellService from "../../services/ModellService";
 import KatalogData from "../../types/katalog";
+import KatalogService from "../../services/KatalogService";
 const Dodaj: React.FC = () => {
   const [listaProducent, setlistaProducent] = React.useState<
     Array<ProducentData>
@@ -29,7 +30,16 @@ const Dodaj: React.FC = () => {
   const [selectModell, setselectModell] = React.useState<ModellData | null>(
     null
   );
-
+  const [errorModell, seterrorModell] = React.useState<String>(
+    ""
+  );
+  const [nazwa_katalog_vaule, setnazwa_katalog_vaule] = React.useState<string>(
+    ""
+  );
+  const [Error_nazwa_katalog, setError_nazwa_katalog] = React.useState<string>(
+    ""
+  );
+  
   useEffect(() => {
     ProducentService.getall().then(
       (response) => {
@@ -99,13 +109,57 @@ const Dodaj: React.FC = () => {
     }
   };
   const DodajKatalog = () => {
+    if(nowyKatalog.modell!=0){
+      if(nowyKatalog.modell!=0){
+      
+        KatalogService.create( "nowyKatalog1",1)
+        .then((response: any) => {
+          console.log("dodano:" );
+          console.log(response);
+
+        })
+        .catch((e: Error) => {
+          console.log(e);
+        });
+    
+
+        
+      }else{
+        window.alert("brak modelu");
+      }
+    }else{
+      window.alert("brak modelu");
+    }
     console.log(nowyKatalog);
     console.log(publicKatalog);
   };
   function selectFiltermodelproducent(element: ModellData) {
     return element.Producent == selectProducentid;
   }
+  const nazwa_grupa_regexp = RegExp(
+    /^[A-Za-z][A-Za-z0-9_]{5,25}$/g
+  );
 
+  const nazwa_katalogInuputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    event.preventDefault();
+    const { name, value } = event.target;
+    if (value.length < 5 ||value.length > 25 ) {
+      setError_nazwa_katalog("Nazwa katalogu nie może mieć mniej niż 5 znaków i wiecej niż 25.");
+      setnazwa_katalog_vaule(value)
+    } else {
+      setError_nazwa_katalog("");
+      setnazwa_katalog_vaule(value)
+      if (!nazwa_grupa_regexp.test(value)) {
+        setError_nazwa_katalog("Nie prawidłowy znak w nazwie katalogu.");
+          setnazwa_katalog_vaule(value)
+        } else {
+          setError_nazwa_katalog("");
+          setnazwa_katalog_vaule(value)
+        }
+    }
+
+
+  }
   return (
     <>
       <Form>
@@ -154,28 +208,23 @@ const Dodaj: React.FC = () => {
               <Form.Label column lg={2}>
                 nazwa katalogu
               </Form.Label>
-              <Col lg={2}>
-                <input type="text" className="form-control" />
+              <Col >
+                {/* <input type="text" name="nazwa_katalog" className="form-control" /> */}
+            <input
+              type="text"
+              name="nazwa_grupa"
+              id="nazwa_grupa"
+              onChange={nazwa_katalogInuputChange}
+              value={nazwa_katalog_vaule}
+              className={`form-control ${
+                Error_nazwa_katalog != "" ? "is-invalid" : ""
+              }`}
+            />
+            <div className="invalid-feedback">{Error_nazwa_katalog}</div>
               </Col>
             </Row>
             <br />
-            {/* <Row>
-              <Col>
-                <div className="input-group mb-3">
-                  <div className="input-group-prepend">
-                    <div className="input-group-text">
-                      <input type="checkbox"  onChange={() => setpublicKatalog((publicKatalog) => !publicKatalog)}/>
-                    </div>
-                  </div>
-                  <input
-                    type="disable"
-                    className="form-control"
-                    placeholder="Zaznacz aby katalog był publiczny"
-                  />
-                </div>
-              </Col>
-            </Row> */}
-            <br />
+           
           </div>
           <Row>
             <Col>

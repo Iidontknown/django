@@ -60,6 +60,7 @@ def getRoutes(request):
 #     return Response(serializer.data)
  
 @api_view(['GET', 'POST'])
+
 @permission_classes([IsAuthenticated])
 def getGrupa(request):
     user=request.user
@@ -282,21 +283,33 @@ def getModell_pk(request,pk):
 
     
 @api_view(['GET', 'POST'])
-# @permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 def getKatalog_nadrzedny(request):
-    # user=request.producent
+    user=request.user
     if request.method == 'GET':
         katalog_nadrzedny=Katalog_nadrzedny.objects.all()
         serializer=Katalog_nadrzednySerializer(katalog_nadrzedny,many=True)
         return Response(serializer.data)
     elif request.method == 'POST':
-        request_data = JSONParser().parse(request)
-        serializer = Katalog_nadrzednySerializer(data=request_data)
+        # data = {
+        #     'modell': request.data.get('modell'),
+        #     'nazwa_katalog': request.data.get('nazwa_katalog'),
+        #     'katalog_wlascicel': user,
+
+        # }
+        data = {
+            'modell': request.data.get('modell'),
+            'nazwa_katalog': request.data.get('nazwa_katalog'),
+            'katalog_wlascicel': request.user.id,
+
+        }
+        serializer = Katalog_nadrzednySerializer(data=data)
         if serializer.is_valid():
             serializer.save()
             return Response({'message': 'dodano'}) 
         else:
-            return Response({'message': 'blad validaci'}) 
+           
+            return Response({'message': 'blad validaci'}, status=status.HTTP_400_BAD_REQUEST) 
        
 
 @api_view(['GET','PUT','DELETE'])
