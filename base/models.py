@@ -38,6 +38,8 @@ class Katalog_nadrzedny(models.Model):
     nazwa_katalog = models.TextField()
     katalog_wlascicel = models.ForeignKey(
         User, on_delete=models.CASCADE, null=True)
+    opis_katalog = models.TextField(null=True,blank=True,default=None)
+    
 
 
 class Katalog_Grupa(models.Model):

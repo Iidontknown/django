@@ -8,7 +8,10 @@ import ModellData from "../../types/modell";
 import ModellService from "../../services/ModellService";
 import KatalogData from "../../types/katalog";
 import KatalogService from "../../services/KatalogService";
+import { NavigateFunction, useNavigate } from "react-router-dom";
 const Dodaj: React.FC = () => {
+  
+  let navigate: NavigateFunction = useNavigate();
   const [listaProducent, setlistaProducent] = React.useState<
     Array<ProducentData>
   >([]);
@@ -19,6 +22,7 @@ const Dodaj: React.FC = () => {
     modell: 0,
     katalog_wlascicel: 0,
     nazwa_katalog: "",
+    opis_katalog:"",
   });
   const [selectProducentid, setselectProducentid] = React.useState<
     number | null
@@ -116,7 +120,8 @@ const Dodaj: React.FC = () => {
         .then((response: any) => {
           console.log("dodano:" );
           console.log(response);
-
+          navigate("/lista");
+          window.location.reload();
         })
         .catch((e: Error) => {
           console.log(e);

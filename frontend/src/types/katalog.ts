@@ -3,4 +3,5 @@ export default interface KatalogData {
     nazwa_katalog: string,
     modell: number,
     katalog_wlascicel: number,
+    opis_katalog:string,
   }

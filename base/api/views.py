@@ -285,22 +285,16 @@ def getModell_pk(request,pk):
 @api_view(['GET', 'POST'])
 @permission_classes([IsAuthenticated])
 def getKatalog_nadrzedny(request):
-    user=request.user
+    user=request.user.id
     if request.method == 'GET':
-        katalog_nadrzedny=Katalog_nadrzedny.objects.all()
+        katalog_nadrzedny=Katalog_nadrzedny.objects.all().filter(katalog_wlascicel=user)
         serializer=Katalog_nadrzednySerializer(katalog_nadrzedny,many=True)
         return Response(serializer.data)
     elif request.method == 'POST':
-        # data = {
-        #     'modell': request.data.get('modell'),
-        #     'nazwa_katalog': request.data.get('nazwa_katalog'),
-        #     'katalog_wlascicel': user,
-
-        # }
         data = {
             'modell': request.data.get('modell'),
             'nazwa_katalog': request.data.get('nazwa_katalog'),
-            'katalog_wlascicel': request.user.id,
+            'katalog_wlascicel': user,
 
         }
         serializer = Katalog_nadrzednySerializer(data=data)
