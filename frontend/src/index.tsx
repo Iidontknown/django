@@ -40,7 +40,7 @@ root.render(
           <Route path="dodaj" element={<Dodaj />} />
           <Route path="konto" element={<Konto />} />
           <Route path="manage" element={<Manage />} />
-          <Route path="katalog" element={<KatalogMenu />} />
+          <Route path="katalog/:id" element={<KatalogMenu />} />
           <Route path="StronaKatalog" element={<StronaKatalog />} />
         </Route>
 

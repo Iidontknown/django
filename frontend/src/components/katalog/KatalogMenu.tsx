@@ -6,17 +6,18 @@ import ProducentData from '../../types/producent';
 import Select, { SingleValue } from "react-select";
 import ModellData from '../../types/modell';
 import { CardColumns } from 'reactstrap';
+import { useParams } from 'react-router-dom';
 
 
 const KatalogMenu: React.FC = () => {
- 
+  let { id } = useParams();
 
   return (
     <> 
     <Container className='pt-1'>
     <div className=" text-center">
     <h1 className="display-4">Deutz fahr 4075/4080/4090 -/h/hts </h1>
-    <p >Własiciel: Admin</p>
+    <p >Własiciel: Admin{id}</p>
   </div>
   <hr/>
      <CardColumns>
