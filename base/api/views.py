@@ -413,6 +413,31 @@ def getStrona_katalog_pk(request,pk):
         model_get.delete() 
         return Response({'message': 'deleted successfully!'}, status=status.HTTP_200_OK)
            
+
+
+
+@api_view(['GET','PUT','DELETE'])
+# @permission_classes([IsAuthenticated])
+def getStrona_katalog_wybrany_pk(request,pk):
+    try: 
+        model_get = Strona_katalog.objects.all().filter(katalog_nadrzedny=pk) 
+    except : 
+        return Response({'message': 'nie istnieje'}, status=status.http_204_no_content) 
+ 
+    if request.method == 'GET': 
+        get_serializer = Strona_katalogSerializer(model_get,many=True) 
+        return Response(get_serializer.data) 
+    elif request.method == 'PUT': 
+        serializer = Strona_katalogSerializer(instance = model_get, data=request.data, partial = True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    elif request.method == 'DELETE': 
+        model_get.delete() 
+        return Response({'message': 'deleted successfully!'}, status=status.HTTP_200_OK)
+           
 #Numer_katalogowy view
 
     

@@ -119,13 +119,14 @@ class Katalog_GrupaSerializer(ModelSerializer):
 class Strona_katalogSerializer(ModelSerializer):
     class Meta:
         model=Strona_katalog
-        fields=('id','katalog_nadrzedny','numer_strony','nazwa_strony')
+        fields=('id','katalog_nadrzedny','numer_strony','nazwa_strony','zdjecie_strona_katalog')
         
     def create(self, validated_data):
         model_temp = Strona_katalog.objects.create(
             katalog_nadrzedny=validated_data['katalog_nadrzedny'],
             numer_strony=validated_data['numer_strony'],
             nazwa_strony=validated_data['nazwa_strony'],
+            zdjecie_strona_katalog=validated_data['zdjecie_strona_katalog'],
         )
         model_temp.save()
         return model_temp

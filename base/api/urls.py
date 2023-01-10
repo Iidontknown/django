@@ -29,6 +29,7 @@ urlpatterns = [
     path('katalog_grupa/<int:pk>', views.getKatalog_Grupa_pk),
     path('strona_katalog/', views.getStrona_katalog),
     path('strona_katalog/<int:pk>', views.getStrona_katalog_pk),
+    path('strona_katalog_wybrany/<int:pk>', views.getStrona_katalog_wybrany_pk),
     path('numer_katalogowy/', views.getNumer_katalogowy),
     path('numer_katalogowy/<int:pk>', views.getNumer_katalogowy_pk),
     path('czesc/', views.getCzesc),

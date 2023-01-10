@@ -5,10 +5,14 @@ import getGrupaall from "../services/GrupyService";
 import GrupaData from "./../types/grupa";
 import GrupyService from "../services/GrupyService";
 import { Link } from "react-router-dom";
+import KatalogService from "../services/KatalogService";
+import KatalogData from "../types/katalog";
 const API_URL = "http://localhost:8000/api/";
 
 const Konto: React.FC = () => {
   const currentUser = getCurrentUser();
+  
+  const [Katalogi, setKatalogi] = React.useState<Array<KatalogData>>([]);
   let refresh: any = "";
   refresh = localStorage.getItem("refresh");
   let access = localStorage.getItem("access");
@@ -19,6 +23,7 @@ const Konto: React.FC = () => {
 
   console.log(listaGrup);
   useEffect(() => {
+    getallkatalog()
     GrupyService.getGrupaall().then(
       (response) => {
         try {
@@ -38,7 +43,16 @@ const Konto: React.FC = () => {
       }
     );
   }, []);
-
+  const getallkatalog = () => {
+    KatalogService.getall()
+      .then((response: any) => {
+        setKatalogi(response.data);
+        console.log(response.data);
+      })
+      .catch((e: Error) => {
+        console.log(e);
+      });
+  };
   return (
     <>
       <div className="container bg-light   ">
@@ -55,11 +69,12 @@ const Konto: React.FC = () => {
         <p>
           <strong>Email:</strong> {currentUser.email}
         </p>
-        <Link to="/grupa">
+        <Link to="/lista">
           <strong>katalogi którymi jestes właścicielem :</strong>{" "}
         </Link>
         <ul>
-          <li>Deutz fahr 4075/4080/4090 -/h/hts</li>
+        {Katalogi &&
+            Katalogi.map((val) => <Link to={`/katalog/${val.id}`}> <li key="{val.id}"> {val.nazwa_katalog}</li></Link>)}
         </ul>{" "}
         <Link to="/grupa">
           <strong>Grupy którymi jestes właścicielem :</strong>
