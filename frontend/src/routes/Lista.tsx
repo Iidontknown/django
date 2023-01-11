@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Card, Button, CardGroup, Container, Col } from "react-bootstrap";
+import { Card, Button, CardGroup, Container, Col, Figure } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { CardColumns } from "reactstrap";
 import MenuBar from "./MenuBar";
@@ -32,6 +32,8 @@ export default function Lista(): JSX.Element {
   return (
     <>
       <Container>
+     <h1 className="mt-4">Twoje Katalogi</h1>
+     <hr/>
         <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
           {Katalogi.length != 0 ? (
             Katalogi.map((val, key) => (

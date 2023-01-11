@@ -480,7 +480,28 @@ def getNumer_katalogowy_pk(request,pk):
     elif request.method == 'DELETE': 
         model_get.delete() 
         return Response({'message': 'deleted successfully!'}, status=status.HTTP_200_OK)
-           
+@api_view(['GET','PUT','DELETE'])
+# @permission_classes([IsAuthenticated])
+def getNumer_katalogowy_wybrany_pk(request,pk):
+    try: 
+        model_get = Numer_katalogowy.objects.all().filter(strona_katalog=pk) 
+    except : 
+        return Response({'message': 'nie istnieje'}, status=status.http_204_no_content) 
+ 
+    if request.method == 'GET': 
+        get_serializer = Numer_katalogowySerializer(model_get,many=True) 
+        return Response(get_serializer.data) 
+    elif request.method == 'PUT': 
+        serializer = Numer_katalogowySerializer(instance = model_get, data=request.data, partial = True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    elif request.method == 'DELETE': 
+        model_get.delete() 
+        return Response({'message': 'deleted successfully!'}, status=status.HTTP_200_OK)
+                   
 #Czesc view
 
     
@@ -566,6 +587,27 @@ def getNumer_katalogowy_Czesc_pk(request,pk):
     elif request.method == 'DELETE': 
         model_get.delete() 
         return Response({'message': 'deleted successfully!'}, status=status.HTTP_200_OK)
+@api_view(['GET','PUT','DELETE'])
+# @permission_classes([IsAuthenticated])
+def getNumer_katalogowy_Czesc_wybrany_pk(request,pk):
+    try: 
+        model_get = Numer_katalogowy_Czesc.objects.all().filter(numer_katalogowy=pk) 
+    except : 
+        return Response({'message': 'nie istnieje'}, status=status.http_204_no_content) 
+ 
+    if request.method == 'GET': 
+        get_serializer = Numer_katalogowy_CzescSerializer(model_get,many=True) 
+        return Response(get_serializer.data) 
+    elif request.method == 'PUT': 
+        serializer = Numer_katalogowy_CzescSerializer(instance = model_get, data=request.data, partial = True,many=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    elif request.method == 'DELETE': 
+        model_get.delete() 
+        return Response({'message': 'deleted successfully!'}, status=status.HTTP_200_OK)
            
 @api_view(['GET', 'POST'])
 # @permission_classes([IsAuthenticated])
@@ -606,5 +648,5 @@ def getZdjecie_pk(request,pk):
             Response(settings.MEDIA_ROOT+ get_serializer.data['image'])
         if os.path.exists(settings.MEDIA_ROOT+get_serializer.data['image_Thumbnails']):
             os.remove(settings.MEDIA_ROOT+get_serializer.data['image_Thumbnails'])
-        # model_get.delete() 
+        model_get.delete() 
         return Response( {'message': 'deleted successfully!'}, status=status.HTTP_200_OK)

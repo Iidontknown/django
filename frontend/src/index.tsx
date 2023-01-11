@@ -41,7 +41,7 @@ root.render(
           <Route path="konto" element={<Konto />} />
           <Route path="manage" element={<Manage />} />
           <Route path="katalog/:id" element={<KatalogMenu />} />
-          <Route path="StronaKatalog" element={<StronaKatalog />} />
+          <Route path="katalog/:id/:idstrona/" element={<StronaKatalog />} />
         </Route>
 
     

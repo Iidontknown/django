@@ -114,9 +114,9 @@ const Dodaj: React.FC = () => {
   };
   const DodajKatalog = () => {
     if(nowyKatalog.modell!=0){
-      if(nowyKatalog.modell!=0){
+      if(selectModell !=null){
       
-        KatalogService.create( "nowyKatalog1",1)
+        KatalogService.create( nazwa_katalog_vaule,selectModell.id)
         .then((response: any) => {
           console.log("dodano:" );
           console.log(response);

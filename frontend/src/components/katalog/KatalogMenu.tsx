@@ -6,7 +6,7 @@ import ProducentData from '../../types/producent';
 import Select, { SingleValue } from "react-select";
 import ModellData from '../../types/modell';
 import { CardColumns } from 'reactstrap';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { getCurrentUser } from '../../services/auth.service';
 import KatalogService from '../../services/KatalogService';
 import KatalogData from './../../types/katalog';
@@ -16,10 +16,16 @@ import strona_katalogData from '../../types/strona_katalog';
 
 const KatalogMenu: React.FC = () => {
   
+  const [inputnazwa_strony, setinputnazwa_strony] = React.useState<string>('');
+  const [setError_inputnazwa_strony, setsetError_inputnazwa_strony] = React.useState<string>('');
+  const [inputerror, setinputerror] = React.useState<boolean>(true);
   const [loading, setloading] = React.useState<boolean>(true);
   const [errormessage, seterrormessage] = React.useState<string>("");
   const [strona_katalogi, setstrona_katalogi] = React.useState<Array<strona_katalogData>>([]);
-
+  const regexp = RegExp(
+    /^[A-Za-z][A-Za-z0-9_]{5,25}$/g
+  );
+  const [kolejnaStrona, setkolejnaStrona] = React.useState<number>(1);
   const [katalog,setKatalog]= React.useState<KatalogData>({
     id: 0,
     modell: 0,
@@ -27,12 +33,14 @@ const KatalogMenu: React.FC = () => {
     nazwa_katalog: "asd",
     opis_katalog:"asd",
   });
-  let { id } = useParams();
+  const { id} = useParams();
+
   const aktualnyUser = getCurrentUser();
   console.log(aktualnyUser)
   useEffect(() => {
     getkatalog(id);
-    getStrona_katalogi(1)
+    const tempidkatalog=Number(id)
+    getStrona_katalogi(tempidkatalog)
   }, []);
   const getkatalog = (x:any) => {
     KatalogService.get_id(x)
@@ -60,6 +68,31 @@ const KatalogMenu: React.FC = () => {
         console.log(e);
       });
   };
+
+  const InuputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    event.preventDefault();
+    const { name, value } = event.target;
+    if (value.length < 5 ||value.length > 25 ) {
+      setsetError_inputnazwa_strony("Nazwa katalogu nie może mieć mniej niż 5 znaków i wiecej niż 25.");
+      setinputerror(true)
+      setinputnazwa_strony(value)
+    } else {
+      setsetError_inputnazwa_strony("");
+      setinputerror(false)
+      setinputnazwa_strony(value)
+      if (!regexp.test(value)) {
+        setsetError_inputnazwa_strony("Nie prawidłowy znak w nazwie katalogu.");
+        setinputerror(true)
+        setinputnazwa_strony(value)
+        } else {
+          setsetError_inputnazwa_strony("");
+          setinputerror(false)
+          setinputnazwa_strony(value)
+        }
+    }
+
+
+  }
   return (
     <> {!loading&&
     <Container className='pt-1'>
@@ -77,27 +110,41 @@ const KatalogMenu: React.FC = () => {
   <hr/>
      <CardColumns>
     
-     <Card>
-    <Card.Img variant="top" height='160px' src="https://cdn.shopify.com/s/files/1/2222/6299/products/deutz1_245438b8-6fbf-4aef-955d-5c212c946e5a_1024x1024@2x.jpg?v=1527328553" />
-    <Card.Body>
-      <Card.Title>Przykładowa nazwa strony</Card.Title>
-      <div className="text-right">1</div>
-    </Card.Body>
-  </Card> 
+     
  {strona_katalogi&&
    strona_katalogi.map((val, key) => (
-    <>
-      <Card key={key}>
-    <Card.Img variant="top" height='160px' src="https://cdn.shopify.com/s/files/1/2222/6299/products/deutz1_245438b8-6fbf-4aef-955d-5c212c946e5a_1024x1024@2x.jpg?v=1527328553" />
+    <><Link key={key} to={'/katalog/'+val.katalog_nadrzedny+'/'+val.id+'/'}>
+      <Card >
+    <Card.Img variant="top" height='160px' src={"http://localhost:8000/api/" + val.zdjecie_image_Thumbnails}/>
     <Card.Body>
       <Card.Title>{val.nazwa_strony}</Card.Title>
       <div className="text-right">{val.numer_strony}</div>
     </Card.Body>
-  </Card> 
-    </>
+  </Card> </Link>
+    
+  </>
 ))
 
  }
+
+{katalog.katalog_wlascicel==aktualnyUser.user_id?(
+      <>
+       <Card >
+        
+    <Card.Body>
+    <p>Dodaj Strone do katalogu</p>
+      <input type='file' placeholder='Dodaj zdjecie'  accept="image/png, image/gif, image/jpeg"></input>
+      <input type='text' placeholder='Nazwa Strony'name='nazwa_strony' value={inputnazwa_strony} onChange={InuputChange}></input>
+      <input type='number' placeholder='Numer strony' min='1'></input>
+       <div className="m-10 btn-group d-flex justify-content-center">
+              <button className="btn btn-success  " disabled>Dodaj stronę</button>
+            </div>
+    </Card.Body>
+  </Card>
+      </>
+    ):( <>
+      </>)
+    }
 </CardColumns>
 </Container>
 }

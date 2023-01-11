@@ -95,8 +95,6 @@ class Numer_katalogowy(models.Model):
 
 
 class Czesc(models.Model):
-    numer_katalogowy = models.ForeignKey(
-        Numer_katalogowy, on_delete=models.CASCADE, null=True)
     nazwa_Czesc = models.TextField()
     opis_Czesc = models.TextField()
 

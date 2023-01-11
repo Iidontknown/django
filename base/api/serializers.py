@@ -117,9 +117,11 @@ class Katalog_GrupaSerializer(ModelSerializer):
         return model_temp
 
 class Strona_katalogSerializer(ModelSerializer):
+    
+    zdjecie_image_Thumbnails = serializers.CharField(source='zdjecie_strona_katalog.image_Thumbnails', read_only=True)
     class Meta:
         model=Strona_katalog
-        fields=('id','katalog_nadrzedny','numer_strony','nazwa_strony','zdjecie_strona_katalog')
+        fields=('id','katalog_nadrzedny','numer_strony','nazwa_strony','zdjecie_strona_katalog','zdjecie_image_Thumbnails')
         
     def create(self, validated_data):
         model_temp = Strona_katalog.objects.create(
@@ -148,11 +150,10 @@ class Numer_katalogowySerializer(ModelSerializer):
 class CzescSerializer(ModelSerializer):
     class Meta:
         model=Czesc
-        fields=('id','numer_katalogowy','nazwa_Czesc','opis_Czesc')
+        fields=('id','nazwa_Czesc','opis_Czesc')
         
     def create(self, validated_data):
         model_temp = Czesc.objects.create(
-            numer_katalogowy=validated_data['numer_katalogowy'],
             nazwa_Czesc=validated_data['nazwa_Czesc'],
             opis_Czesc=validated_data['opis_Czesc'],
         )
@@ -160,9 +161,11 @@ class CzescSerializer(ModelSerializer):
         return model_temp
 
 class Numer_katalogowy_CzescSerializer(ModelSerializer):
+    
+    czesc_nazwa_Czesc = serializers.CharField(source='czesc.nazwa_Czesc', read_only=True)
     class Meta:
         model=Numer_katalogowy_Czesc
-        fields=('id','numer_katalogowy','czesc','opis_Numer_katalogowy_Czesc')
+        fields=('id','numer_katalogowy','czesc','opis_Numer_katalogowy_Czesc','czesc_nazwa_Czesc')
         
     def create(self, validated_data):
         model_temp = Numer_katalogowy_Czesc.objects.create(
