@@ -24,10 +24,10 @@ async function getall() {
     }
 
 
-    export const create = (nazwa_grupa:string) => {
+    export const create = (nazwa_Czesc:string,opis_Czesc:string) => {
 
       return axios.post(API_URL + "czesc/", {
-        nazwa_grupa,
+        nazwa_Czesc,opis_Czesc
       }, { headers: authHeader() });
 
 

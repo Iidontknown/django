@@ -63,7 +63,7 @@ def getRoutes(request):
 
 @permission_classes([IsAuthenticated])
 def getGrupa(request):
-    user=request.user
+    user=request.user.id
     if request.method == 'GET':
         grupa=Grupa.objects.filter(user=user)
         serializer=GrupaSerializer(grupa,many=True)
@@ -79,7 +79,7 @@ def getGrupa(request):
             serializer.save()
             return Response({'message': 'dodano'}) 
         else:
-            return Response({'message': 'sadasd'}, status=status.HTTP_400_BAD_REQUEST) 
+            return Response({'message': 'sadasd','error':serializer.errors}, status=status.HTTP_400_BAD_REQUEST) 
        
 
 @api_view(['GET','PUT','DELETE'])
@@ -518,9 +518,9 @@ def getCzesc(request):
         serializer = CzescSerializer(data=request_data)
         if serializer.is_valid():
             serializer.save()
-            return Response({'message': 'dodano'}) 
+            return Response({'message': 'dodano','id':serializer.data['id']}) 
         else:
-            return Response({'message': 'blad validaci'}) 
+            return Response({'message': 'blad validaci','error':serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
        
 
 @api_view(['GET','PUT','DELETE'])
@@ -613,22 +613,25 @@ def getNumer_katalogowy_Czesc_wybrany_pk(request,pk):
 # @permission_classes([IsAuthenticated])
 def getZdjecie(request):
     
-    # user=request.producent
     if request.method == 'GET':
         model_get=Zdjecie.objects.all()
         serializer=ZdjecieSerializer(model_get,many=True)
         return Response(serializer.data)
     elif request.method == 'POST':
-        
-        # request_data = JSONParser().parse(request)
-        # request_data.tytul_zdiecie="ala_makota"
-        serializer = ZdjecieSerializer(data=request.data)
+        user=request.user.id
+        data = {
+            'opis_zdjecie': request.data.get('opis_zdjecie'),
+            'wlasciciel': user,
+            'image':request.data.get('image'),
+
+        }
+        serializer = ZdjecieSerializer(data=data)
         
         if serializer.is_valid():
             serializer.save()
-            return Response({'message': 'dodano'}) 
+            return Response({'message': 'dodano','id':serializer.data['id']}) 
         else:
-            return Response({'message': 'blad validaci'}) 
+            return Response({'message': 'blad validaci','data':data,'error':serializer.errors}, status=status.HTTP_400_BAD_REQUEST) 
 @api_view(['GET','PUT','DELETE'])
 # @permission_classes([IsAuthenticated])
 def getZdjecie_pk(request,pk):

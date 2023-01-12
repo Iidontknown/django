@@ -83,6 +83,13 @@ const Konto: React.FC = () => {
           {listaGrup &&
             listaGrup.map((val) => <li key="{val.id}"> {val.nazwa_grupa}</li>)}
         </ul>
+        <Link to="/grupa">
+          <strong>Twoje listy czesci:</strong>
+        </Link> 
+            <ul>
+              <li>Testowa Lista1</li>
+              <li>Testowa Lista2</li>
+            </ul>
       </div>
     </>
   );

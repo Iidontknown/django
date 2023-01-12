@@ -54,7 +54,6 @@ def upload_to(instance, filename):
 
 class Zdjecie(models.Model):
     wlasciciel = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
-    tytul_zdiecie = models.TextField()
     opis_zdjecie = models.TextField()
 
     class Watermark(object):
@@ -67,12 +66,12 @@ class Zdjecie(models.Model):
             return image
     image = ProcessedImageField(upload_to=upload_to,
                                 processors=[ResizeToFill(
-                                    1000, 500), Watermark()],
+                                    1080, 1920), Watermark()],
                                 format='JPEG',
-                                options={'quality': 60})
+                                options={'quality': 90})
     image_Thumbnails = ImageSpecField(source='image',
                                       processors=[ResizeToFill(
-                                          100, 50), Watermark()],
+                                          400, 200), Watermark()],
                                       format='JPEG',
                                       options={'quality': 60})
 

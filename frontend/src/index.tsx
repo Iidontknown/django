@@ -16,6 +16,7 @@ import Dodaj from "./components/katalog/Dodaj";
 import Manage from "./components/katalog/Manage";
 import KatalogMenu from "./components/katalog/KatalogMenu";
 import StronaKatalog from "./components/katalog/StronaKatalog";
+import Wyszukaj from "./routes/Wyszukaj";
 const root: ReactDOM.Root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
@@ -39,6 +40,7 @@ root.render(
           <Route path="logout" element={<LogOut />} />
           <Route path="dodaj" element={<Dodaj />} />
           <Route path="konto" element={<Konto />} />
+          <Route path="wyszukaj" element={<Wyszukaj />} />
           <Route path="manage" element={<Manage />} />
           <Route path="katalog/:id" element={<KatalogMenu />} />
           <Route path="katalog/:id/:idstrona/" element={<StronaKatalog />} />

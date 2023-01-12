@@ -141,7 +141,7 @@ class Numer_katalogowySerializer(ModelSerializer):
     def create(self, validated_data):
         model_temp = Numer_katalogowy.objects.create(
             strona_katalog=validated_data['strona_katalog'],
-            numer_strony=validated_data['numer_katalogowy_strona'],
+            numer_katalogowy_strona=validated_data['numer_katalogowy_strona'],
             opis_Numer_katalogowy=validated_data['opis_Numer_katalogowy'],
         )
         model_temp.save()
@@ -183,12 +183,11 @@ class ZdjecieSerializer(ModelSerializer):
     image_Thumbnails = serializers.ImageField(read_only=True)
     class Meta:
         model=Zdjecie
-        fields=('id','wlasciciel','tytul_zdiecie','opis_zdjecie','image','image_Thumbnails')
+        fields=('id','wlasciciel','opis_zdjecie','image','image_Thumbnails')
         
     # def create(self, validated_data):
     #     model_temp = Numer_katalogowy_Czesc.objects.create(
     #         wlasciciel=validated_data['wlasciciel'],
-    #         tytul_zdiecie=validated_data['tytul_zdiecie'],
     #         opis_zdjecie=validated_data['opis_zdjecie'],
     #         image_url=validated_data['image_url'],
     #     )

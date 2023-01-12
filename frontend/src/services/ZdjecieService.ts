@@ -24,14 +24,22 @@ async function getall() {
     }
 
 
-    export const create = (nazwa_grupa:string) => {
-
+    export const create = (image:File,opis_zdjecie:string) => {
+      const access = localStorage.getItem("access");
+      // let image=zdjecie
+      console.log(image)
+    if (access) {
+      let user = null;
+      user = JSON.parse(access);
+       ;
+      console.log(image)
       return axios.post(API_URL + "zdjecie/", {
-        nazwa_grupa,
-      }, { headers: authHeader() });
+        image,opis_zdjecie
+      }, { headers: { "Content-Type": "multipart/form-data",Authorization: 'Bearer ' + user ,} });
 
 
-      
+    }else{
+      throw new Error('brak user'); }
     };
     export const change_id = (nazwa_grupa:string,id:number) => {
       console.log(id+nazwa_grupa)

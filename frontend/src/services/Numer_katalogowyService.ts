@@ -32,10 +32,10 @@ async function getall() {
     }
 
 
-    export const create = (nazwa_grupa:string) => {
+    export const create = (numer_katalogowy_strona:string,opis_Numer_katalogowy:string,strona_katalog:number) => {
 
       return axios.post(API_URL + "numer_katalogowy/", {
-        nazwa_grupa,
+        numer_katalogowy_strona,opis_Numer_katalogowy,strona_katalog
       }, { headers: authHeader() });
 
 
