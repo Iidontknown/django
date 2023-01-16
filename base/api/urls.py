@@ -41,5 +41,10 @@ urlpatterns = [
     path('numer_katalogowy_czesc_wybrany/<int:pk>',
          views.getNumer_katalogowy_Czesc_wybrany_pk),     
     path('zdjecie/', views.getZdjecie),
-    path('zdjecie/<int:pk>', views.getZdjecie_pk),
+    path('zdjecie/<int:pk>', views.getZdjecie_pk),     
+    path('lista/', views.getLista),
+    path('lista/<int:pk>', views.getLista_pk),   
+    path('numer_katalogowy_lista/', views.getNumer_katalogowy_Lista),
+    path('numer_katalogowy_lista/<int:pk>', views.getNumer_katalogowy_Lista_pk),
+    path('numer_katalogowy_lista_wybrany/<int:pk>', views.getNumer_katalogowy_Lista_wybrany_pk),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

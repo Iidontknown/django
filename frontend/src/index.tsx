@@ -5,7 +5,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import App from "./routes/App";
 import Login from "./routes/Login";
 import Rejestracja from "./routes/Rejestracja";
-import Lista from "./routes/Lista";
 import Konto from "./routes/Konto";
 import LogOut from "./routes/LogOut";
 import { getCurrentUser } from "./services/auth.service";
@@ -17,6 +16,8 @@ import Manage from "./components/katalog/Manage";
 import KatalogMenu from "./components/katalog/KatalogMenu";
 import StronaKatalog from "./components/katalog/StronaKatalog";
 import Wyszukaj from "./routes/Wyszukaj";
+import Katalog from "./routes/Katalog";
+import Lista from "./routes/Lista";
 const root: ReactDOM.Root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
@@ -32,16 +33,16 @@ root.render(
         <Route path="rejestracja" element={<Rejestracja />} />
 
         <Route path="/" element={<ProtectedRoutes />}>
-          <Route path="/lista" element={<Lista />} />
+          <Route path="lista" element={<Lista />} />
           <Route path="dodaj" element={<Dodaj />} />
           <Route path="konto" element={<Konto />} />
           <Route path="grupa" element={<GrupaLista />} />
-          {/* <Route path="katalog" element={<Katalog />} /> */}
           <Route path="logout" element={<LogOut />} />
           <Route path="dodaj" element={<Dodaj />} />
           <Route path="konto" element={<Konto />} />
           <Route path="wyszukaj" element={<Wyszukaj />} />
           <Route path="manage" element={<Manage />} />
+          <Route path="katalog" element={<Katalog />} />
           <Route path="katalog/:id" element={<KatalogMenu />} />
           <Route path="katalog/:id/:idstrona/" element={<StronaKatalog />} />
         </Route>

@@ -13,12 +13,12 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework import status
 
 from django.contrib.auth.models import User
-from .serializers import CzescSerializer, GrupaUserSerializer, Katalog_GrupaSerializer, Katalog_nadrzednySerializer, ModellSerializer, Numer_katalogowy_CzescSerializer, Numer_katalogowySerializer, ProducentSerializer, RegisterSerializer, Strona_katalogSerializer, ZdjecieSerializer
+from .serializers import CzescSerializer, GrupaUserSerializer, Katalog_GrupaSerializer, Katalog_nadrzednySerializer, ListaSerializer, ModellSerializer, Numer_katalogowy_CzescSerializer, Numer_katalogowy_ListaSerializer, Numer_katalogowySerializer, ProducentSerializer, RegisterSerializer, Strona_katalogSerializer, ZdjecieSerializer
 from rest_framework import generics
 from rest_framework.permissions import AllowAny
 
 from .serializers import GrupaSerializer
-from base.models import Czesc, Grupa, GrupaUser, Katalog_Grupa, Katalog_nadrzedny, Modell, Numer_katalogowy, Numer_katalogowy_Czesc, Producent, Strona_katalog, Zdjecie
+from base.models import Czesc, Grupa, GrupaUser, Katalog_Grupa, Katalog_nadrzedny, Lista, Modell, Numer_katalogowy, Numer_katalogowy_Czesc, Numer_katalogowy_Lista, Producent, Strona_katalog, Zdjecie
 
 from rest_framework.parsers import JSONParser 
 
@@ -653,3 +653,112 @@ def getZdjecie_pk(request,pk):
             os.remove(settings.MEDIA_ROOT+get_serializer.data['image_Thumbnails'])
         model_get.delete() 
         return Response( {'message': 'deleted successfully!'}, status=status.HTTP_200_OK)
+
+
+# view lista
+@api_view(['GET', 'POST'])
+@permission_classes([IsAuthenticated])
+def getLista(request):
+    
+    user=request.user.id
+    # user=request.producent
+    if request.method == 'GET':
+        model_get=Lista.objects.filter(user=user)
+        serializer=ListaSerializer(model_get,many=True)
+        return Response(serializer.data)
+    elif request.method == 'POST':
+        request_data = JSONParser().parse(request)
+        request_data['user']=user
+        serializer = ListaSerializer(data=request_data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'message': 'dodano'}) 
+        else:
+            return Response({'message': 'blad validaci','error':serializer.errors}, status=status.HTTP_400_BAD_REQUEST) 
+       
+
+@api_view(['GET','PUT','DELETE'])
+# @permission_classes([IsAuthenticated])
+def getLista_pk(request,pk):
+    try: 
+        model_get = Lista.objects.get(pk=pk) 
+    except : 
+        return Response({'message': 'nie istnieje'}, status=status.http_204_no_content) 
+ 
+    if request.method == 'GET': 
+        get_serializer = ListaSerializer(model_get) 
+        return Response(get_serializer.data) 
+    elif request.method == 'PUT': 
+        serializer = ListaSerializer(instance = model_get, data=request.data, partial = True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    elif request.method == 'DELETE': 
+        model_get.delete() 
+        return Response({'message': 'deleted successfully!'}, status=status.HTTP_200_OK)
+
+# view Numer_katalogowy_Lista
+@api_view(['GET', 'POST'])
+@permission_classes([IsAuthenticated])
+def getNumer_katalogowy_Lista(request):
+    user=request.user.id
+    if request.method == 'GET':
+        model_get=Numer_katalogowy_Lista.objects.filter(lista__user__id=user)
+        serializer=Numer_katalogowy_ListaSerializer(model_get,many=True)
+        return Response(serializer.data)
+    elif request.method == 'POST':
+        request_data = JSONParser().parse(request)
+        serializer = Numer_katalogowy_ListaSerializer(data=request_data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'message': 'dodano'}) 
+        else:
+            return Response({'message': 'blad validaci','error':serializer.errors}, status=status.HTTP_400_BAD_REQUEST) 
+       
+
+@api_view(['GET','PUT','DELETE'])
+# @permission_classes([IsAuthenticated])
+def getNumer_katalogowy_Lista_pk(request,pk):
+    try: 
+        model_get = Numer_katalogowy_Lista.objects.get(pk=pk) 
+    except : 
+        return Response({'message': 'nie istnieje'}, status=status.http_204_no_content) 
+ 
+    if request.method == 'GET': 
+        get_serializer = Numer_katalogowy_ListaSerializer(model_get) 
+        return Response(get_serializer.data) 
+    elif request.method == 'PUT': 
+        serializer = Numer_katalogowy_ListaSerializer(instance = model_get, data=request.data, partial = True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    elif request.method == 'DELETE': 
+        model_get.delete() 
+        return Response({'message': 'deleted successfully!'}, status=status.HTTP_200_OK)
+
+@api_view(['GET','PUT','DELETE'])
+# @permission_classes([IsAuthenticated])
+
+def getNumer_katalogowy_Lista_wybrany_pk(request,pk):
+    try: 
+        model_get = Numer_katalogowy_Lista.objects.all().filter(lista=pk) 
+    except : 
+        return Response({'message': 'nie istnieje'}, status=status.http_204_no_content) 
+ 
+    if request.method == 'GET': 
+        get_serializer = Numer_katalogowy_ListaSerializer(model_get,many=True) 
+        return Response(get_serializer.data) 
+    elif request.method == 'PUT': 
+        serializer = Numer_katalogowy_ListaSerializer(instance = model_get, data=request.data, partial = True,many=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    elif request.method == 'DELETE': 
+        model_get.delete() 
+        return Response({'message': 'deleted successfully!'}, status=status.HTTP_200_OK)

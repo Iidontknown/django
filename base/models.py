@@ -104,4 +104,14 @@ class Numer_katalogowy_Czesc(models.Model):
     czesc = models.ForeignKey(Czesc, on_delete=models.CASCADE, null=True)
     opis_Numer_katalogowy_Czesc = models.TextField()
 
+class Lista(models.Model):
+    
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=False)
+    nazwa_lista = models.TextField()
+
+class Numer_katalogowy_Lista(models.Model):
+    numer_katalogowy = models.ForeignKey(
+        Numer_katalogowy, on_delete=models.CASCADE)
+    lista = models.ForeignKey(Lista, on_delete=models.CASCADE, null=True)
+    liczba = models.PositiveIntegerField(default=1)
 

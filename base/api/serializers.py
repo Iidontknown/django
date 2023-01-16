@@ -7,17 +7,18 @@ from django.contrib.auth.password_validation import validate_password
 from rest_framework.serializers import ModelSerializer
 from base.models import *
 
+
 class RegisterSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(
-            required=True,
-            validators=[UniqueValidator(queryset=User.objects.all())]
-            )
+        required=True,
+        validators=[UniqueValidator(queryset=User.objects.all())]
+    )
 
     password = serializers.CharField(write_only=True, required=True)
+
     class Meta:
         model = User
         fields = ('username', 'password', 'email')
-
 
     def create(self, validated_data):
         user = User.objects.create(
@@ -28,12 +29,18 @@ class RegisterSerializer(serializers.ModelSerializer):
         user.save()
 
         return user
+
+
 class GrupaSerializer(ModelSerializer):
-    user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(),required=True)
-    nazwa_grupa = serializers.CharField(required=True, validators=[UniqueValidator(queryset=Grupa.objects.all())])
+    user = serializers.PrimaryKeyRelatedField(
+        queryset=User.objects.all(), required=True)
+    nazwa_grupa = serializers.CharField(required=True, validators=[
+                                        UniqueValidator(queryset=Grupa.objects.all())])
+
     class Meta:
-        model=Grupa
-        fields=('id','nazwa_grupa','user')
+        model = Grupa
+        fields = ('id', 'nazwa_grupa', 'user')
+
     def create(self, validated_data):
         producent = Grupa.objects.create(
             nazwa_grupa=validated_data['nazwa_grupa'],
@@ -42,15 +49,21 @@ class GrupaSerializer(ModelSerializer):
         producent.save()
         return producent
 
+
 class GrupaUserSerializer(ModelSerializer):
-    user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(),required=True)
-    grupa = serializers.PrimaryKeyRelatedField(queryset=Grupa.objects.all(),required=True)
+    user = serializers.PrimaryKeyRelatedField(
+        queryset=User.objects.all(), required=True)
+    grupa = serializers.PrimaryKeyRelatedField(
+        queryset=Grupa.objects.all(), required=True)
     user_name = serializers.CharField(source='user.username', read_only=True)
-    grupa_nazwa_grupa = serializers.CharField(source='grupa.nazwa_grupa', read_only=True)
+    grupa_nazwa_grupa = serializers.CharField(
+        source='grupa.nazwa_grupa', read_only=True)
+
     class Meta:
-        model=GrupaUser
-        fields=('id','grupa','user','allow','user_name','grupa_nazwa_grupa')
-        
+        model = GrupaUser
+        fields = ('id', 'grupa', 'user', 'allow',
+                  'user_name', 'grupa_nazwa_grupa')
+
     def create(self, validated_data):
         model_temp = GrupaUser.objects.create(
             grupa=validated_data['grupa'],
@@ -63,12 +76,14 @@ class GrupaUserSerializer(ModelSerializer):
 
 class ProducentSerializer(ModelSerializer):
     nazwa_producent = serializers.CharField(
-            required=True,
-            validators=[UniqueValidator(queryset=Producent.objects.all())]
-            )
+        required=True,
+        validators=[UniqueValidator(queryset=Producent.objects.all())]
+    )
+
     class Meta:
-        model=Producent
-        fields=('nazwa_producent','id')
+        model = Producent
+        fields = ('nazwa_producent', 'id')
+
     def create(self, validated_data):
         producent = Producent.objects.create(
             nazwa_producent=validated_data['nazwa_producent']
@@ -76,11 +91,12 @@ class ProducentSerializer(ModelSerializer):
         producent.save()
         return producent
 
+
 class ModellSerializer(ModelSerializer):
     class Meta:
-        model=Modell
-        fields=('id','nazwa_model','Producent')
-        
+        model = Modell
+        fields = ('id', 'nazwa_model', 'Producent')
+
     def create(self, validated_data):
         modell = Modell.objects.create(
             nazwa_model=validated_data['nazwa_model'],
@@ -89,11 +105,12 @@ class ModellSerializer(ModelSerializer):
         modell.save()
         return modell
 
+
 class Katalog_nadrzednySerializer(ModelSerializer):
     class Meta:
-        model=Katalog_nadrzedny
-        fields=('id','modell','nazwa_katalog','katalog_wlascicel')
-        
+        model = Katalog_nadrzedny
+        fields = ('id', 'modell', 'nazwa_katalog', 'katalog_wlascicel')
+
     def create(self, validated_data):
         katalog_nadrzedny = Katalog_nadrzedny.objects.create(
             modell=validated_data['modell'],
@@ -103,11 +120,12 @@ class Katalog_nadrzednySerializer(ModelSerializer):
         katalog_nadrzedny.save()
         return katalog_nadrzedny
 
+
 class Katalog_GrupaSerializer(ModelSerializer):
     class Meta:
-        model=Katalog_Grupa
-        fields=('id','grupa','katalog')
-        
+        model = Katalog_Grupa
+        fields = ('id', 'grupa', 'katalog')
+
     def create(self, validated_data):
         model_temp = Katalog_Grupa.objects.create(
             grupa=validated_data['grupa'],
@@ -116,13 +134,17 @@ class Katalog_GrupaSerializer(ModelSerializer):
         model_temp.save()
         return model_temp
 
+
 class Strona_katalogSerializer(ModelSerializer):
-    
-    zdjecie_image_Thumbnails = serializers.CharField(source='zdjecie_strona_katalog.image_Thumbnails', read_only=True)
+
+    zdjecie_image_Thumbnails = serializers.CharField(
+        source='zdjecie_strona_katalog.image_Thumbnails', read_only=True)
+
     class Meta:
-        model=Strona_katalog
-        fields=('id','katalog_nadrzedny','numer_strony','nazwa_strony','zdjecie_strona_katalog','zdjecie_image_Thumbnails')
-        
+        model = Strona_katalog
+        fields = ('id', 'katalog_nadrzedny', 'numer_strony', 'nazwa_strony',
+                  'zdjecie_strona_katalog', 'zdjecie_image_Thumbnails')
+
     def create(self, validated_data):
         model_temp = Strona_katalog.objects.create(
             katalog_nadrzedny=validated_data['katalog_nadrzedny'],
@@ -133,11 +155,13 @@ class Strona_katalogSerializer(ModelSerializer):
         model_temp.save()
         return model_temp
 
+
 class Numer_katalogowySerializer(ModelSerializer):
     class Meta:
-        model=Numer_katalogowy
-        fields=('id','strona_katalog','numer_katalogowy_strona','opis_Numer_katalogowy')
-        
+        model = Numer_katalogowy
+        fields = ('id', 'strona_katalog', 'numer_katalogowy_strona',
+                  'opis_Numer_katalogowy')
+
     def create(self, validated_data):
         model_temp = Numer_katalogowy.objects.create(
             strona_katalog=validated_data['strona_katalog'],
@@ -147,11 +171,12 @@ class Numer_katalogowySerializer(ModelSerializer):
         model_temp.save()
         return model_temp
 
+
 class CzescSerializer(ModelSerializer):
     class Meta:
-        model=Czesc
-        fields=('id','nazwa_Czesc','opis_Czesc')
-        
+        model = Czesc
+        fields = ('id', 'nazwa_Czesc', 'opis_Czesc')
+
     def create(self, validated_data):
         model_temp = Czesc.objects.create(
             nazwa_Czesc=validated_data['nazwa_Czesc'],
@@ -160,13 +185,17 @@ class CzescSerializer(ModelSerializer):
         model_temp.save()
         return model_temp
 
+
 class Numer_katalogowy_CzescSerializer(ModelSerializer):
-    
-    czesc_nazwa_Czesc = serializers.CharField(source='czesc.nazwa_Czesc', read_only=True)
+
+    czesc_nazwa_Czesc = serializers.CharField(
+        source='czesc.nazwa_Czesc', read_only=True)
+
     class Meta:
-        model=Numer_katalogowy_Czesc
-        fields=('id','numer_katalogowy','czesc','opis_Numer_katalogowy_Czesc','czesc_nazwa_Czesc')
-        
+        model = Numer_katalogowy_Czesc
+        fields = ('id', 'numer_katalogowy', 'czesc',
+                  'opis_Numer_katalogowy_Czesc', 'czesc_nazwa_Czesc')
+
     def create(self, validated_data):
         model_temp = Numer_katalogowy_Czesc.objects.create(
             numer_katalogowy=validated_data['numer_katalogowy'],
@@ -178,13 +207,15 @@ class Numer_katalogowy_CzescSerializer(ModelSerializer):
 
 
 class ZdjecieSerializer(ModelSerializer):
-    
+
     image = serializers.ImageField(required=False)
     image_Thumbnails = serializers.ImageField(read_only=True)
+
     class Meta:
-        model=Zdjecie
-        fields=('id','wlasciciel','opis_zdjecie','image','image_Thumbnails')
-        
+        model = Zdjecie
+        fields = ('id', 'wlasciciel', 'opis_zdjecie',
+                  'image', 'image_Thumbnails')
+
     # def create(self, validated_data):
     #     model_temp = Numer_katalogowy_Czesc.objects.create(
     #         wlasciciel=validated_data['wlasciciel'],
@@ -197,3 +228,43 @@ class ZdjecieSerializer(ModelSerializer):
     #     if self.instance.image:
     #         self.instance.image.delete()
     #     return super().save(*args, **kwargs)
+
+
+class ListaSerializer(ModelSerializer):
+    class Meta:
+        model = Lista
+        fields = ('id', 'user', 'nazwa_lista')
+
+    def create(self, validated_data):
+        model_temp = Lista.objects.create(
+            user=validated_data['user'],
+            nazwa_lista=validated_data['nazwa_lista'],
+        )
+        model_temp.save()
+        return model_temp
+
+
+class Numer_katalogowy_ListaSerializer(ModelSerializer):
+
+    numer_katalogowy_numer_katalogowy_strona = serializers.CharField(
+        source='numer_katalogowy.numer_katalogowy_strona', read_only=True)
+    numer_katalogowy_opis_Numer_katalogowy = serializers.CharField(
+        source='numer_katalogowy.opis_Numer_katalogowy', read_only=True)
+    numer_katalogowy_nazwa_katalog = serializers.CharField(
+        source='numer_katalogowy.strona_katalog.katalog_nadrzedny.nazwa_katalog', read_only=True)
+
+    class Meta:
+        model = Numer_katalogowy_Lista
+        fields = ('id', 'numer_katalogowy', 'lista', 'liczba',
+                  'numer_katalogowy_numer_katalogowy_strona', 
+                  'numer_katalogowy_opis_Numer_katalogowy', 
+                  'numer_katalogowy_nazwa_katalog')
+
+    def create(self, validated_data):
+        model_temp = Czesc.objects.create(
+            numer_katalogowy=validated_data['numer_katalogowy'],
+            lista=validated_data['lista'],
+            liczba=validated_data['liczba'],
+        )
+        model_temp.save()
+        return model_temp

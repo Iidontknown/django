@@ -7,12 +7,15 @@ import GrupyService from "../services/GrupyService";
 import { Link } from "react-router-dom";
 import KatalogService from "../services/KatalogService";
 import KatalogData from "../types/katalog";
+import ListaData from "../types/lista";
+import listaService from "../services/ListaService";
 const API_URL = "http://localhost:8000/api/";
 
 const Konto: React.FC = () => {
   const currentUser = getCurrentUser();
   
   const [Katalogi, setKatalogi] = React.useState<Array<KatalogData>>([]);
+  const [Listy, setListy] = React.useState<Array<ListaData>>([]);
   let refresh: any = "";
   refresh = localStorage.getItem("refresh");
   let access = localStorage.getItem("access");
@@ -23,6 +26,7 @@ const Konto: React.FC = () => {
 
   console.log(listaGrup);
   useEffect(() => {
+    getalllisty()
     getallkatalog()
     GrupyService.getGrupaall().then(
       (response) => {
@@ -43,6 +47,7 @@ const Konto: React.FC = () => {
       }
     );
   }, []);
+
   const getallkatalog = () => {
     KatalogService.getall()
       .then((response: any) => {
@@ -53,6 +58,18 @@ const Konto: React.FC = () => {
         console.log(e);
       });
   };
+  const getalllisty = () => {
+    listaService.getall()
+      .then((response: any) => {
+        setListy(response.data);
+        console.log(response.data);
+      })
+      .catch((e: Error) => {
+        console.log(e);
+      });
+  };
+
+
   return (
     <>
       <div className="container bg-light   ">
@@ -83,12 +100,12 @@ const Konto: React.FC = () => {
           {listaGrup &&
             listaGrup.map((val) => <li key="{val.id}"> {val.nazwa_grupa}</li>)}
         </ul>
-        <Link to="/grupa">
+        <Link to="/lista">
           <strong>Twoje listy czesci:</strong>
         </Link> 
-            <ul>
-              <li>Testowa Lista1</li>
-              <li>Testowa Lista2</li>
+        <Link to='/lista'>Dodaj</Link><ul>
+            {Listy &&
+            Listy.map((val) => <Link to={`/lista/${val.id}`}> <li key="{val.id}"> {val.nazwa_lista}</li></Link>)}
             </ul>
       </div>
     </>

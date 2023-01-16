@@ -1,26 +1,39 @@
-import * as React from "react";
-import { Card, Button, CardGroup, Container, Col, Figure } from "react-bootstrap";
-import { Link } from "react-router-dom";
-import { CardColumns } from "reactstrap";
-import MenuBar from "./MenuBar";
-import KatalogData from "./../types/katalog";
-import GrupyService from "../services/GrupyService";
-import KatalogService from "../services/KatalogService";
-import ModellService from "../services/ModellService";
-import ModellData from './../types/modell';
-import ProducentService from "../services/ProducentService";
-import ProducentData from './../types/producent';
-export default function Lista(): JSX.Element {
-  const [Katalogi, setKatalogi] = React.useState<Array<KatalogData>>([]);
-  const [Modelle, setModelle] = React.useState<Array<ModellData>>([]);
-  const [Producent, setProducent] = React.useState<Array<ProducentData>>([]);
-  React.useEffect(() => {
-    getallkatalog();
+
+import * as React from 'react';
+import { Button, Card, Container, Row } from 'react-bootstrap';
+import listaService from '../services/ListaService';
+import ListaData from '../types/lista';
+import { useEffect } from 'react';
+import { CardGroup } from 'react-bootstrap';
+import numer_katalogowy_ListaService from '../services/Numer_katalogowy_ListaService';
+import Numer_katalogowy_ListaData from '../types/numer_katalogowy_lista';
+import { Link } from 'react-router-dom';
+
+
+
+const Lista: React.FC = () => {  
+  
+  const [Listy, setListy] = React.useState<Array<ListaData>>([]);
+  const [numer_katalogowy_Lista, setNumer_katalogowy_Lista] = React.useState<Array<Numer_katalogowy_ListaData>>([]);
+  useEffect(() => {
+    getalllisty()
+    getallnumer_katalogowy_Lista()
   }, []);
-  const getallkatalog = () => {
-    KatalogService.getall()
+
+  const getalllisty = () => {
+    listaService.getall()
       .then((response: any) => {
-        setKatalogi(response.data);
+        setListy(response.data);
+        console.log(response.data);
+      })
+      .catch((e: Error) => {
+        console.log(e);
+      });
+  }; 
+  const getallnumer_katalogowy_Lista = () => {
+    numer_katalogowy_ListaService.getall()
+      .then((response: any) => {
+        setNumer_katalogowy_Lista(response.data);
         console.log(response.data);
       })
       .catch((e: Error) => {
@@ -29,36 +42,35 @@ export default function Lista(): JSX.Element {
   };
 
   
+
+console.log(numer_katalogowy_Lista)
   return (
-    <>
-      <Container>
-     <h1 className="mt-4">Twoje Katalogi</h1>
-     <hr/>
-        <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
-          {Katalogi.length != 0 ? (
-            Katalogi.map((val, key) => (
-              <>
-                {/* { temp='/katalog/'+{val.id}} */}
-                <Link to={`/katalog/${val.id}`}>
-                  <Col>
-                    <Card>
-                      <Card.Img
-                        variant="top"
-                        src="https://engine.od.ua/imgl/img_6140_1.jpg"
-                      />
-                      <Card.Body>
-                        <Card.Title>{val.nazwa_katalog}</Card.Title>
-                      </Card.Body>
-                    </Card>{" "}
-                  </Col>
-                </Link>
-              </>
-            ))
-          ) : (
-            <h1>Brak</h1>
-          )}
-        </div>
-      </Container>
-    </>
-  );
+    <Container>
+<Row >
+          <strong>Twoje listy czesci:</strong>
+          </Row>
+       <Button>Dodaj</Button><ul>
+            {Listy &&
+            Listy.map((val) => <><Link to={`/lista/${val.id}`}> <li key="{val.id}"> {val.nazwa_lista}
+
+
+            </li></Link><ol></ol> { numer_katalogowy_Lista && numer_katalogowy_Lista.map((valnumer) => 
+            valnumer.lista==val.id?(<>
+<p>
+{valnumer.numer_katalogowy_nazwa_katalog} | {valnumer.numer_katalogowy_numer_katalogowy_strona} |{valnumer.numer_katalogowy_opis_Numer_katalogowy} {val.id}
+</p></>
+            ):(<></>)
+            
+
+            )}</>
+            
+
+            )}
+            
+            </ul>
+          
+
+     </Container>
+  )
 }
+export default Lista;
