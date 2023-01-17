@@ -24,10 +24,10 @@ async function getall() {
     }
 
 
-    export const create = (user:number,nazwa_lista:string) => {
+    export const create = (nazwa_lista:string) => {
 
       return axios.post(API_URL + "lista/", {
-        user,nazwa_lista
+        nazwa_lista
       }, { headers: authHeader() });
 
 

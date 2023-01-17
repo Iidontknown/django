@@ -24,26 +24,34 @@ import ModellService from "../../services/ModellService";
 import ProducentService from "../../services/ProducentService";
 import Numer_katalogowy_czescService from "../../services/Numer_katalogowy_CzescService";
 import Numer_katalogowy_CzescData from "../../types/numer_katalogowy_Czesc";
-import CzescData from "../../types/czesc";
 import CzescService from "../../services/CzescService";
 import { getCurrentUser } from "../../services/auth.service";
+import CzescData from "./../../types/czesc";
+import Select, { PropsValue, SingleValue } from "react-select";
 
 const StronaKatalog: React.FC = () => {
   const regexp = RegExp(/^[A-Za-z][A-Za-z0-9_]{5,25}$/g);
-  const [inputNazwa_Czesc, setInputNazwa_Czesc] =
-  React.useState<string>("");
-const [errornazwa_Czesc, setErrornazwa_Czesc] =
-  React.useState<string>("");
-  const [inputOpis_Czesc, setInputOpis_Czesc] =
-    React.useState<string>("");
-  const [errorOpis_Czesc, setErrorOpis_Czesc] =
-    React.useState<string>("");
-    const [inputOpis_Numer_katalogowy_Czesc, setInputOpis_Numer_katalogowy_Czesc] =
-    React.useState<string>("");
-  const [errorOpis_Numer_katalogowy_Czesc, setErrorOpis_Numer_katalogowy_Czesc] =
-    React.useState<string>("");
+  const [inputNazwa_Czesc, setInputNazwa_Czesc] = React.useState<string>("");
+  const [errornazwa_Czesc, setErrornazwa_Czesc] = React.useState<string>("");
 
+  const [inputliczba_Numer_katalogowy_Czesc, setinputliczba_Numer_katalogowy_Czesc] = React.useState<number>(1);
+  const [errorliczba_Numer_katalogowy_Czesc, seterrorliczba_Numer_katalogowy_Czesc] = React.useState<string>("");
 
+  const [inputOpis_Czesc, setInputOpis_Czesc] = React.useState<string>("");
+  const [errorOpis_Czesc, setErrorOpis_Czesc] = React.useState<string>("");
+  const [
+    inputOpis_Numer_katalogowy_Czesc,
+    setInputOpis_Numer_katalogowy_Czesc,
+  ] = React.useState<string>("");
+  const [
+    errorOpis_Numer_katalogowy_Czesc,
+    setErrorOpis_Numer_katalogowy_Czesc,
+  ] = React.useState<string>("");
+
+  const [selectCzesc, setselectCzesc] = React.useState<CzescData | null>(null);
+  const [selectCzescid, setselectCzescid] = React.useState<number | null>(
+    null
+  );
   const [error_opis_Numer_katalogowy, setError_opis_Numer_katalogowy] =
     React.useState<string>("");
   const [inputOpis_Numer_katalogowy, setInputOpis_Numer_katalogowy] =
@@ -104,6 +112,7 @@ const [errornazwa_Czesc, setErrornazwa_Czesc] =
   const { id, idstrona } = useParams();
 
   useEffect(() => {
+    getczesc();
     const tempidkatalogstrona = Number(idstrona);
     const tempidkatalog = Number(id);
     getStrona_katalog(tempidkatalogstrona);
@@ -115,19 +124,19 @@ const [errornazwa_Czesc, setErrornazwa_Czesc] =
   useEffect(() => {
     getZdjecie(strona_katalog.zdjecie_strona_katalog);
   }, [strona_katalog]);
-  const getczesc = (x: number) => {
-    CzescService.get_id(x)
+
+  const getczesc = () => {
+    CzescService.getall()
       .then((response: any) => {
         console.log(response.data);
-        let tempCzesc = czesc;
-        tempCzesc[x] = response.data;
-        setCzesc(tempCzesc);
+        setCzesc(response.data);
         console.log(czesc);
       })
       .catch((e: Error) => {
         console.log(e);
       });
   };
+
   const getStrona_katalog = (x: number) => {
     Strona_katalogService.get_id(x)
       .then((response: any) => {
@@ -220,6 +229,7 @@ const [errornazwa_Czesc, setErrornazwa_Czesc] =
   };
 
   const pokaz_opis = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setselectCzesc(null)
     event.preventDefault();
     const button: HTMLButtonElement = event.currentTarget;
     console.log(button.id);
@@ -247,6 +257,23 @@ const [errornazwa_Czesc, setErrornazwa_Czesc] =
       }
     }
   };
+
+  const liczba_Numer_katalogowy_CzescChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    event.preventDefault();
+    const { name, value } = event.target;
+    if (Number(value) < 1) {
+      seterrorliczba_Numer_katalogowy_Czesc(
+        "Liczba nie może być mniejsza niż 1"
+      );
+    } else {
+      seterrorliczba_Numer_katalogowy_Czesc("");
+      setinputliczba_Numer_katalogowy_Czesc(Number(value));
+    
+    }
+  };
+
   const numer_katalogowy_stronaChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -269,15 +296,11 @@ const [errornazwa_Czesc, setErrornazwa_Czesc] =
     }
   };
 
-  const nazwa_CzescChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  const nazwa_CzescChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();
     const { name, value } = event.target;
     if (value.length < 5 || value.length > 25) {
-      setErrornazwa_Czesc(
-        "nie może mieć mniej niż 5 znaków i wiecej niż 25."
-      );
+      setErrornazwa_Czesc("nie może mieć mniej niż 5 znaków i wiecej niż 25.");
       setInputNazwa_Czesc(value);
     } else {
       setErrornazwa_Czesc("");
@@ -311,15 +334,11 @@ const [errornazwa_Czesc, setErrornazwa_Czesc] =
       }
     }
   };
-  const opis_CzescChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  const opis_CzescChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();
     const { name, value } = event.target;
     if (value.length < 5 || value.length > 25) {
-      setErrorOpis_Czesc(
-        "nie może mieć mniej niż 5 znaków i wiecej niż 25."
-      );
+      setErrorOpis_Czesc("nie może mieć mniej niż 5 znaków i wiecej niż 25.");
       setInputOpis_Czesc(value);
     } else {
       setErrorOpis_Czesc("");
@@ -333,21 +352,30 @@ const [errornazwa_Czesc, setErrornazwa_Czesc] =
     }
   };
   const dodajCzesc = () => {
-    if (true) {
-      CzescService.create(inputNazwa_Czesc,inputOpis_Czesc
-      )
+    if (selectCzesc==null) {
+      CzescService.create(inputNazwa_Czesc, inputOpis_Czesc)
         .then((response: any) => {
           console.log("dodano:" + response.data);
           console.log(response);
-          dodajCzesc_numer_katalogowy(inputOpis_Numer_katalogowy_Czesc,Numer_katalogowye[pokazId].id,response.data.id)
+          dodajCzesc_numer_katalogowy(
+            inputOpis_Numer_katalogowy_Czesc,
+            Numer_katalogowye[pokazId].id,
+            response.data.id,Number(inputliczba_Numer_katalogowy_Czesc)
+          );
         })
         .catch((e: Error) => {
           console.log(e);
         });
+    }else{
+      dodajCzesc_numer_katalogowy(
+        inputOpis_Numer_katalogowy_Czesc,
+        Numer_katalogowye[pokazId].id,
+        selectCzesc.id,Number(inputliczba_Numer_katalogowy_Czesc)
+      );
     }
   };
   const dodajNumer_katalogowy = () => {
-    if (typeof pokazId !=undefined) {
+    if (typeof pokazId != undefined) {
       Numer_katalogowyService.create(
         inputNumer_katalogowy_strona,
         inputOpis_Numer_katalogowy,
@@ -355,6 +383,8 @@ const [errornazwa_Czesc, setErrornazwa_Czesc] =
       )
         .then((response: any) => {
           console.log("dodano:" + response);
+
+          window.location.reload();
           console.log(response);
         })
         .catch((e: Error) => {
@@ -362,16 +392,36 @@ const [errornazwa_Czesc, setErrornazwa_Czesc] =
         });
     }
   };
-  const dodajCzesc_numer_katalogowy = (opis_Numer_katalogowy_Czesc:string,numer_katalogowy:number,czesc:number) => {
+  const dodajCzesc_numer_katalogowy = (
+    opis_Numer_katalogowy_Czesc: string,
+    numer_katalogowy: number,
+    czesc: number,
+    liczba_Numer_katalogowy_Czesc:number
+  ) => {
     if (true) {
-      Numer_katalogowy_czescService.create(opis_Numer_katalogowy_Czesc,numer_katalogowy,czesc)
+      Numer_katalogowy_czescService.create(
+        opis_Numer_katalogowy_Czesc,
+        numer_katalogowy,
+        czesc,liczba_Numer_katalogowy_Czesc
+      )
         .then((response: any) => {
           console.log("dodano:" + response.data);
+
+          window.location.reload();
           console.log(response);
         })
         .catch((e: Error) => {
           console.log(e);
         });
+    }
+  };
+  const SelectCzescOnchange = (selected: SingleValue<CzescData>) => {
+    if (selected != null) {
+      setselectCzescid(selected.id);
+      setselectCzesc(selected)
+    } else {
+      setselectCzescid(null);
+      setselectCzesc(null)
     }
   };
   return (
@@ -383,7 +433,6 @@ const [errornazwa_Czesc, setErrornazwa_Czesc] =
               <Image
                 width={540}
                 src={"http://localhost:8000/api" + zdjecie.image}
-                // onLoad={setLoadingZdjecie(false)}
               ></Image>
             ) : (
               <Image
@@ -471,39 +520,90 @@ const [errornazwa_Czesc, setErrornazwa_Czesc] =
                               katalog.katalog_wlascicel ? (
                                 <div className="border p-1  mt-2 d-flex flex-row">
                                   <div className="w-100 ">
-                                    <InputGroup hasValidation className="m-2">
+                                  
+
+<InputGroup hasValidation className="m-2">
+
+                                      
                                       <InputGroup.Text>
-                                      Nazwa Czesc
+                                        Czesc z bazy
                                       </InputGroup.Text>
+                                      <Select<CzescData> 
+                                      
+                                        getOptionLabel={(czesc: CzescData) =>
+                                          czesc.nazwa_Czesc +' '+czesc.opis_Czesc
+                                        }
+                                        getOptionValue={(czesc: CzescData) =>
+                                          czesc.id.toString()
+                                        }
+                                        options={czesc}
+                                        isClearable={true}
+                                        backspaceRemovesValue={true}
+                                        placeholder="Wybierz czesc z bazy"
+                                        onChange={SelectCzescOnchange}
+                                        value={selectCzesc}
+                                      />
+
+                                     
+                                    </InputGroup>
+
+                                    <InputGroup hasValidation className="m-2">
+                                  
+                                  <InputGroup.Text>
+                                    ilość czesc
+                                  </InputGroup.Text>
+                                 
+
+                                  <Form.Control
+                                    type="number"
+                                    min='1'
+                                    required
+                                    value={inputliczba_Numer_katalogowy_Czesc}
+                                    onChange={liczba_Numer_katalogowy_CzescChange}
+                                    placeholder="Pozostaw puste jesli dodajesz z bazy"
+                                    isInvalid={
+                                      errorliczba_Numer_katalogowy_Czesc ? true : false
+                                    }
+                                  />
+                                  <Form.Control.Feedback type="invalid">
+                                    {errorliczba_Numer_katalogowy_Czesc}
+                                  </Form.Control.Feedback>
+                                </InputGroup>
+
+                                    <InputGroup hasValidation className="m-2">
+                                  
+                                      <InputGroup.Text>
+                                        Nazwa Czesc
+                                      </InputGroup.Text>
+                                     
+
                                       <Form.Control
                                         type="text"
                                         required
                                         value={inputNazwa_Czesc}
                                         onChange={nazwa_CzescChange}
+                                        placeholder="Pozostaw puste jesli dodajesz z bazy"
                                         isInvalid={
-                                          errornazwa_Czesc
-                                            ? true
-                                            : false
+                                          errornazwa_Czesc ? true : false
                                         }
                                       />
                                       <Form.Control.Feedback type="invalid">
                                         {errornazwa_Czesc}
                                       </Form.Control.Feedback>
                                     </InputGroup>
+
+
                                     <InputGroup hasValidation className="m-2">
-                                      <InputGroup.Text>
-                                      opis
-                                      </InputGroup.Text>
+                                      <InputGroup.Text>opis</InputGroup.Text>
                                       <Form.Control
                                         type="text"
                                         required
                                         isInvalid={
-                                          errorOpis_Czesc
-                                            ? true
-                                            : false
+                                          errorOpis_Czesc ? true : false
                                         }
                                         value={inputOpis_Czesc}
                                         onChange={opis_CzescChange}
+                                        placeholder="Pozostaw puste jesli dodajesz z bazy"
                                       />
                                       <Form.Control.Feedback type="invalid">
                                         {errorOpis_Czesc}
@@ -511,7 +611,7 @@ const [errornazwa_Czesc, setErrornazwa_Czesc] =
                                     </InputGroup>
                                     <InputGroup hasValidation className="m-2">
                                       <InputGroup.Text>
-                                      opis Cześć-Numer Katalogowy
+                                        opis Cześć-Numer Katalogowy
                                       </InputGroup.Text>
                                       <Form.Control
                                         type="text"
@@ -522,7 +622,9 @@ const [errornazwa_Czesc, setErrornazwa_Czesc] =
                                             : false
                                         }
                                         value={inputOpis_Numer_katalogowy_Czesc}
-                                        onChange={opis_Numer_katalogowy_CzescChange}
+                                        onChange={
+                                          opis_Numer_katalogowy_CzescChange
+                                        }
                                       />
                                       <Form.Control.Feedback type="invalid">
                                         {errorOpis_Numer_katalogowy_Czesc}
@@ -546,7 +648,7 @@ const [errornazwa_Czesc, setErrornazwa_Czesc] =
                                 numer_katalogowy_czesc[key].map(
                                   (vali_li, key_li) => (
                                     <>
-                                      <li>{vali_li.czesc_nazwa_Czesc}</li>
+                                      <li>{vali_li.liczba_Numer_katalogowy_Czesc} x {vali_li.czesc_nazwa_Czesc} - {vali_li.opis_Numer_katalogowy_Czesc}</li>
                                     </>
                                   )
                                 )
@@ -568,15 +670,7 @@ const [errornazwa_Czesc, setErrornazwa_Czesc] =
                               </Button>
                             </>
                           )}
-                          {/* <br />
-                          Opis: {val.opis_Numer_katalogowy}
-                          <br />
-                          Numery pasujących cześci:
-                          <br />
-                          <ul>
-                            <li>m1234xszc - Przykładowy producent </li>
-                            <li>43565l - Przykładowy producent2 </li>
-                          </ul> */}
+                         
                         </div>
                         <div className="w-100 btn-group d-flex justify-content-center">
                           <Button className="btn btn-success d-flex ">

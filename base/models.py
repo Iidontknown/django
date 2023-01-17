@@ -99,6 +99,7 @@ class Czesc(models.Model):
 
 
 class Numer_katalogowy_Czesc(models.Model):
+    liczba_Numer_katalogowy_Czesc = models.PositiveIntegerField(default=1)
     numer_katalogowy = models.ForeignKey(
         Numer_katalogowy, on_delete=models.CASCADE)
     czesc = models.ForeignKey(Czesc, on_delete=models.CASCADE, null=True)

@@ -34,10 +34,10 @@ async function getall() {
     }
 
 
-    export const create = (opis_Numer_katalogowy_Czesc:string,numer_katalogowy:number,czesc:number) => {
+    export const create = (opis_Numer_katalogowy_Czesc:string,numer_katalogowy:number,czesc:number,liczba_Numer_katalogowy_Czesc:number) => {
 console.log('numer_katalogowy_czesc')
       return axios.post(API_URL + "numer_katalogowy_czesc/", {
-        opis_Numer_katalogowy_Czesc,numer_katalogowy,czesc
+        opis_Numer_katalogowy_Czesc,numer_katalogowy,czesc,liczba_Numer_katalogowy_Czesc
       }, { headers: authHeader() });
 
 

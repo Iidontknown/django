@@ -194,13 +194,14 @@ class Numer_katalogowy_CzescSerializer(ModelSerializer):
     class Meta:
         model = Numer_katalogowy_Czesc
         fields = ('id', 'numer_katalogowy', 'czesc',
-                  'opis_Numer_katalogowy_Czesc', 'czesc_nazwa_Czesc')
+                  'opis_Numer_katalogowy_Czesc', 'czesc_nazwa_Czesc','liczba_Numer_katalogowy_Czesc')
 
     def create(self, validated_data):
         model_temp = Numer_katalogowy_Czesc.objects.create(
             numer_katalogowy=validated_data['numer_katalogowy'],
             czesc=validated_data['czesc'],
             opis_Numer_katalogowy_Czesc=validated_data['opis_Numer_katalogowy_Czesc'],
+            liczba_Numer_katalogowy_Czesc=validated_data['liczba_Numer_katalogowy_Czesc'],
         )
         model_temp.save()
         return model_temp
