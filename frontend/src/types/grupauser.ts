@@ -1,4 +1,4 @@
-export default interface GrupaUser {
+export default interface GrupaUserData {
   id: any | null,
   allow: boolean,
   user: number,

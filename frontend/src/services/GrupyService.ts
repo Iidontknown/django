@@ -5,7 +5,7 @@ import GrupaData from './../types/grupa';
 
 const API_URL = "http://localhost:8000/api/";
 
-async function getGrupaall() {
+async function get() {
   try {
     const grupy = axios.get("http://localhost:8000/api/grupa/", { headers: authHeader() })
     return grupy
@@ -14,6 +14,15 @@ async function getGrupaall() {
     throw new Error('błąd');
   }
   }
+  async function getall() {
+    try {
+      const grupy = axios.get("http://localhost:8000/api/grupaall/", { headers: authHeader() })
+      return grupy
+    } catch (error) {
+      console.log("alaasd")
+      throw new Error('błąd');
+    }
+    }
   async function getGrupa(id:number) {
     try {
       const grupy = axios.get("http://localhost:8000/api/grupa/"+id, { headers: authHeader() })
@@ -54,6 +63,6 @@ async function getGrupaall() {
     };
 
   const GrupyService = {
-    getGrupaall,getGrupa,create,delete_id,change_id
+    get,getGrupa,create,delete_id,change_id,getall
   }
 export default GrupyService

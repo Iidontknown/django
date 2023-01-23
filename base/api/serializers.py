@@ -262,7 +262,7 @@ class Numer_katalogowy_ListaSerializer(ModelSerializer):
                   'numer_katalogowy_nazwa_katalog')
 
     def create(self, validated_data):
-        model_temp = Czesc.objects.create(
+        model_temp = Numer_katalogowy_Lista.objects.create(
             numer_katalogowy=validated_data['numer_katalogowy'],
             lista=validated_data['lista'],
             liczba=validated_data['liczba'],

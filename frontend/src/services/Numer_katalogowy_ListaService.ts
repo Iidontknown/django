@@ -37,7 +37,7 @@ async function getall() {
     export const create = (numer_katalogowy:number,lista:number,liczba:number) => {
 
       return axios.post(API_URL + "numer_katalogowy_lista/", {
-        numer_katalogowy,lista,liczba
+        numer_katalogowy,lista,liczba,
       }, { headers: authHeader() });
 
 

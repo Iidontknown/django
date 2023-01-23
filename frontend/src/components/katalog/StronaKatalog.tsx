@@ -28,9 +28,14 @@ import CzescService from "../../services/CzescService";
 import { getCurrentUser } from "../../services/auth.service";
 import CzescData from "./../../types/czesc";
 import Select, { PropsValue, SingleValue } from "react-select";
+import ListaData from './../../types/lista';
+import listaService from "../../services/ListaService";
+import numer_katalogowy_ListaService from "../../services/Numer_katalogowy_ListaService";
 
 const StronaKatalog: React.FC = () => {
   const regexp = RegExp(/^[A-Za-z][A-Za-z0-9_]{5,25}$/g);
+  
+  const [liczba_numer_katalogowy_lista, setliczba_numer_katalogowy_lista] = React.useState<Array<number>>([]);
   const [inputNazwa_Czesc, setInputNazwa_Czesc] = React.useState<string>("");
   const [errornazwa_Czesc, setErrornazwa_Czesc] = React.useState<string>("");
 
@@ -47,8 +52,9 @@ const StronaKatalog: React.FC = () => {
     errorOpis_Numer_katalogowy_Czesc,
     setErrorOpis_Numer_katalogowy_Czesc,
   ] = React.useState<string>("");
-
+  
   const [selectCzesc, setselectCzesc] = React.useState<CzescData | null>(null);
+  const [selectLista, setselectLista] = React.useState<ListaData | null>(null);
   const [selectCzescid, setselectCzescid] = React.useState<number | null>(
     null
   );
@@ -72,6 +78,7 @@ const StronaKatalog: React.FC = () => {
     Array<Numer_katalogowyData>
   >([]);
   const [czesc, setCzesc] = React.useState<Array<CzescData>>([]);
+  const [lista, setLista] = React.useState<Array<ListaData>>([]);
   const [numer_katalogowy_czesc, setNumer_katalogowy_czesc] = React.useState<
     Array<Array<Numer_katalogowy_CzescData>>
   >([[]]);
@@ -118,6 +125,7 @@ const StronaKatalog: React.FC = () => {
     getStrona_katalog(tempidkatalogstrona);
     getNumer_katalogowye(tempidkatalogstrona);
     getkatalog(tempidkatalog);
+    getLista()
   }, []);
   console.log(id, idstrona);
 
@@ -210,6 +218,18 @@ const StronaKatalog: React.FC = () => {
         console.log(e);
       });
   };
+  const getLista = () => {
+    listaService.getall()
+      .then((response: any) => {
+        console.log(response.data);
+        setLista(response.data);
+        console.log(lista);
+        setselectLista(lista[lista.length-1])
+      })
+      .catch((e: Error) => {
+        console.log(e);
+      });
+  };
   const getNumer_katalogowy_czesc = (x: number, key: number) => {
     Numer_katalogowy_czescService.getwybrany(x)
       .then((response: any) => {
@@ -235,6 +255,32 @@ const StronaKatalog: React.FC = () => {
     console.log(button.id);
     getNumer_katalogowy_czesc(Number(button.name), Number(button.id));
   };
+  const dodaj_do_listy = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setselectCzesc(null)
+    event.preventDefault();
+    const button: HTMLButtonElement = event.currentTarget;
+    console.log(button.id);
+    if(selectLista!=null ){
+      let temp=liczba_numer_katalogowy_lista[Number(button.id)]
+      if (temp=0){
+        temp=1
+      }
+      dodaj_numer_katalogowy_lista(Number(button.id),selectLista.id,temp)}
+  };
+  const dodaj_numer_katalogowy_lista = (numer_katalogowy:number,lista:number,liczba:number) => {
+      numer_katalogowy_ListaService.create(numer_katalogowy,lista,liczba
+      )
+        .then((response: any) => {
+          console.log("dodano:" + response);
+
+          window.location.reload();
+          console.log(response);
+        })
+        .catch((e: Error) => {
+          console.log(e);
+        });
+  };
+
 
   const opis_Numer_katalogowyChange = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -273,7 +319,20 @@ const StronaKatalog: React.FC = () => {
     
     }
   };
-
+  const liczba_numer_katalogowy_listaChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    event.preventDefault();
+    const { name, value } = event.target;
+    if (Number(value) < 1) {
+      
+    } else {
+      let temp=liczba_numer_katalogowy_lista
+      temp[Number(name)]=Number(value)
+      setliczba_numer_katalogowy_lista(temp);
+    
+    }
+  };
   const numer_katalogowy_stronaChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -313,6 +372,8 @@ const StronaKatalog: React.FC = () => {
       }
     }
   };
+
+
   const opis_Numer_katalogowy_CzescChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -423,6 +484,9 @@ const StronaKatalog: React.FC = () => {
       setselectCzescid(null);
       setselectCzesc(null)
     }
+  };
+  const SelectListaOnchange = (selected: SingleValue<ListaData>) => {
+    setselectLista(selected)
   };
   return (
     <>
@@ -673,7 +737,36 @@ const StronaKatalog: React.FC = () => {
                          
                         </div>
                         <div className="w-100 btn-group d-flex justify-content-center">
-                          <Button className="btn btn-success d-flex ">
+                        <Select<ListaData> 
+                                      
+                                      getOptionLabel={(lista: ListaData) =>
+                                        lista.nazwa_lista 
+                                      }
+                                      getOptionValue={(lista: ListaData) =>
+                                        lista.id.toString()
+                                      }
+                                      options={lista}
+                                      isClearable={false}
+                                      backspaceRemovesValue={true}
+                                      placeholder="Wybierz listę"
+                                      onChange={SelectListaOnchange}
+                                      value={selectLista}
+                                    />
+                                    <input
+                                    type="number"
+                                    min='1'
+                                    defaultValue={1}
+                                    required
+                                    name={val.id.toString()}
+                                    value={liczba_numer_katalogowy_lista[val.id]}
+                                    onChange={liczba_numer_katalogowy_listaChange}
+                                    placeholder="Pozostaw puste jesli dodajesz z bazy"
+                                   
+                                  />
+                          <Button className="btn btn-success d-flex " 
+                                onClick={dodaj_do_listy}
+                                id={val.id.toString()}
+                                >
                             Dodaj do listy{" "}
                           </Button>
                         </div>

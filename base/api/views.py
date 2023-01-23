@@ -21,7 +21,8 @@ from .serializers import GrupaSerializer
 from base.models import Czesc, Grupa, GrupaUser, Katalog_Grupa, Katalog_nadrzedny, Lista, Modell, Numer_katalogowy, Numer_katalogowy_Czesc, Numer_katalogowy_Lista, Producent, Strona_katalog, Zdjecie
 
 from rest_framework.parsers import JSONParser 
-
+	
+from django.db.models import Q
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
     def get_token(cls, user):
@@ -109,25 +110,41 @@ def getGrupa_pk(request,pk):
         model_get.delete() 
         return Response({'message': 'deleted successfully!'}, status=status.HTTP_200_OK)
 
+@api_view(['GET'])
+# @permission_classes([IsAuthenticated])
+def getGrupaall(request):
+    user=request.user.id
+    pk__list=GrupaUser.objects.filter(user=user).values_list('grupa', flat=True)
+
+    grupa=Grupa.objects.filter(~Q(user = user)).exclude(id__in=pk__list)
+    serializer=GrupaSerializer(grupa,many=True)
+    return Response(serializer.data)
+   
+ 
+
+
+
 #GrupaUser view
 
     
 @api_view(['GET', 'POST'])
 # @permission_classes([IsAuthenticated])
 def getGrupaUser(request):
-    # user=request.producent
+    user=request.user.id
     if request.method == 'GET':
-        model_get=GrupaUser.objects.all()
+        model_get=GrupaUser.objects.all().filter(user=user) 
         serializer=GrupaUserSerializer(model_get,many=True)
         return Response(serializer.data)
     elif request.method == 'POST':
         request_data = JSONParser().parse(request)
+        request_data['user']=user
+        request_data['allow']=False
         serializer = GrupaUserSerializer(data=request_data)
         if serializer.is_valid():
             serializer.save()
             return Response({'message': 'dodano'}) 
         else:
-            return Response({'message': 'blad validaci'}, status=status.HTTP_417_EXPECTATION_FAILED) 
+            return Response({'message': 'blad validaci','error':serializer.errors}, status=status.HTTP_417_EXPECTATION_FAILED) 
        
 
 @api_view(['GET','PUT','DELETE'])
@@ -151,6 +168,41 @@ def getGrupaUser_pk(request,pk):
     elif request.method == 'DELETE': 
         model_get.delete() 
         return Response({'message': 'deleted successfully!'}, status=status.HTTP_200_OK)
+
+
+@api_view(['GET','PUT','DELETE'])
+# @permission_classes([IsAuthenticated])
+def getGrupaUserGrupa_wybrany_pk(request,pk):
+    try: 
+        model_get = GrupaUser.objects.all().filter(grupa=pk) 
+    except : 
+        return Response({'message': 'nie istnieje'}, status=status.http_204_no_content) 
+ 
+    if request.method == 'GET': 
+        get_serializer = GrupaUserSerializer(model_get,many=True) 
+        return Response(get_serializer.data) 
+    elif request.method == 'PUT': 
+        serializer = GrupaUserSerializer(instance = model_get, data=request.data, partial = True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    elif request.method == 'DELETE': 
+        model_get.delete() 
+        return Response({'message': 'deleted successfully!'}, status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+# @permission_classes([IsAuthenticated])
+def getGrupaUserGrupa_wybrany_user_pk(request,pk):
+    try: 
+        model_get = GrupaUser.objects.all().filter(user=pk) 
+    except : 
+        return Response({'message': 'nie istnieje'}, status=status.http_204_no_content) 
+    get_serializer = GrupaUserSerializer(model_get,many=True) 
+    return Response(get_serializer.data) 
+   
+
 
 @api_view(['GET','PUT','DELETE'])
 # @permission_classes([IsAuthenticated])

@@ -22,21 +22,30 @@ async function getall() {
       throw new Error('błąd');
     }
     }
+    async function get_wybrany_id(id:number) {
+      try {
+        const grupy = axios.get(API_URL + "grupausergrupa_wybrany/"+id, { headers: authHeader() })
+     
+        return grupy
+      } catch (error) {
+        console.log("alaasd")
+        throw new Error('błąd');
+      }
+      }
 
 
-    export const create = (nazwa_grupa:string) => {
+    export const create = (grupa:number) => {
 
       return axios.post(API_URL + "grupauser/", {
-        nazwa_grupa,
+        grupa,
       }, { headers: authHeader() });
 
 
       
     };
-    export const change_id = (nazwa_grupa:string,id:number) => {
-      console.log(id+nazwa_grupa)
+    export const change_id = (allow:boolean,id:number) => {
       return axios.put(API_URL + "grupauser/"+id, {id,
-        nazwa_grupa,
+        allow,
       }, { headers: authHeader() });
 
 
@@ -52,6 +61,6 @@ async function getall() {
     };
 
   const GrupaUserService = {
-    getall,get_id,create,delete_id,change_id
+    getall,get_id,create,delete_id,change_id,get_wybrany_id
   }
 export default GrupaUserService

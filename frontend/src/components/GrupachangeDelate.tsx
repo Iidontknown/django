@@ -3,23 +3,22 @@ import GrupyService from "../services/GrupyService";
 import GrupaData from "../types/grupa";
 import GrupaUserchangeDelate from "./GrupaUserchangeDelate";
 
-function GrupachangeDelate({ id, nazwa_grupa }: GrupaData) {
+function GrupachangeDelate(val: GrupaData) {
   const [Error_nazwa_grupa, setError_nazwa_grupa] = useState<string>("");
   const [nazwa_grupa_input, setnazwa_grupa_input] =
-    useState<string>(nazwa_grupa);
-
+    useState<string>(val.nazwa_grupa);
   const [ZmienNazwe_input, setZmienNazwe_input] = useState<boolean>();
   const [isValid, setisValid] = useState<boolean>(true);
   const nazwa_grupa_regexp = RegExp(/^[A-Za-z][A-Za-z0-9_]{5,25}$/g);
 
   const changeRow = () => {
-console.log('asdsad'+id)
+console.log('asdsad'+val.id)
     if (isValid) {
       const confirmBox = window.confirm(
         "Czy zmienić nazwę grupy na:" + nazwa_grupa_input
       );
       if (confirmBox === true) {
-        GrupyService.change_id(nazwa_grupa_input, id)
+        GrupyService.change_id(nazwa_grupa_input, val.id)
           .then((response: any) => {
             window.alert("Zmieniono");
             console.log(response.data);
@@ -137,14 +136,14 @@ console.log('asdsad'+id)
               <button
                 className="btn btn-danger p-1"
                 type="submit"
-                onClick={() => deleteRow(id, nazwa_grupa)}
+                onClick={() => deleteRow(val.id, val.nazwa_grupa)}
               >
                 Usuń grupę
               </button>
             </div>
           </div>
         </div>
-        <GrupaUserchangeDelate {...id} ></GrupaUserchangeDelate>
+        <GrupaUserchangeDelate {...val} ></GrupaUserchangeDelate>
     </>
   );
 }

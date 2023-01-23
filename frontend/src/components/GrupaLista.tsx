@@ -14,6 +14,8 @@ import Grupaadd from "./Grupaadd";
 import GrupachangeDelate from './GrupachangeDelate';
 const GrupaLista: React.FC =  () => {
     const [grupy, setGrupy] = useState<Array<GrupaData>>([]);
+    
+const [reload, setreload] = useState<boolean>(false);
     const [AktualnaGrupa, setAktualnaGrupa] = useState<GrupaData | null>(null);
     const [AktualnyId, setAktualnyId] = useState<number>(-1);
     const [nazwa_grupa_dod, setnazwa_grupa_dod] = useState<string>("");
@@ -22,7 +24,7 @@ const GrupaLista: React.FC =  () => {
     const notify = () => toast("Wow so easy !");
     useEffect(() => {
         getallgrupa();
-    }, []);
+    }, [reload]);
 
     const validationSchema = Yup.object().shape({
         nazwa_grupa: Yup.string()
@@ -43,7 +45,7 @@ const GrupaLista: React.FC =  () => {
 
     const getallgrupa = () => {
         
-        GrupyService.getGrupaall().then((response: any) => {
+        GrupyService.get().then((response: any) => {
             setGrupy(response.data)
             console.log(response.data)
             
