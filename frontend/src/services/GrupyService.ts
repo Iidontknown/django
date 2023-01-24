@@ -33,7 +33,16 @@ async function get() {
       throw new Error('błąd');
     }
     }
-
+    async function get_katalogwherekataloggrupa(id:number) {
+      try {
+        const grupy = axios.get(API_URL + "grupawherekatalog_grupa/"+id, { headers: authHeader() })
+     
+        return grupy
+      } catch (error) {
+        console.log("alaasd")
+        throw new Error('błąd');
+      }
+      }
 
     export const create = (nazwa_grupa:string) => {
 
@@ -63,6 +72,6 @@ async function get() {
     };
 
   const GrupyService = {
-    get,getGrupa,create,delete_id,change_id,getall
+    get,getGrupa,create,delete_id,change_id,getall,get_katalogwherekataloggrupa
   }
 export default GrupyService

@@ -25,7 +25,7 @@ const  MenuBar: React.FC = () => {
         {currentUser && (<>
         <Nav.Link href="/konto" className='text-white'>Konto</Nav.Link>
         <Nav.Link href="/lista"className='text-white'>Zarządzaj Katalogami</Nav.Link>
-        <Nav.Link href="/katalog"className='text-white'>Wyszukaj</Nav.Link>
+        <Nav.Link href="/wyszukaj"className='text-white'>Wyszukaj</Nav.Link>
         <Nav.Link href="/dodaj"className='text-white'>+</Nav.Link>
         
         

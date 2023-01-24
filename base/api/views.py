@@ -119,6 +119,26 @@ def getGrupaall(request):
     grupa=Grupa.objects.filter(~Q(user = user)).exclude(id__in=pk__list)
     serializer=GrupaSerializer(grupa,many=True)
     return Response(serializer.data)
+
+@api_view(['GET'])
+# @permission_classes([IsAuthenticated])
+def getGrupawhereKatalog_Grupa(request,pk):
+    try: 
+        user=request.user.id
+        pk__list=Katalog_Grupa.objects.filter(katalog=pk).values_list('grupa', flat=True)
+
+        model_get=Grupa.objects.filter(user = user).exclude(id__in=pk__list)
+    except : 
+        return Response({'message': 'nie istnieje'}, status=status.HTTP_204_NO_CONTENT) 
+ 
+    get_serializer = GrupaSerializer(model_get,many=True) 
+    return Response(get_serializer.data, status=status.HTTP_200_OK) 
+    
+
+# def getGrupawhere(request):
+    
+#     serializer=GrupaSerializer(grupa,many=True)
+#     return Response(serializer.data)
    
  
 
@@ -128,7 +148,7 @@ def getGrupaall(request):
 
     
 @api_view(['GET', 'POST'])
-# @permission_classes([IsAuthenticated])
+# @permission_classes([IsAuthenti            ated])
 def getGrupaUser(request):
     user=request.user.id
     if request.method == 'GET':
@@ -421,7 +441,41 @@ def getKatalog_Grupa_pk(request,pk):
     elif request.method == 'DELETE': 
         model_get.delete() 
         return Response({'message': 'deleted successfully!'}, status=status.HTTP_200_OK)
-           
+
+@api_view(['GET','PUT','DELETE'])
+# @permission_classes([IsAuthenticated])
+def getKatalog_Grupa_katalog_pk(request,pk):
+    try: 
+        model_get = Katalog_Grupa.objects.all().filter(katalog=pk) 
+    except : 
+        return Response({'message': 'nie istnieje'}, status=status.http_204_no_content) 
+ 
+    if request.method == 'GET': 
+        get_serializer = Katalog_GrupaSerializer(model_get,many=True) 
+        return Response(get_serializer.data) 
+ 
+    elif request.method == 'DELETE': 
+        model_get.delete() 
+        return Response({'message': 'deleted successfully!'}, status=status.HTTP_200_OK)
+
+@api_view(['GET','PUT','DELETE'])
+# @permission_classes([IsAuthenticated])
+def getKatalog_Grupa_grupa_pk(request,pk):
+    try: 
+        model_get = Katalog_Grupa.objects.all().filter(grupa=pk) 
+    except : 
+        return Response({'message': 'nie istnieje'}, status=status.http_204_no_content) 
+ 
+    if request.method == 'GET': 
+        get_serializer = Katalog_GrupaSerializer(model_get,many=True) 
+        return Response(get_serializer.data) 
+ 
+    elif request.method == 'DELETE': 
+        model_get.delete() 
+        return Response({'message': 'deleted successfully!'}, status=status.HTTP_200_OK)
+    
+
+
 #Strona_katalog view
 
     

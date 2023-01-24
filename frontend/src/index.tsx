@@ -41,6 +41,8 @@ root.render(
           <Route path="dodaj" element={<Dodaj />} />
           <Route path="konto" element={<Konto />} />
           <Route path="wyszukaj" element={<Wyszukaj />} />
+          <Route path="wyszukaj/:tekst/" element={<Wyszukaj />} />
+          <Route path="wyszukaj/:id/:idstrona/" element={<Wyszukaj />} />
           <Route path="manage" element={<Manage />} />
           <Route path="katalog" element={<Katalog />} />
           <Route path="katalog/:id" element={<KatalogMenu />} />

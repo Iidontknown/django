@@ -13,9 +13,21 @@ import KatalogData from "./../../types/katalog";
 import Strona_katalogService from "../../services/Strona_katalogService";
 import strona_katalogData from "../../types/strona_katalog";
 import ZdjecieService from "../../services/ZdjecieService";
+import GrupaData from './../../types/grupa';
+import GrupyService from "../../services/GrupyService";
+import Katalog_GrupaService from "../../services/Katalog_GrupaService";
+import Katalog_GrupaData from "../../types/katalog_grupa";
 
 const KatalogMenu: React.FC = () => {
-  
+  const [selectGrupa, setselectGrupa] = React.useState<
+  GrupaData|null
+>(null);
+const [listagrup, setlistagrup] = React.useState<
+Array<GrupaData>
+>([]);
+const [listakataloggrupa, setlistakataloggrupa] = React.useState<
+    Array<Katalog_GrupaData>
+  >([]);
   const [Error_InuputImage, setError_InuputImage] = React.useState<string>("Dodaj Zdjecie strony");
   const [image, setImage] = React.useState<File|null>(null);
   const [inputnazwa_strony, setinputnazwa_strony] = React.useState<string>("");
@@ -46,13 +58,17 @@ const KatalogMenu: React.FC = () => {
     getkatalog(idKatalog_nadrzedny);
     const tempidkatalog = Number(idKatalog_nadrzedny);
     getStrona_katalogi(tempidkatalog);
+   
+    
   }, []);
   const getkatalog = (x: any) => {
     KatalogService.get_id(x)
       .then((response: any) => {
-        console.log(response.data);
+        console.log(response);
         setKatalog(response.data);
         setloading(false);
+        getGrupy()
+        
       })
       .catch((e: Error) => {
         seterrormessage("błąd z pokazanie katalogu z numerem: " + idKatalog_nadrzedny);
@@ -66,6 +82,29 @@ const KatalogMenu: React.FC = () => {
         console.log(response.data);
         setstrona_katalogi(response.data);
         console.log(strona_katalogi);
+      })
+      .catch((e: Error) => {
+        console.log(e);
+      });
+  };
+  const getGrupy = () => {
+    getkataloggrupa()
+    GrupyService.get_katalogwherekataloggrupa(idKatalog_nadrzedny)
+      .then((response: any) => {
+        console.log(response.data);
+        setlistagrup(response.data);
+        console.log(listagrup);
+      })
+      .catch((e: Error) => {
+        console.log(e);
+      });
+  };
+  const getkataloggrupa = () => {
+    Katalog_GrupaService.getall()
+      .then((response: any) => {
+        console.log(response.data);
+        setlistakataloggrupa(response.data);
+        console.log(listagrup);
       })
       .catch((e: Error) => {
         console.log(e);
@@ -166,8 +205,38 @@ const KatalogMenu: React.FC = () => {
           });
       }
     };
-
-
+    const SelectgrupaOnchange = (selected: SingleValue<GrupaData>) => {
+      setselectGrupa(selected)
+      
+    };
+    const dodajkataloggrupa = ( )=> {
+      if (selectGrupa!= null) {
+        Katalog_GrupaService.create(selectGrupa.id,idKatalog_nadrzedny)
+          .then((response: any) => {
+            console.log("dodano:" + response.data.id);
+            console.log(response);
+            window.alert("Dodano");
+            setselectGrupa(null)
+            getGrupy()
+          })
+          .catch((e: Error) => {
+            console.log(e);
+          });
+      }
+    };
+    const delatekataloggrupa = (id:number )=> {
+        Katalog_GrupaService.delete_id(id)
+          .then((response: any) => {
+            console.log("dodano:" + response.data.id);
+            console.log(response);
+            window.alert("usuniento");
+            setselectGrupa(null)
+            getGrupy()
+          })
+          .catch((e: Error) => {
+            console.log(e);
+          });
+    };
   return (
     <>
       {" "}
@@ -175,15 +244,7 @@ const KatalogMenu: React.FC = () => {
         <Container className="pt-1">
           <div className=" text-center">
             <h1 className="display-4">{katalog.nazwa_katalog} </h1>
-            {katalog.katalog_wlascicel == aktualnyUser.user_id ? (
-              <>
-                <p>Własiciel: {aktualnyUser.username} </p>
-              </>
-            ) : (
-              <>
-                <p>Własiciel: {katalog.katalog_wlascicel} </p>
-              </>
-            )}
+            <p>Własiciel: {katalog.katalog_wlascicel_username} </p>
           </div>
           <hr />
           {katalog.katalog_wlascicel == aktualnyUser.user_id ? (
@@ -231,6 +292,30 @@ const KatalogMenu: React.FC = () => {
                   </div>
                 </Row>
                 <hr></hr>
+                <Row>
+                  {listakataloggrupa&&
+              listakataloggrupa.map((val, key) => (<><Col >
+              {val.grupa_nazwa_grupa}<Button onClick={() => delatekataloggrupa(val.id)}>usuń</Button>
+              </Col>
+              </>))}</Row><Row>
+                <Select<GrupaData>
+                  getOptionLabel={(grupa: GrupaData) =>
+                    grupa.nazwa_grupa
+                  }
+                  getOptionValue={(grupa: GrupaData) =>
+                    grupa.id.toString()
+                  }
+                  options={listagrup}
+                  isClearable={true}
+                  backspaceRemovesValue={true}
+                  placeholder="wybierz grupę"
+                  onChange={SelectgrupaOnchange}
+                  value={selectGrupa}
+                />
+                </Row>
+                <button className="btn btn-success  "  onClick={dodajkataloggrupa} >
+                        Dodaj grupa katalog
+                      </button>
               </>
             ) : (
               <></>

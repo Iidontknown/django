@@ -10,10 +10,9 @@ import ModellService from "../services/ModellService";
 import ModellData from '../types/modell';
 import ProducentService from "../services/ProducentService";
 import ProducentData from '../types/producent';
+import ZdjecieData from './../types/zdjecie';
 export default function Katalog(): JSX.Element {
   const [Katalogi, setKatalogi] = React.useState<Array<KatalogData>>([]);
-  const [Modelle, setModelle] = React.useState<Array<ModellData>>([]);
-  const [Producent, setProducent] = React.useState<Array<ProducentData>>([]);
   React.useEffect(() => {
     getallkatalog();
   }, []);

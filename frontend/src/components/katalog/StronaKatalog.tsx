@@ -272,8 +272,7 @@ const StronaKatalog: React.FC = () => {
       )
         .then((response: any) => {
           console.log("dodano:" + response);
-
-          window.location.reload();
+          
           console.log(response);
         })
         .catch((e: Error) => {

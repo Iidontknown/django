@@ -105,36 +105,6 @@ class ModellSerializer(ModelSerializer):
         modell.save()
         return modell
 
-
-class Katalog_nadrzednySerializer(ModelSerializer):
-    class Meta:
-        model = Katalog_nadrzedny
-        fields = ('id', 'modell', 'nazwa_katalog', 'katalog_wlascicel')
-
-    def create(self, validated_data):
-        katalog_nadrzedny = Katalog_nadrzedny.objects.create(
-            modell=validated_data['modell'],
-            nazwa_katalog=validated_data['nazwa_katalog'],
-            katalog_wlascicel=validated_data['katalog_wlascicel'],
-        )
-        katalog_nadrzedny.save()
-        return katalog_nadrzedny
-
-
-class Katalog_GrupaSerializer(ModelSerializer):
-    class Meta:
-        model = Katalog_Grupa
-        fields = ('id', 'grupa', 'katalog')
-
-    def create(self, validated_data):
-        model_temp = Katalog_Grupa.objects.create(
-            grupa=validated_data['grupa'],
-            katalog=validated_data['katalog'],
-        )
-        model_temp.save()
-        return model_temp
-
-
 class Strona_katalogSerializer(ModelSerializer):
 
     zdjecie_image_Thumbnails = serializers.CharField(
@@ -154,6 +124,41 @@ class Strona_katalogSerializer(ModelSerializer):
         )
         model_temp.save()
         return model_temp
+
+class Katalog_nadrzednySerializer(ModelSerializer):
+    
+    katalog_wlascicel_username =serializers.CharField(source='katalog_wlascicel.username', read_only=True)
+    class Meta:
+        model = Katalog_nadrzedny
+        fields = ('id', 'modell', 'nazwa_katalog', 'katalog_wlascicel','katalog_wlascicel_username')
+
+    def create(self, validated_data):
+        katalog_nadrzedny = Katalog_nadrzedny.objects.create(
+            modell=validated_data['modell'],
+            nazwa_katalog=validated_data['nazwa_katalog'],
+            katalog_wlascicel=validated_data['katalog_wlascicel'],
+        )
+        katalog_nadrzedny.save()
+        return katalog_nadrzedny
+
+
+class Katalog_GrupaSerializer(ModelSerializer):
+    
+    grupa_nazwa_grupa = serializers.CharField(source='grupa.nazwa_grupa', read_only=True)
+    katalog_nazwa_katalog = serializers.CharField(source='katalog.nazwa_katalog', read_only=True)
+    class Meta:
+        model = Katalog_Grupa
+        fields = ('id', 'grupa', 'katalog','grupa_nazwa_grupa','katalog_nazwa_katalog')
+
+    def create(self, validated_data):
+        model_temp = Katalog_Grupa.objects.create(
+            grupa=validated_data['grupa'],
+            katalog=validated_data['katalog'],
+        )
+        model_temp.save()
+        return model_temp
+
+
 
 
 class Numer_katalogowySerializer(ModelSerializer):
