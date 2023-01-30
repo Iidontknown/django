@@ -27,6 +27,8 @@ urlpatterns = [
     path('modell/', views.getModell),
     path('modell/<int:pk>', views.getModell_pk),
     path('katalog_nadrzedny/', views.getKatalog_nadrzedny),
+    path('katalog_nadrzedny_all/', views.getKatalog_nadrzedny_all),
+    path('getKatalog_nadrzedny_typ_pk/<slug:typwyszukaj>/<int:pk>', views.getKatalog_nadrzedny_typ_pk),
     path('katalog_nadrzedny/<int:pk>', views.getKatalog_nadrzedny_pk),
     path('katalog_grupa/', views.getKatalog_Grupa),
     path('katalog_grupa/<int:pk>', views.getKatalog_Grupa_pk),

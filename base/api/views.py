@@ -353,6 +353,7 @@ def getModell_pk(request,pk):
 
 #Katalog_nadrzedny view
 
+ 
     
 @api_view(['GET', 'POST'])
 @permission_classes([IsAuthenticated])
@@ -376,7 +377,45 @@ def getKatalog_nadrzedny(request):
         else:
            
             return Response({'message': 'blad validaci'}, status=status.HTTP_400_BAD_REQUEST) 
-       
+
+
+
+@api_view(['GET'])
+# @permission_classes([IsAuthenticated])
+def getKatalog_nadrzedny_typ_pk(request,pk,typwyszukaj):
+    user=request.user.id
+    if typwyszukaj == 'model':
+        pk__list_grupa_user=Grupa.objects.filter(user=user).values_list('id', flat=True)
+        pk__list_grupa=GrupaUser.objects.filter(user=user,allow=True).values_list('grupa', flat=True)
+        pk__list_grupa=pk__list_grupa.union(pk__list_grupa_user,all=True)
+        pk__list_katalog_grupa=Katalog_Grupa.objects.filter(grupa__in=pk__list_grupa).values_list('katalog', flat=True)
+        katalog_nadrzedny=Katalog_nadrzedny.objects.filter(id__in = pk__list_katalog_grupa,modell=pk)| Katalog_nadrzedny.objects.filter(katalog_wlascicel = user)
+        serializer=Katalog_nadrzednySerializer(katalog_nadrzedny,many=True)
+        return Response(serializer.data)
+    elif typwyszukaj == 'producent':
+        pk__list_grupa_user=Grupa.objects.filter(user=user).values_list('id', flat=True)
+        pk__list_grupa=GrupaUser.objects.filter(user=user,allow=True).values_list('grupa', flat=True)
+        pk__list_grupa=pk__list_grupa.union(pk__list_grupa_user,all=True)
+        pk__list_katalog_grupa=Katalog_Grupa.objects.filter(grupa__in=pk__list_grupa).values_list('katalog', flat=True)
+        pk__list_modell=Modell.objects.filter(Producent=pk).values_list('id', flat=True)
+        katalog_nadrzedny=Katalog_nadrzedny.objects.filter(id__in = pk__list_katalog_grupa,modell__in=pk__list_modell)| Katalog_nadrzedny.objects.filter(katalog_wlascicel = user)
+        serializer=Katalog_nadrzednySerializer(katalog_nadrzedny,many=True)
+        return Response(serializer.data)
+  
+    return Response( status=status.HTTP_404_NOT_FOUND)
+
+@api_view(['GET'])
+# @permission_classes([IsAuthenticated])
+def getKatalog_nadrzedny_all(request):
+    user=request.user.id
+    pk__list_grupa_user=Grupa.objects.filter(user=user).values_list('id', flat=True)
+    pk__list_grupa=GrupaUser.objects.filter(user=user,allow=True).values_list('grupa', flat=True)
+    pk__list_grupa=pk__list_grupa.union(pk__list_grupa_user,all=True)
+    pk__list_katalog_grupa=Katalog_Grupa.objects.filter(grupa__in=pk__list_grupa).values_list('katalog', flat=True)
+    katalog_nadrzedny=Katalog_nadrzedny.objects.filter(id__in = pk__list_katalog_grupa) | Katalog_nadrzedny.objects.filter(katalog_wlascicel = user)
+    serializer=Katalog_nadrzednySerializer(katalog_nadrzedny,many=True)
+    return Response(serializer.data)  
+      
 
 @api_view(['GET','PUT','DELETE'])
 # @permission_classes([IsAuthenticated])

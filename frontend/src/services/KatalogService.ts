@@ -5,6 +5,17 @@ const API_URL = "http://localhost:8000/api/";
 
 async function getall() {
   try {
+    const grupy = axios.get(API_URL + "katalog_nadrzedny_all/", { headers: authHeader() })
+    return grupy
+  } catch (error) {
+    console.log("alaasd")
+    throw new Error('błąd');
+  }
+  }
+
+  
+async function getall_user() {
+  try {
     const grupy = axios.get(API_URL + "katalog_nadrzedny/", { headers: authHeader() })
     return grupy
   } catch (error) {
@@ -12,6 +23,26 @@ async function getall() {
     throw new Error('błąd');
   }
   }
+  async function get_model_id(id:number) {
+    try {
+      const grupy = axios.get(API_URL + "katalog_nadrzedny_all/modell/"+id, { headers: authHeader() })
+   
+      return grupy
+    } catch (error) {
+      console.log("alaasd")
+      throw new Error('błąd');
+    }
+    }
+    async function get_producent_id(id:number) {
+      try {
+        const grupy = axios.get(API_URL + "katalog_nadrzedny_all/producent/"+id, { headers: authHeader() })
+     
+        return grupy
+      } catch (error) {
+        console.log("alaasd")
+        throw new Error('błąd');
+      }
+      }
   async function get_id(id:number) {
     try {
       const grupy = axios.get(API_URL + "katalog_nadrzedny/"+id, { headers: authHeader() })
@@ -52,6 +83,6 @@ async function getall() {
     };
 
   const KatalogService = {
-    getall,get_id,create,delete_id,change_id
+    getall,get_id,create,delete_id,change_id,getall_user,get_model_id,get_producent_id
   }
 export default KatalogService

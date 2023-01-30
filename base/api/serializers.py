@@ -128,9 +128,12 @@ class Strona_katalogSerializer(ModelSerializer):
 class Katalog_nadrzednySerializer(ModelSerializer):
     
     katalog_wlascicel_username =serializers.CharField(source='katalog_wlascicel.username', read_only=True)
+    image_Thumbnails = serializers.StringRelatedField(source='strona_katalog_set.first.zdjecie_strona_katalog.image_Thumbnails', read_only=True)
+    
+
     class Meta:
         model = Katalog_nadrzedny
-        fields = ('id', 'modell', 'nazwa_katalog', 'katalog_wlascicel','katalog_wlascicel_username')
+        fields = ('id', 'modell', 'nazwa_katalog', 'katalog_wlascicel','katalog_wlascicel_username','image_Thumbnails')
 
     def create(self, validated_data):
         katalog_nadrzedny = Katalog_nadrzedny.objects.create(

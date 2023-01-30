@@ -17,7 +17,7 @@ export default function Katalog(): JSX.Element {
     getallkatalog();
   }, []);
   const getallkatalog = () => {
-    KatalogService.getall()
+    KatalogService.getall_user()
       .then((response: any) => {
         setKatalogi(response.data);
         console.log(response.data);
@@ -43,7 +43,10 @@ export default function Katalog(): JSX.Element {
                     <Card>
                       <Card.Img
                         variant="top"
-                        src="https://engine.od.ua/imgl/img_6140_1.jpg"
+                        src={
+                          "http://localhost:8000/api/" +
+                          val.image_Thumbnails
+                        }
                       />
                       <Card.Body>
                         <Card.Title>{val.nazwa_katalog}</Card.Title>

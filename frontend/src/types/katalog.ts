@@ -4,5 +4,6 @@ export default interface KatalogData {
     modell: number,
     katalog_wlascicel: number,
     opis_katalog:string,
-    katalog_wlascicel_username?:string
+    katalog_wlascicel_username?:string,
+    image_Thumbnails?:string
   }

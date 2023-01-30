@@ -60,7 +60,7 @@ const Konto: React.FC = () => {
   }, []);
 
   const getallkatalog = () => {
-    KatalogService.getall()
+    KatalogService.getall_user()
       .then((response: any) => {
         setKatalogi(response.data);
         console.log(response.data);

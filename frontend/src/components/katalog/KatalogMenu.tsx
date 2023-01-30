@@ -17,6 +17,7 @@ import GrupaData from './../../types/grupa';
 import GrupyService from "../../services/GrupyService";
 import Katalog_GrupaService from "../../services/Katalog_GrupaService";
 import Katalog_GrupaData from "../../types/katalog_grupa";
+import Pdf_katalog from '../Pdf_katalog';
 
 const KatalogMenu: React.FC = () => {
   const [selectGrupa, setselectGrupa] = React.useState<
@@ -237,16 +238,25 @@ const [listakataloggrupa, setlistakataloggrupa] = React.useState<
             console.log(e);
           });
     };
+    const data = {
+      image: 'https://example.com/image.jpg',
+      description: 'Description of the image'
+    };
+
   return (
     <>
       {" "}
       {!loading && (
         <Container className="pt-1">
+          
+          
           <div className=" text-center">
             <h1 className="display-4">{katalog.nazwa_katalog} </h1>
             <p>Własiciel: {katalog.katalog_wlascicel_username} </p>
           </div>
           <hr />
+
+          <Button onClick={() => Pdf_katalog()}>Drukuj</Button>
           {katalog.katalog_wlascicel == aktualnyUser.user_id ? (
               <>
                 <Row>

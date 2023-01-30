@@ -13,22 +13,50 @@ import { CardColumns } from "reactstrap";
 const API_URL = "http://localhost:8000/api/";
 
 const Wyszukaj: React.FC = () => {
- 
+
+  const [katalogi, setKatalogi] = React.useState<Array<KatalogData>>([]);
+  const [wyszukajinput, setwyszukajinput] = React.useState<string>('');
+  React.useEffect(() => {
+    getallkatalog();
+  }, []);
+
+  const getallkatalog = () => {
+    KatalogService.getall()
+      .then((response: any) => {
+        setKatalogi(response.data);
+        
+        console.log(response);
+      })
+      .catch((e: Error) => {
+        console.log(e);
+      });
+  };
+  const wyszukajonchange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    event.preventDefault();
+    const { name, value } = event.target;
+    setwyszukajinput(value)
+  }
+
+  
+
   return (
     <>
     <Container><Row ><div className="input-group rounded mt-3">
-  <input type="search" className="form-control rounded" placeholder="Wyszukaj" />
-  <span className="input-group-text border-0">
+  <input type="search" className="form-control rounded" placeholder="Wyszukaj" value={wyszukajinput} onChange={wyszukajonchange}/>
+  {/* <button  className="input-group-text border-0" onClick={wyszukajonclick}>
     Wyszukaj
-  </span>
+    </button > */}
 </div>
       </Row>
       <hr></hr>
       <CardColumns>
-      <Link
+      {katalogi.filter((filterval)=>filterval.nazwa_katalog.toLowerCase().includes(wyszukajinput.toLowerCase())).length > 0 ? (
+            katalogi.filter((filterval)=>filterval.nazwa_katalog.toLowerCase().includes(wyszukajinput.toLowerCase())).map((val, key) => (
+              <>
+              <Link
                    
                     to={
-                      "/katalog/"
+                      "/katalog/"+val.id
                     }
                   >
                     <Card>
@@ -36,14 +64,20 @@ const Wyszukaj: React.FC = () => {
                         variant="top"
                         height="160px"
                         src={
-                          "http://localhost:8000/api/CACHE/images/images/8756b894b223471f9d5338d6252ac668/beabb330940688f0582b8d33a6c5fe15.JPEG"                 
+                          "http://localhost:8000/api/" +
+                          val.image_Thumbnails
                         }
                       />
                       <Card.Body>
-                        <Card.Title>test</Card.Title>
+                        <Card.Title>{val.nazwa_katalog}</Card.Title>
                       </Card.Body>
                     </Card>{" "}
                   </Link>
+                  </>
+            ))
+          ) : (
+            <h1>Brak</h1>
+          )}
       </CardColumns>
       </Container>
     </>

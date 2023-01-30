@@ -487,6 +487,22 @@ const StronaKatalog: React.FC = () => {
   const SelectListaOnchange = (selected: SingleValue<ListaData>) => {
     setselectLista(selected)
   };
+  function usunStroneOnclick(): void {
+    const confirmBox = window.confirm("Czy usunąć stronę: "+strona_katalog.nazwa_strony  );
+    if (confirmBox === true) {
+      Strona_katalogService.delete_id(Number(idstrona))
+        .then((response: any) => {
+          window.alert("Usuniento");
+          console.log(response.data);
+
+          // window.location.reload();
+        })
+        .catch((e: Error) => {
+          console.log(e);
+        });
+    }
+  }
+
   return (
     <>
       <Container className="w-100 mh-100 p-20">
@@ -520,9 +536,18 @@ const StronaKatalog: React.FC = () => {
               </Row>
               <div>
                 {aktualnyUser.user_id == katalog.katalog_wlascicel ? (
+                  
                   <Row className="border p-1  mt-2 d-flex flex-row">
+                    
                     <div className="w-100 ">
+                    <Button
+                          className="btn btn-danger d-flex m-1 w-100 "
+                          onClick={usunStroneOnclick}
+                        >
+                          usuń stronę 
+                        </Button>
                       <InputGroup hasValidation className="m-2">
+                      
                         <InputGroup.Text>
                           numer katalogowy strona
                         </InputGroup.Text>
@@ -561,6 +586,7 @@ const StronaKatalog: React.FC = () => {
                         </Button>
                       </div>
                     </div>
+                  
                   </Row>
                 ) : (
                   <></>
