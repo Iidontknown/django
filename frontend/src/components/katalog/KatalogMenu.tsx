@@ -20,6 +20,9 @@ import Katalog_GrupaData from "../../types/katalog_grupa";
 import Pdf_katalog from '../Pdf_katalog';
 
 const KatalogMenu: React.FC = () => {
+
+
+
   const [selectGrupa, setselectGrupa] = React.useState<
   GrupaData|null
 >(null);
