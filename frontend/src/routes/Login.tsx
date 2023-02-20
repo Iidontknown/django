@@ -70,7 +70,7 @@ const Login: React.FC<Props> = () => {
 
               <div className="form-outline form-white mb-4 py-2">
                 
-              <label className="form-label" >Email</label>
+              <label className="form-label" >Nazwa użytkownika</label>
                 <Field type="text" name="username" className="form-control form-control-lg" />
                 <ErrorMessage
                           name="username"
@@ -90,7 +90,6 @@ const Login: React.FC<Props> = () => {
                         />
               </div>
 
-              <p className="small mb-5 pb-lg-2"><a className="text-white-50" href="#!">Zapomiałem hasło</a></p>
 
               <button className="btn btn-outline-light btn-lg px-5" type="submit">Login</button>
               {message && (

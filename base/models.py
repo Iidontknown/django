@@ -59,19 +59,18 @@ class Zdjecie(models.Model):
     class Watermark(object):
         def process(self, image):
             draw = ImageDraw.Draw(image)
-            font = ImageFont.truetype("arial.ttf", 10)
+            font = ImageFont.truetype("arial.ttf", 20)
             draw.text((0, 0), "katalog",
                       (0, 0, 0), font=font)
 
             return image
     image = ProcessedImageField(upload_to=upload_to,
-                                processors=[ResizeToFill(
-                                    1080, 1920), Watermark()],
+                                processors=[ Watermark()],
                                 format='JPEG',
                                 options={'quality': 90})
     image_Thumbnails = ImageSpecField(source='image',
                                       processors=[ResizeToFill(
-                                          400, 200), Watermark()],
+                                          400, 200)],
                                       format='JPEG',
                                       options={'quality': 60})
 

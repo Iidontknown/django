@@ -600,6 +600,9 @@ const StronaKatalog: React.FC = () => {
                           Numer katalogowy: {val.numer_katalogowy_strona}
                           {pokazId == key ? (
                             <>
+                            <br />{aktualnyUser.user_id ==
+                              katalog.katalog_wlascicel ? (
+                            <Button className="btn btn-danger w-100" onClick={() => console.log('asdasd')}>usuń umer katalogowy</Button>):(<></>)}
                               <br />
                               Opis: {val.opis_Numer_katalogowy}
                               <br />
@@ -734,13 +737,22 @@ const StronaKatalog: React.FC = () => {
                                 <></>
                               )}
                               {numer_katalogowy_czesc[key].length ? (
+                                aktualnyUser.user_id ==
+                                  katalog.katalog_wlascicel ? (
                                 numer_katalogowy_czesc[key].map(
+                                  (vali_li, key_li) => (
+                                    <>
+                                      <li>{vali_li.liczba_Numer_katalogowy_Czesc} x {vali_li.czesc_nazwa_Czesc} - {vali_li.opis_Numer_katalogowy_Czesc}-  <Button className="btn btn-danger " onClick={() => console.log('asdasd')}>usuń cześć</Button>
+                            </li>
+                                    </>
+                                  )
+                                )):( numer_katalogowy_czesc[key].map(
                                   (vali_li, key_li) => (
                                     <>
                                       <li>{vali_li.liczba_Numer_katalogowy_Czesc} x {vali_li.czesc_nazwa_Czesc} - {vali_li.opis_Numer_katalogowy_Czesc}</li>
                                     </>
                                   )
-                                )
+                                ))
                               ) : (
                                 <>
                                   <li>brak</li>

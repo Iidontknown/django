@@ -90,7 +90,6 @@ const Rejestracja: React.FC = () => {
 
   return (
     <>
-      <MenuBar />
       <Formik
         initialValues={{
           username: '',
@@ -105,7 +104,7 @@ const Rejestracja: React.FC = () => {
           <div className="container py-1 " >
             <div className="row d-flex justify-content-center align-items-center ">
               <div className="col-12 col-md-8 col-lg-6 col-xl-5">
-                <div className="card  text-white" style={{ backgroundColor: "#112111" }}>
+                <div className="card  text-white" style={{ backgroundColor: "#993333" }}>
                   <div className="card-body p-5 text-center">
 
                     <div className="mb-md-5 mt-md-4 pb-5">
@@ -168,6 +167,8 @@ const Rejestracja: React.FC = () => {
                       </div>
 
                       <button className="btn btn-outline-light btn-lg px-5" type="submit">Zarajestruj się</button>
+                      {message?
+                      <>
                       <div
                         className={
                           errorBoolMessage ? "alert alert-danger" : "alert alert-success"
@@ -175,12 +176,13 @@ const Rejestracja: React.FC = () => {
                         role="alert"
                       >
                         {message}
-                      </div>
+                      </div></>:<></>
+                      }
                     </div>
 
                     <div>
-                      <p className="mb-0">  <a href="zalogujsie" className="text-white fw-bold">Zaloguj się</a>
-                      </p>
+                      <button className="mb-0 btn btn-outline-light btn-lg px-5">  <a href="zalogujsie" className="text-white fw-bold">Zaloguj się</a>
+                      </button>
                     </div>
 
                   </div>

@@ -110,10 +110,10 @@ const Dodajlista = () => {
             Listy.map((val) => <><Link to={`/lista/${val.id}`}> <li key="{val.id}"> {val.nazwa_lista}
 
 
-            </li></Link><ol></ol> { numer_katalogowy_Lista && numer_katalogowy_Lista.map((valnumer) => 
+            </li></Link><ol></ol>Nazwa katalog | numer katalogowy { numer_katalogowy_Lista &&  numer_katalogowy_Lista.map((valnumer) => 
             valnumer.lista==val.id?(<>
 <p>
-{valnumer.numer_katalogowy_nazwa_katalog} | {valnumer.numer_katalogowy_numer_katalogowy_strona} |{valnumer.numer_katalogowy_opis_Numer_katalogowy} {val.id}
+{valnumer.numer_katalogowy_nazwa_katalog} | {valnumer.numer_katalogowy_numer_katalogowy_strona} |{valnumer.numer_katalogowy_opis_Numer_katalogowy} 
 </p></>
             ):(<></>)
             

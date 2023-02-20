@@ -165,12 +165,11 @@ const Konto: React.FC = () => {
         </ul>
         <Link to="/lista">
           <strong>Twoje listy czesci:</strong>
-        </Link> 
-        <Link to='/lista'>Dodaj</Link><ul>
+        </Link> <ul>
             {Listy &&
             Listy.map((val) => <Link to={`/lista/${val.id}`}> <li key={val.id}> {val.nazwa_lista}</li></Link>)}
             </ul>
-          <strong>Grupy do których nalerzysz lub wyałeś zaproszenie </strong>
+          <strong>lista grupy do których przynależysz lub wysłałeś prośbę o członkostwo. </strong>
         <ul> <Select<GrupaData>
                   getOptionLabel={(grupa: GrupaData) => grupa.nazwa_grupa}
                   getOptionValue={(grupa: GrupaData) => grupa.id.toString()}
@@ -183,7 +182,7 @@ const Konto: React.FC = () => {
                 />
                 <button onClick={dodajgrupauser}> Wyślij </button>
           {listagrupauser &&
-            listagrupauser.map((val) => <li key={val.id}> {val.grupa_nazwa_grupa} {val.allow?(<>Jesteś</>):(<>Oczekujesz na akceptacje</>)}</li>)}
+            listagrupauser.map((val) => <li key={val.id}> {val.grupa_nazwa_grupa} {val.allow?(<><b>należysz</b></>):(<><b>Oczekujesz na akceptacje</b></>)}</li>)}
         </ul>
       </div>
     </>

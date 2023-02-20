@@ -17,7 +17,6 @@ import GrupaData from './../../types/grupa';
 import GrupyService from "../../services/GrupyService";
 import Katalog_GrupaService from "../../services/Katalog_GrupaService";
 import Katalog_GrupaData from "../../types/katalog_grupa";
-import Pdf_katalog from '../Pdf_katalog';
 
 const KatalogMenu: React.FC = () => {
 
@@ -259,11 +258,12 @@ const [listakataloggrupa, setlistakataloggrupa] = React.useState<
           </div>
           <hr />
 
-          <Button onClick={() => Pdf_katalog()}>Drukuj</Button>
           {katalog.katalog_wlascicel == aktualnyUser.user_id ? (
               <>
                 <Row>
                   <div>
+                  <Button className="btn btn-danger" onClick={() => console.log('asdasd')}>usuń katalog</Button>
+                    <hr></hr>
                     <p>Dodaj Strone do katalogu</p>
                     <FormGroup>
                     <input
@@ -308,7 +308,7 @@ const [listakataloggrupa, setlistakataloggrupa] = React.useState<
                 <Row>
                   {listakataloggrupa&&
               listakataloggrupa.map((val, key) => (<><Col >
-              {val.grupa_nazwa_grupa}<Button onClick={() => delatekataloggrupa(val.id)}>usuń</Button>
+              {val.grupa_nazwa_grupa}<Button className="m-1" onClick={() => delatekataloggrupa(val.id)}>usuń</Button>
               </Col>
               </>))}</Row><Row>
                 <Select<GrupaData>
@@ -326,9 +326,10 @@ const [listakataloggrupa, setlistakataloggrupa] = React.useState<
                   value={selectGrupa}
                 />
                 </Row>
-                <button className="btn btn-success  "  onClick={dodajkataloggrupa} >
+                <button className="btn btn-success m-1 "  onClick={dodajkataloggrupa} >
                         Dodaj grupa katalog
                       </button>
+                      <hr></hr>
               </>
             ) : (
               <></>

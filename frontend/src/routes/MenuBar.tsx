@@ -21,12 +21,12 @@ const  MenuBar: React.FC = () => {
     <Navbar.Toggle/>
     <Navbar.Collapse id="basic-navbar-nav">
       <Nav className="me-auto">
-        <Nav.Link href="/" className='text-white'>Strona główna</Nav.Link>
+        {/* <Nav.Link href="/" className='text-white'>Strona główna</Nav.Link> */}
         {currentUser && (<>
         <Nav.Link href="/konto" className='text-white'>Konto</Nav.Link>
         <Nav.Link href="/katalog"className='text-white'>Zarządzaj Katalogami</Nav.Link>
         <Nav.Link href="/wyszukaj"className='text-white'>Wyszukaj</Nav.Link>
-        <Nav.Link href="/dodaj"className='text-white'>+</Nav.Link>
+        <Nav.Link href="/dodaj"className='text-white'>Dodaj</Nav.Link>
         
         
         <Nav.Link  onClick={wylogujsie} className='text-white'>Wyloguj się</Nav.Link>
