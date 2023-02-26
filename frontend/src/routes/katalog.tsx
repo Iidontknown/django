@@ -1,16 +1,8 @@
 import * as React from "react";
 import { Card, Button, CardGroup, Container, Col, Figure } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import { CardColumns } from "reactstrap";
-import MenuBar from "./MenuBar";
 import KatalogData from "../types/katalog";
-import GrupyService from "../services/GrupyService";
 import KatalogService from "../services/KatalogService";
-import ModellService from "../services/ModellService";
-import ModellData from '../types/modell';
-import ProducentService from "../services/ProducentService";
-import ProducentData from '../types/producent';
-import ZdjecieData from './../types/zdjecie';
 export default function Katalog(): JSX.Element {
   const [Katalogi, setKatalogi] = React.useState<Array<KatalogData>>([]);
   React.useEffect(() => {
@@ -37,7 +29,6 @@ export default function Katalog(): JSX.Element {
           {Katalogi.length != 0 ? (
             Katalogi.map((val, key) => (
               <>
-                {/* { temp='/katalog/'+{val.id}} */}
                 <Link to={`/katalog/${val.id}`}>
                   <Col>
                     <Card>

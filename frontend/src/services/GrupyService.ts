@@ -10,7 +10,7 @@ async function get() {
     const grupy = axios.get("http://localhost:8000/api/grupa/", { headers: authHeader() })
     return grupy
   } catch (error) {
-    console.log("alaasd")
+    
     throw new Error('błąd');
   }
   }
@@ -19,7 +19,7 @@ async function get() {
       const grupy = axios.get("http://localhost:8000/api/grupaall/", { headers: authHeader() })
       return grupy
     } catch (error) {
-      console.log("alaasd")
+      
       throw new Error('błąd');
     }
     }
@@ -29,7 +29,7 @@ async function get() {
    
       return grupy
     } catch (error) {
-      console.log("alaasd")
+      
       throw new Error('błąd');
     }
     }
@@ -39,7 +39,7 @@ async function get() {
      
         return grupy
       } catch (error) {
-        console.log("alaasd")
+        
         throw new Error('błąd');
       }
       }

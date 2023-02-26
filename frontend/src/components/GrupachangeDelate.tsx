@@ -1,18 +1,18 @@
-import React, {  useState } from "react";
+import React, { useState } from "react";
 import GrupyService from "../services/GrupyService";
 import GrupaData from "../types/grupa";
 import GrupaUserchangeDelate from "./GrupaUserchangeDelate";
 
 function GrupachangeDelate(val: GrupaData) {
   const [Error_nazwa_grupa, setError_nazwa_grupa] = useState<string>("");
-  const [nazwa_grupa_input, setnazwa_grupa_input] =
-    useState<string>(val.nazwa_grupa);
+  const [nazwa_grupa_input, setnazwa_grupa_input] = useState<string>(
+    val.nazwa_grupa
+  );
   const [ZmienNazwe_input, setZmienNazwe_input] = useState<boolean>();
   const [isValid, setisValid] = useState<boolean>(true);
   const nazwa_grupa_regexp = RegExp(/^[A-Za-z][A-Za-z0-9_]{5,25}$/g);
 
   const changeRow = () => {
-console.log('asdsad'+val.id)
     if (isValid) {
       const confirmBox = window.confirm(
         "Czy zmienić nazwę grupy na:" + nazwa_grupa_input
@@ -23,7 +23,7 @@ console.log('asdsad'+val.id)
             window.alert("Zmieniono");
             console.log(response.data);
 
-            // window.location.reload();
+            window.location.reload();
           })
           .catch((e: Error) => {
             console.log(e);
@@ -40,7 +40,7 @@ console.log('asdsad'+val.id)
           window.alert("Usuniento");
           console.log(response.data);
 
-          // window.location.reload();
+          window.location.reload();
         })
         .catch((e: Error) => {
           console.log(e);
@@ -78,72 +78,59 @@ console.log('asdsad'+val.id)
       default:
         break;
     }
-    // let errors =
-    // switch (name) {
-    //   case 'nazwa_grupa':
-    //      errors['nazwa_grupa'] = value.length < 5 ? 'Username must be 5 characters long!': '';
-    //      break;
-    //   default:
-    //     break;
-    // }
-  };
-
-  const changeGrupa = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    console.log("dupa");
-    if (isValid) {
-      console.log("dupa");
-    }
   };
 
   return (
     <>
-        <div className="row p-2 pt-5">
-          <div className="col ">
+      <div className="row p-2 pt-5">
+        <div className="col ">
+          {ZmienNazwe_input ? (
+            <input
+              type="text"
+              name="nazwa_grupa"
+              id="nazwa_grupa"
+              onChange={handleChange}
+              value={nazwa_grupa_input}
+              className={`form-control ${
+                Error_nazwa_grupa != "" ? "is-invalid" : ""
+              }`}
+            />
+          ) : (
+            <p>{nazwa_grupa_input}</p>
+          )}
+
+          <div className="invalid-feedback">{Error_nazwa_grupa}</div>
+        </div>
+
+        <div className="col ">
+          <div className=" btn-group d-flex justify-content-center">
             {ZmienNazwe_input ? (
-              <input
-                type="text"
-                name="nazwa_grupa"
-                id="nazwa_grupa"
-                onChange={handleChange}
-                value={nazwa_grupa_input}
-                className={`form-control ${
-                  Error_nazwa_grupa != "" ? "is-invalid" : ""
-                }`}
-              />
+              <button
+                className="btn btn-success p-1 "
+                onClick={() => changeRow()}
+              >
+                Zaakceptuj{" "}
+              </button>
             ) : (
-              <p>{nazwa_grupa_input}</p>
+              <button
+                className="btn btn-warning p-1 "
+                onClick={() => setZmienNazwe_input(true)}
+              >
+                Zmień nazwę{" "}
+              </button>
             )}
 
-            <div className="invalid-feedback">{Error_nazwa_grupa}</div>
-          </div>
-
-          <div className="col ">
-            <div className=" btn-group d-flex justify-content-center">
-              {ZmienNazwe_input ? (
-                <button className="btn btn-success p-1 " onClick={() =>changeRow()} >
-                  Zaakceptuj{" "}
-                </button>
-              ) : (
-                <button
-                  className="btn btn-warning p-1 "
-                  onClick={() => setZmienNazwe_input(true)}
-                >
-                  Zmień nazwę{" "}
-                </button>
-              )}
-
-              <button
-                className="btn btn-danger p-1"
-                type="submit"
-                onClick={() => deleteRow(val.id, val.nazwa_grupa)}
-              >
-                Usuń grupę
-              </button>
-            </div>
+            <button
+              className="btn btn-danger p-1"
+              type="submit"
+              onClick={() => deleteRow(val.id, val.nazwa_grupa)}
+            >
+              Usuń grupę
+            </button>
           </div>
         </div>
-        <GrupaUserchangeDelate {...val} ></GrupaUserchangeDelate>
+      </div>
+      <GrupaUserchangeDelate {...val}></GrupaUserchangeDelate>
     </>
   );
 }

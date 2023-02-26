@@ -8,7 +8,7 @@ async function getall() {
     const grupy = axios.get(API_URL + "katalog_nadrzedny_all/", { headers: authHeader() })
     return grupy
   } catch (error) {
-    console.log("alaasd")
+    
     throw new Error('błąd');
   }
   }
@@ -19,7 +19,7 @@ async function getall_user() {
     const grupy = axios.get(API_URL + "katalog_nadrzedny/", { headers: authHeader() })
     return grupy
   } catch (error) {
-    console.log("alaasd")
+    
     throw new Error('błąd');
   }
   }
@@ -29,7 +29,7 @@ async function getall_user() {
    
       return grupy
     } catch (error) {
-      console.log("alaasd")
+      
       throw new Error('błąd');
     }
     }
@@ -39,7 +39,7 @@ async function getall_user() {
      
         return grupy
       } catch (error) {
-        console.log("alaasd")
+        
         throw new Error('błąd');
       }
       }
@@ -49,7 +49,7 @@ async function getall_user() {
    
       return grupy
     } catch (error) {
-      console.log("alaasd")
+      
       throw new Error('błąd');
     }
     }

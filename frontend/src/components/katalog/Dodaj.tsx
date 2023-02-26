@@ -1,16 +1,15 @@
-import React, { useRef } from "react";
+import React from "react";
 import { useEffect } from "react";
 import { Row, Form, Col, Button } from "react-bootstrap";
 import ProducentService from "../../services/ProducentService";
 import ProducentData from "../../types/producent";
-import Select, { PropsValue, SingleValue } from "react-select";
+import Select, { SingleValue } from "react-select";
 import ModellData from "../../types/modell";
 import ModellService from "../../services/ModellService";
 import KatalogData from "../../types/katalog";
 import KatalogService from "../../services/KatalogService";
 import { NavigateFunction, useNavigate } from "react-router-dom";
 const Dodaj: React.FC = () => {
-  
   let navigate: NavigateFunction = useNavigate();
   const [listaProducent, setlistaProducent] = React.useState<
     Array<ProducentData>
@@ -22,7 +21,7 @@ const Dodaj: React.FC = () => {
     modell: 0,
     katalog_wlascicel: 0,
     nazwa_katalog: "",
-    opis_katalog:"",
+    opis_katalog: "",
   });
   const [selectProducentid, setselectProducentid] = React.useState<
     number | null
@@ -34,16 +33,12 @@ const Dodaj: React.FC = () => {
   const [selectModell, setselectModell] = React.useState<ModellData | null>(
     null
   );
-  const [errorModell, seterrorModell] = React.useState<String>(
-    ""
-  );
-  const [nazwa_katalog_vaule, setnazwa_katalog_vaule] = React.useState<string>(
-    ""
-  );
-  const [Error_nazwa_katalog, setError_nazwa_katalog] = React.useState<string>(
-    ""
-  );
-  
+
+  const [nazwa_katalog_vaule, setnazwa_katalog_vaule] =
+    React.useState<string>("");
+  const [Error_nazwa_katalog, setError_nazwa_katalog] =
+    React.useState<string>("");
+
   useEffect(() => {
     ProducentService.getall().then(
       (response) => {
@@ -55,12 +50,6 @@ const Dodaj: React.FC = () => {
         }
       },
       (error) => {
-        const _content =
-          (error.response &&
-            error.response.data &&
-            error.response.data.message) ||
-          error.message ||
-          error.toString();
         console.log(error);
       }
     );
@@ -77,12 +66,6 @@ const Dodaj: React.FC = () => {
         }
       },
       (error) => {
-        const _content =
-          (error.response &&
-            error.response.data &&
-            error.response.data.message) ||
-          error.message ||
-          error.toString();
         console.log(error);
       }
     );
@@ -104,8 +87,8 @@ const Dodaj: React.FC = () => {
   const SelectModelOnchange = (selected: SingleValue<ModellData>) => {
     if (selected != null) {
       setselectModellid(selected.id);
-      let temp :KatalogData=nowyKatalog
-      temp.modell=selected.id
+      let temp: KatalogData = nowyKatalog;
+      temp.modell = selected.id;
       setnowyKatalog(temp);
       setselectModell(selected);
     } else {
@@ -113,26 +96,22 @@ const Dodaj: React.FC = () => {
     }
   };
   const DodajKatalog = () => {
-    if(nowyKatalog.modell!=0){
-      if(selectModell !=null){
-      
-        KatalogService.create( nazwa_katalog_vaule,selectModell.id)
-        .then((response: any) => {
-          console.log("dodano:" );
-          console.log(response);
-          navigate("/lista");
-          window.location.reload();
-        })
-        .catch((e: Error) => {
-          console.log(e);
-        });
-    
-
-        
-      }else{
+    if (nowyKatalog.modell != 0) {
+      if (selectModell != null) {
+        KatalogService.create(nazwa_katalog_vaule, selectModell.id)
+          .then((response: any) => {
+            console.log("dodano:");
+            console.log(response);
+            navigate("/katalog");
+            window.location.reload();
+          })
+          .catch((e: Error) => {
+            console.log(e);
+          });
+      } else {
         window.alert("brak modelu");
       }
-    }else{
+    } else {
       window.alert("brak modelu");
     }
     console.log(nowyKatalog);
@@ -141,30 +120,30 @@ const Dodaj: React.FC = () => {
   function selectFiltermodelproducent(element: ModellData) {
     return element.Producent == selectProducentid;
   }
-  const nazwa_grupa_regexp = RegExp(
-    /^[A-Za-z][A-Za-z0-9_]{5,25}$/g
-  );
+  const nazwa_grupa_regexp = RegExp(/^[A-Za-z][A-Za-z0-9_]{5,25}$/g);
 
-  const nazwa_katalogInuputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const nazwa_katalogInuputChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     event.preventDefault();
     const { name, value } = event.target;
-    if (value.length < 5 ||value.length > 25 ) {
-      setError_nazwa_katalog("Nazwa katalogu nie może mieć mniej niż 5 znaków i wiecej niż 25.");
-      setnazwa_katalog_vaule(value)
+    if (value.length < 5 || value.length > 25) {
+      setError_nazwa_katalog(
+        "Nazwa katalogu nie może mieć mniej niż 5 znaków i wiecej niż 25."
+      );
+      setnazwa_katalog_vaule(value);
     } else {
       setError_nazwa_katalog("");
-      setnazwa_katalog_vaule(value)
+      setnazwa_katalog_vaule(value);
       if (!nazwa_grupa_regexp.test(value)) {
         setError_nazwa_katalog("Nie prawidłowy znak w nazwie katalogu.");
-          setnazwa_katalog_vaule(value)
-        } else {
-          setError_nazwa_katalog("");
-          setnazwa_katalog_vaule(value)
-        }
+        setnazwa_katalog_vaule(value);
+      } else {
+        setError_nazwa_katalog("");
+        setnazwa_katalog_vaule(value);
+      }
     }
-
-
-  }
+  };
   return (
     <>
       <Form>
@@ -213,23 +192,22 @@ const Dodaj: React.FC = () => {
               <Form.Label column lg={2}>
                 nazwa katalogu
               </Form.Label>
-              <Col >
+              <Col>
                 {/* <input type="text" name="nazwa_katalog" className="form-control" /> */}
-            <input
-              type="text"
-              name="nazwa_grupa"
-              id="nazwa_grupa"
-              onChange={nazwa_katalogInuputChange}
-              value={nazwa_katalog_vaule}
-              className={`form-control ${
-                Error_nazwa_katalog != "" ? "is-invalid" : ""
-              }`}
-            />
-            <div className="invalid-feedback">{Error_nazwa_katalog}</div>
+                <input
+                  type="text"
+                  name="nazwa_grupa"
+                  id="nazwa_grupa"
+                  onChange={nazwa_katalogInuputChange}
+                  value={nazwa_katalog_vaule}
+                  className={`form-control ${
+                    Error_nazwa_katalog != "" ? "is-invalid" : ""
+                  }`}
+                />
+                <div className="invalid-feedback">{Error_nazwa_katalog}</div>
               </Col>
             </Row>
             <br />
-           
           </div>
           <Row>
             <Col>

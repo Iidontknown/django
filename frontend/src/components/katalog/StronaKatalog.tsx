@@ -28,19 +28,26 @@ import CzescService from "../../services/CzescService";
 import { getCurrentUser } from "../../services/auth.service";
 import CzescData from "./../../types/czesc";
 import Select, { PropsValue, SingleValue } from "react-select";
-import ListaData from './../../types/lista';
+import ListaData from "./../../types/lista";
 import listaService from "../../services/ListaService";
 import numer_katalogowy_ListaService from "../../services/Numer_katalogowy_ListaService";
 
 const StronaKatalog: React.FC = () => {
   const regexp = RegExp(/^[A-Za-z][A-Za-z0-9_]{5,25}$/g);
-  
-  const [liczba_numer_katalogowy_lista, setliczba_numer_katalogowy_lista] = React.useState<Array<number>>([]);
+
+  const [liczba_numer_katalogowy_lista, setliczba_numer_katalogowy_lista] =
+    React.useState<Array<number>>([]);
   const [inputNazwa_Czesc, setInputNazwa_Czesc] = React.useState<string>("");
   const [errornazwa_Czesc, setErrornazwa_Czesc] = React.useState<string>("");
 
-  const [inputliczba_Numer_katalogowy_Czesc, setinputliczba_Numer_katalogowy_Czesc] = React.useState<number>(1);
-  const [errorliczba_Numer_katalogowy_Czesc, seterrorliczba_Numer_katalogowy_Czesc] = React.useState<string>("");
+  const [
+    inputliczba_Numer_katalogowy_Czesc,
+    setinputliczba_Numer_katalogowy_Czesc,
+  ] = React.useState<number>(1);
+  const [
+    errorliczba_Numer_katalogowy_Czesc,
+    seterrorliczba_Numer_katalogowy_Czesc,
+  ] = React.useState<string>("");
 
   const [inputOpis_Czesc, setInputOpis_Czesc] = React.useState<string>("");
   const [errorOpis_Czesc, setErrorOpis_Czesc] = React.useState<string>("");
@@ -52,12 +59,10 @@ const StronaKatalog: React.FC = () => {
     errorOpis_Numer_katalogowy_Czesc,
     setErrorOpis_Numer_katalogowy_Czesc,
   ] = React.useState<string>("");
-  
+
   const [selectCzesc, setselectCzesc] = React.useState<CzescData | null>(null);
   const [selectLista, setselectLista] = React.useState<ListaData | null>(null);
-  const [selectCzescid, setselectCzescid] = React.useState<number | null>(
-    null
-  );
+  const [selectCzescid, setselectCzescid] = React.useState<number | null>(null);
   const [error_opis_Numer_katalogowy, setError_opis_Numer_katalogowy] =
     React.useState<string>("");
   const [inputOpis_Numer_katalogowy, setInputOpis_Numer_katalogowy] =
@@ -125,7 +130,7 @@ const StronaKatalog: React.FC = () => {
     getStrona_katalog(tempidkatalogstrona);
     getNumer_katalogowye(tempidkatalogstrona);
     getkatalog(tempidkatalog);
-    getLista()
+    getLista();
   }, []);
   console.log(id, idstrona);
 
@@ -219,12 +224,13 @@ const StronaKatalog: React.FC = () => {
       });
   };
   const getLista = () => {
-    listaService.getall()
+    listaService
+      .getall()
       .then((response: any) => {
         console.log(response.data);
         setLista(response.data);
         console.log(lista);
-        setselectLista(lista[lista.length-1])
+        setselectLista(lista[lista.length - 1]);
       })
       .catch((e: Error) => {
         console.log(e);
@@ -249,37 +255,41 @@ const StronaKatalog: React.FC = () => {
   };
 
   const pokaz_opis = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setselectCzesc(null)
+    setselectCzesc(null);
     event.preventDefault();
     const button: HTMLButtonElement = event.currentTarget;
     console.log(button.id);
     getNumer_katalogowy_czesc(Number(button.name), Number(button.id));
   };
   const dodaj_do_listy = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setselectCzesc(null)
+    setselectCzesc(null);
     event.preventDefault();
     const button: HTMLButtonElement = event.currentTarget;
     console.log(button.id);
-    if(selectLista!=null ){
-      let temp=liczba_numer_katalogowy_lista[Number(button.id)]
-      if (temp=0){
-        temp=1
+    if (selectLista != null) {
+      let temp = liczba_numer_katalogowy_lista[Number(button.id)];
+      if ((temp = 0)) {
+        temp = 1;
       }
-      dodaj_numer_katalogowy_lista(Number(button.id),selectLista.id,temp)}
+      dodaj_numer_katalogowy_lista(Number(button.id), selectLista.id, temp);
+    }
   };
-  const dodaj_numer_katalogowy_lista = (numer_katalogowy:number,lista:number,liczba:number) => {
-      numer_katalogowy_ListaService.create(numer_katalogowy,lista,liczba
-      )
-        .then((response: any) => {
-          console.log("dodano:" + response);
-          
-          console.log(response);
-        })
-        .catch((e: Error) => {
-          console.log(e);
-        });
-  };
+  const dodaj_numer_katalogowy_lista = (
+    numer_katalogowy: number,
+    lista: number,
+    liczba: number
+  ) => {
+    numer_katalogowy_ListaService
+      .create(numer_katalogowy, lista, liczba)
+      .then((response: any) => {
+        console.log("dodano:" + response);
 
+        console.log(response);
+      })
+      .catch((e: Error) => {
+        console.log(e);
+      });
+  };
 
   const opis_Numer_katalogowyChange = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -315,7 +325,6 @@ const StronaKatalog: React.FC = () => {
     } else {
       seterrorliczba_Numer_katalogowy_Czesc("");
       setinputliczba_Numer_katalogowy_Czesc(Number(value));
-    
     }
   };
   const liczba_numer_katalogowy_listaChange = (
@@ -324,12 +333,10 @@ const StronaKatalog: React.FC = () => {
     event.preventDefault();
     const { name, value } = event.target;
     if (Number(value) < 1) {
-      
     } else {
-      let temp=liczba_numer_katalogowy_lista
-      temp[Number(name)]=Number(value)
+      let temp = liczba_numer_katalogowy_lista;
+      temp[Number(name)] = Number(value);
       setliczba_numer_katalogowy_lista(temp);
-    
     }
   };
   const numer_katalogowy_stronaChange = (
@@ -372,7 +379,6 @@ const StronaKatalog: React.FC = () => {
     }
   };
 
-
   const opis_Numer_katalogowy_CzescChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -412,7 +418,7 @@ const StronaKatalog: React.FC = () => {
     }
   };
   const dodajCzesc = () => {
-    if (selectCzesc==null) {
+    if (selectCzesc == null) {
       CzescService.create(inputNazwa_Czesc, inputOpis_Czesc)
         .then((response: any) => {
           console.log("dodano:" + response.data);
@@ -420,17 +426,19 @@ const StronaKatalog: React.FC = () => {
           dodajCzesc_numer_katalogowy(
             inputOpis_Numer_katalogowy_Czesc,
             Numer_katalogowye[pokazId].id,
-            response.data.id,Number(inputliczba_Numer_katalogowy_Czesc)
+            response.data.id,
+            Number(inputliczba_Numer_katalogowy_Czesc)
           );
         })
         .catch((e: Error) => {
           console.log(e);
         });
-    }else{
+    } else {
       dodajCzesc_numer_katalogowy(
         inputOpis_Numer_katalogowy_Czesc,
         Numer_katalogowye[pokazId].id,
-        selectCzesc.id,Number(inputliczba_Numer_katalogowy_Czesc)
+        selectCzesc.id,
+        Number(inputliczba_Numer_katalogowy_Czesc)
       );
     }
   };
@@ -456,13 +464,14 @@ const StronaKatalog: React.FC = () => {
     opis_Numer_katalogowy_Czesc: string,
     numer_katalogowy: number,
     czesc: number,
-    liczba_Numer_katalogowy_Czesc:number
+    liczba_Numer_katalogowy_Czesc: number
   ) => {
     if (true) {
       Numer_katalogowy_czescService.create(
         opis_Numer_katalogowy_Czesc,
         numer_katalogowy,
-        czesc,liczba_Numer_katalogowy_Czesc
+        czesc,
+        liczba_Numer_katalogowy_Czesc
       )
         .then((response: any) => {
           console.log("dodano:" + response.data);
@@ -478,17 +487,19 @@ const StronaKatalog: React.FC = () => {
   const SelectCzescOnchange = (selected: SingleValue<CzescData>) => {
     if (selected != null) {
       setselectCzescid(selected.id);
-      setselectCzesc(selected)
+      setselectCzesc(selected);
     } else {
       setselectCzescid(null);
-      setselectCzesc(null)
+      setselectCzesc(null);
     }
   };
   const SelectListaOnchange = (selected: SingleValue<ListaData>) => {
-    setselectLista(selected)
+    setselectLista(selected);
   };
   function usunStroneOnclick(): void {
-    const confirmBox = window.confirm("Czy usunąć stronę: "+strona_katalog.nazwa_strony  );
+    const confirmBox = window.confirm(
+      "Czy usunąć stronę: " + strona_katalog.nazwa_strony
+    );
     if (confirmBox === true) {
       Strona_katalogService.delete_id(Number(idstrona))
         .then((response: any) => {
@@ -536,18 +547,15 @@ const StronaKatalog: React.FC = () => {
               </Row>
               <div>
                 {aktualnyUser.user_id == katalog.katalog_wlascicel ? (
-                  
                   <Row className="border p-1  mt-2 d-flex flex-row">
-                    
                     <div className="w-100 ">
-                    <Button
-                          className="btn btn-danger d-flex m-1 w-100 "
-                          onClick={usunStroneOnclick}
-                        >
-                          usuń stronę 
-                        </Button>
+                      <Button
+                        className="btn btn-danger d-flex m-1 w-100 "
+                        onClick={usunStroneOnclick}
+                      >
+                        usuń stronę
+                      </Button>
                       <InputGroup hasValidation className="m-2">
-                      
                         <InputGroup.Text>
                           numer katalogowy strona
                         </InputGroup.Text>
@@ -586,7 +594,6 @@ const StronaKatalog: React.FC = () => {
                         </Button>
                       </div>
                     </div>
-                  
                   </Row>
                 ) : (
                   <></>
@@ -600,9 +607,18 @@ const StronaKatalog: React.FC = () => {
                           Numer katalogowy: {val.numer_katalogowy_strona}
                           {pokazId == key ? (
                             <>
-                            <br />{aktualnyUser.user_id ==
+                              <br />
+                              {aktualnyUser.user_id ==
                               katalog.katalog_wlascicel ? (
-                            <Button className="btn btn-danger w-100" onClick={() => console.log('asdasd')}>usuń umer katalogowy</Button>):(<></>)}
+                                <Button
+                                  className="btn btn-danger w-100"
+                                  onClick={() => console.log("asdasd")}
+                                >
+                                  usuń umer katalogowy
+                                </Button>
+                              ) : (
+                                <></>
+                              )}
                               <br />
                               Opis: {val.opis_Numer_katalogowy}
                               <br />
@@ -612,18 +628,15 @@ const StronaKatalog: React.FC = () => {
                               katalog.katalog_wlascicel ? (
                                 <div className="border p-1  mt-2 d-flex flex-row">
                                   <div className="w-100 ">
-                                  
-
-<InputGroup hasValidation className="m-2">
-
-                                      
+                                    <InputGroup hasValidation className="m-2">
                                       <InputGroup.Text>
                                         Czesc z bazy
                                       </InputGroup.Text>
-                                      <Select<CzescData> 
-                                      
+                                      <Select<CzescData>
                                         getOptionLabel={(czesc: CzescData) =>
-                                          czesc.nazwa_Czesc +' '+czesc.opis_Czesc
+                                          czesc.nazwa_Czesc +
+                                          " " +
+                                          czesc.opis_Czesc
                                         }
                                         getOptionValue={(czesc: CzescData) =>
                                           czesc.id.toString()
@@ -635,39 +648,39 @@ const StronaKatalog: React.FC = () => {
                                         onChange={SelectCzescOnchange}
                                         value={selectCzesc}
                                       />
-
-                                     
                                     </InputGroup>
 
                                     <InputGroup hasValidation className="m-2">
-                                  
-                                  <InputGroup.Text>
-                                    ilość czesc
-                                  </InputGroup.Text>
-                                 
+                                      <InputGroup.Text>
+                                        ilość czesc
+                                      </InputGroup.Text>
 
-                                  <Form.Control
-                                    type="number"
-                                    min='1'
-                                    required
-                                    value={inputliczba_Numer_katalogowy_Czesc}
-                                    onChange={liczba_Numer_katalogowy_CzescChange}
-                                    placeholder="Pozostaw puste jesli dodajesz z bazy"
-                                    isInvalid={
-                                      errorliczba_Numer_katalogowy_Czesc ? true : false
-                                    }
-                                  />
-                                  <Form.Control.Feedback type="invalid">
-                                    {errorliczba_Numer_katalogowy_Czesc}
-                                  </Form.Control.Feedback>
-                                </InputGroup>
+                                      <Form.Control
+                                        type="number"
+                                        min="1"
+                                        required
+                                        value={
+                                          inputliczba_Numer_katalogowy_Czesc
+                                        }
+                                        onChange={
+                                          liczba_Numer_katalogowy_CzescChange
+                                        }
+                                        placeholder="Pozostaw puste jesli dodajesz z bazy"
+                                        isInvalid={
+                                          errorliczba_Numer_katalogowy_Czesc
+                                            ? true
+                                            : false
+                                        }
+                                      />
+                                      <Form.Control.Feedback type="invalid">
+                                        {errorliczba_Numer_katalogowy_Czesc}
+                                      </Form.Control.Feedback>
+                                    </InputGroup>
 
                                     <InputGroup hasValidation className="m-2">
-                                  
                                       <InputGroup.Text>
                                         Nazwa Czesc
                                       </InputGroup.Text>
-                                     
 
                                       <Form.Control
                                         type="text"
@@ -683,7 +696,6 @@ const StronaKatalog: React.FC = () => {
                                         {errornazwa_Czesc}
                                       </Form.Control.Feedback>
                                     </InputGroup>
-
 
                                     <InputGroup hasValidation className="m-2">
                                       <InputGroup.Text>opis</InputGroup.Text>
@@ -738,21 +750,43 @@ const StronaKatalog: React.FC = () => {
                               )}
                               {numer_katalogowy_czesc[key].length ? (
                                 aktualnyUser.user_id ==
-                                  katalog.katalog_wlascicel ? (
-                                numer_katalogowy_czesc[key].map(
-                                  (vali_li, key_li) => (
-                                    <>
-                                      <li>{vali_li.liczba_Numer_katalogowy_Czesc} x {vali_li.czesc_nazwa_Czesc} - {vali_li.opis_Numer_katalogowy_Czesc}-  <Button className="btn btn-danger " onClick={() => console.log('asdasd')}>usuń cześć</Button>
-                            </li>
-                                    </>
+                                katalog.katalog_wlascicel ? (
+                                  numer_katalogowy_czesc[key].map(
+                                    (vali_li, key_li) => (
+                                      <>
+                                        <li>
+                                          {
+                                            vali_li.liczba_Numer_katalogowy_Czesc
+                                          }{" "}
+                                          x {vali_li.czesc_nazwa_Czesc} -{" "}
+                                          {vali_li.opis_Numer_katalogowy_Czesc}-{" "}
+                                          <Button
+                                            className="btn btn-danger "
+                                            onClick={() =>
+                                              console.log("asdasd")
+                                            }
+                                          >
+                                            usuń cześć
+                                          </Button>
+                                        </li>
+                                      </>
+                                    )
                                   )
-                                )):( numer_katalogowy_czesc[key].map(
-                                  (vali_li, key_li) => (
-                                    <>
-                                      <li>{vali_li.liczba_Numer_katalogowy_Czesc} x {vali_li.czesc_nazwa_Czesc} - {vali_li.opis_Numer_katalogowy_Czesc}</li>
-                                    </>
+                                ) : (
+                                  numer_katalogowy_czesc[key].map(
+                                    (vali_li, key_li) => (
+                                      <>
+                                        <li>
+                                          {
+                                            vali_li.liczba_Numer_katalogowy_Czesc
+                                          }{" "}
+                                          x {vali_li.czesc_nazwa_Czesc} -{" "}
+                                          {vali_li.opis_Numer_katalogowy_Czesc}
+                                        </li>
+                                      </>
+                                    )
                                   )
-                                ))
+                                )
                               ) : (
                                 <>
                                   <li>brak</li>
@@ -771,39 +805,37 @@ const StronaKatalog: React.FC = () => {
                               </Button>
                             </>
                           )}
-                         
                         </div>
                         <div className="w-100 btn-group d-flex justify-content-center">
-                        <Select<ListaData> 
-                                      
-                                      getOptionLabel={(lista: ListaData) =>
-                                        lista.nazwa_lista 
-                                      }
-                                      getOptionValue={(lista: ListaData) =>
-                                        lista.id.toString()
-                                      }
-                                      options={lista}
-                                      isClearable={false}
-                                      backspaceRemovesValue={true}
-                                      placeholder="Wybierz listę"
-                                      onChange={SelectListaOnchange}
-                                      value={selectLista}
-                                    />
-                                    <input
-                                    type="number"
-                                    min='1'
-                                    defaultValue={1}
-                                    required
-                                    name={val.id.toString()}
-                                    value={liczba_numer_katalogowy_lista[val.id]}
-                                    onChange={liczba_numer_katalogowy_listaChange}
-                                    placeholder="Pozostaw puste jesli dodajesz z bazy"
-                                   
-                                  />
-                          <Button className="btn btn-success d-flex " 
-                                onClick={dodaj_do_listy}
-                                id={val.id.toString()}
-                                >
+                          <Select<ListaData>
+                            getOptionLabel={(lista: ListaData) =>
+                              lista.nazwa_lista
+                            }
+                            getOptionValue={(lista: ListaData) =>
+                              lista.id.toString()
+                            }
+                            options={lista}
+                            isClearable={false}
+                            backspaceRemovesValue={true}
+                            placeholder="Wybierz listę"
+                            onChange={SelectListaOnchange}
+                            value={selectLista}
+                          />
+                          <input
+                            type="number"
+                            min="1"
+                            defaultValue={1}
+                            required
+                            name={val.id.toString()}
+                            value={liczba_numer_katalogowy_lista[val.id]}
+                            onChange={liczba_numer_katalogowy_listaChange}
+                            placeholder="Pozostaw puste jesli dodajesz z bazy"
+                          />
+                          <Button
+                            className="btn btn-success d-flex "
+                            onClick={dodaj_do_listy}
+                            id={val.id.toString()}
+                          >
                             Dodaj do listy{" "}
                           </Button>
                         </div>

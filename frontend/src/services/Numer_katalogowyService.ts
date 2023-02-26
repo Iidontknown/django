@@ -7,7 +7,7 @@ async function getwybrany(id:number) {
     const grupy = axios.get(API_URL + "numer_katalogowy_wybrany/"+id, { headers: authHeader() })
     return grupy
   } catch (error) {
-    console.log("alaasd")
+    
     throw new Error('błąd');
   }
   }
@@ -16,7 +16,7 @@ async function getall() {
     const grupy = axios.get(API_URL + "numer_katalogowy/", { headers: authHeader() })
     return grupy
   } catch (error) {
-    console.log("alaasd")
+    
     throw new Error('błąd');
   }
   }
@@ -26,7 +26,7 @@ async function getall() {
    
       return grupy
     } catch (error) {
-      console.log("alaasd")
+      
       throw new Error('błąd');
     }
     }

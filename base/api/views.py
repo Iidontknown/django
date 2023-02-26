@@ -52,16 +52,9 @@ def getRoutes(request):
 
     return Response(routes)
 
-# @api_view(['GET'])
-# # @permission_classes([IsAuthenticated])
-# def getGrupaa(request):
-#     user=2
-#     grupa=Grupa.objects.filter(user=user)
-#     serializer=GrupaSerializer(grupa,many=True)
-#     return Response(serializer.data)
+
  
 @api_view(['GET', 'POST'])
-
 @permission_classes([IsAuthenticated])
 def getGrupa(request):
     user=request.user.id
@@ -80,7 +73,8 @@ def getGrupa(request):
             serializer.save()
             return Response({'message': 'dodano'}) 
         else:
-            return Response({'message': 'sadasd','error':serializer.errors}, status=status.HTTP_400_BAD_REQUEST) 
+            return Response({'message': 'error','error':serializer.errors}, 
+                            status=status.HTTP_400_BAD_REQUEST) 
        
 
 @api_view(['GET','PUT','DELETE'])
@@ -111,7 +105,7 @@ def getGrupa_pk(request,pk):
         return Response({'message': 'deleted successfully!'}, status=status.HTTP_200_OK)
 
 @api_view(['GET'])
-# @permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 def getGrupaall(request):
     user=request.user.id
     pk__list=GrupaUser.objects.filter(user=user).values_list('grupa', flat=True)
@@ -121,7 +115,7 @@ def getGrupaall(request):
     return Response(serializer.data)
 
 @api_view(['GET'])
-# @permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 def getGrupawhereKatalog_Grupa(request,pk):
     try: 
         user=request.user.id
@@ -135,12 +129,6 @@ def getGrupawhereKatalog_Grupa(request,pk):
     return Response(get_serializer.data, status=status.HTTP_200_OK) 
     
 
-# def getGrupawhere(request):
-    
-#     serializer=GrupaSerializer(grupa,many=True)
-#     return Response(serializer.data)
-   
- 
 
 
 
@@ -148,7 +136,7 @@ def getGrupawhereKatalog_Grupa(request,pk):
 
     
 @api_view(['GET', 'POST'])
-# @permission_classes([IsAuthenti            ated])
+@permission_classes([IsAuthenticated])
 def getGrupaUser(request):
     user=request.user.id
     if request.method == 'GET':
@@ -168,7 +156,7 @@ def getGrupaUser(request):
        
 
 @api_view(['GET','PUT','DELETE'])
-# @permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 def getGrupaUser_pk(request,pk):
     try: 
         model_get = GrupaUser.objects.get(pk=pk) 
@@ -191,7 +179,7 @@ def getGrupaUser_pk(request,pk):
 
 
 @api_view(['GET','PUT','DELETE'])
-# @permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 def getGrupaUserGrupa_wybrany_pk(request,pk):
     try: 
         model_get = GrupaUser.objects.all().filter(grupa=pk) 
@@ -213,7 +201,7 @@ def getGrupaUserGrupa_wybrany_pk(request,pk):
         return Response({'message': 'deleted successfully!'}, status=status.HTTP_200_OK)
 
 @api_view(['GET'])
-# @permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 def getGrupaUserGrupa_wybrany_user_pk(request,pk):
     try: 
         model_get = GrupaUser.objects.all().filter(user=pk) 
@@ -225,11 +213,10 @@ def getGrupaUserGrupa_wybrany_user_pk(request,pk):
 
 
 @api_view(['GET','PUT','DELETE'])
-# @permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 def getGrupaUserGrupa_pk(request,pk):
     try: 
         model_get = GrupaUser.objects.all().filter(grupa=pk)
-        # model_get = GrupaUser.objects.filter 
     except : 
         return Response({'message': 'nie istnieje'}, status=status.http_204_no_content )
  
@@ -255,7 +242,6 @@ def getGrupaUserGrupa_pk(request,pk):
 @api_view(['GET', 'POST'])
 @permission_classes([IsAuthenticated])
 def getProducent(request):
-    # user=request.producent
     if request.method == 'GET':
         grupa=Producent.objects.all()
         serializer=ProducentSerializer(grupa,many=True)
@@ -308,7 +294,6 @@ def getProducent_pk(request,pk):
 @api_view(['GET', 'POST'])
 @permission_classes([IsAuthenticated])
 def getModell(request):
-    # user=request.producent
     if request.method == 'GET':
         modell=Modell.objects.all()
         serializer=ModellSerializer(modell,many=True)
@@ -381,7 +366,7 @@ def getKatalog_nadrzedny(request):
 
 
 @api_view(['GET'])
-# @permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 def getKatalog_nadrzedny_typ_pk(request,pk,typwyszukaj):
     user=request.user.id
     if typwyszukaj == 'model':
@@ -405,7 +390,7 @@ def getKatalog_nadrzedny_typ_pk(request,pk,typwyszukaj):
     return Response( status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['GET'])
-# @permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 def getKatalog_nadrzedny_all(request):
     user=request.user.id
     pk__list_grupa_user=Grupa.objects.filter(user=user).values_list('id', flat=True)
@@ -418,7 +403,7 @@ def getKatalog_nadrzedny_all(request):
       
 
 @api_view(['GET','PUT','DELETE'])
-# @permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 def getKatalog_nadrzedny_pk(request,pk):
     try: 
         model_get = Katalog_nadrzedny.objects.get(pk=pk) 
@@ -448,9 +433,8 @@ def getKatalog_nadrzedny_pk(request,pk):
 
     
 @api_view(['GET', 'POST'])
-# @permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 def getKatalog_Grupa(request):
-    # user=request.producent
     if request.method == 'GET':
         model_get=Katalog_Grupa.objects.all()
         serializer=Katalog_GrupaSerializer(model_get,many=True)
@@ -462,11 +446,11 @@ def getKatalog_Grupa(request):
             serializer.save()
             return Response({'message': 'dodano'}) 
         else:
-            return Response({'message': 'blad validaci'}) 
+            return Response({'message': 'error'}) 
        
 
 @api_view(['GET','PUT','DELETE'])
-# @permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 def getKatalog_Grupa_pk(request,pk):
     try: 
         model_get = Katalog_Grupa.objects.get(pk=pk) 
@@ -482,7 +466,7 @@ def getKatalog_Grupa_pk(request,pk):
         return Response({'message': 'deleted successfully!'}, status=status.HTTP_200_OK)
 
 @api_view(['GET','PUT','DELETE'])
-# @permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 def getKatalog_Grupa_katalog_pk(request,pk):
     try: 
         model_get = Katalog_Grupa.objects.all().filter(katalog=pk) 
@@ -498,7 +482,7 @@ def getKatalog_Grupa_katalog_pk(request,pk):
         return Response({'message': 'deleted successfully!'}, status=status.HTTP_200_OK)
 
 @api_view(['GET','PUT','DELETE'])
-# @permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 def getKatalog_Grupa_grupa_pk(request,pk):
     try: 
         model_get = Katalog_Grupa.objects.all().filter(grupa=pk) 
@@ -519,9 +503,8 @@ def getKatalog_Grupa_grupa_pk(request,pk):
 
     
 @api_view(['GET', 'POST'])
-# @permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 def getStrona_katalog(request):
-    # user=request.producent
     if request.method == 'GET':
         model_get=Strona_katalog.objects.all()
         serializer=Strona_katalogSerializer(model_get,many=True)
@@ -537,7 +520,7 @@ def getStrona_katalog(request):
        
 
 @api_view(['GET','PUT','DELETE'])
-# @permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 def getStrona_katalog_pk(request,pk):
     try: 
         model_get = Strona_katalog.objects.get(pk=pk) 
@@ -562,7 +545,7 @@ def getStrona_katalog_pk(request,pk):
 
 
 @api_view(['GET','PUT','DELETE'])
-# @permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 def getStrona_katalog_wybrany_pk(request,pk):
     try: 
         model_get = Strona_katalog.objects.all().filter(katalog_nadrzedny=pk) 
@@ -587,9 +570,8 @@ def getStrona_katalog_wybrany_pk(request,pk):
 
     
 @api_view(['GET', 'POST'])
-# @permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 def getNumer_katalogowy(request):
-    # user=request.producent
     if request.method == 'GET':
         model_get=Numer_katalogowy.objects.all()
         serializer=Numer_katalogowySerializer(model_get,many=True)
@@ -605,7 +587,7 @@ def getNumer_katalogowy(request):
        
 
 @api_view(['GET','PUT','DELETE'])
-# @permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 def getNumer_katalogowy_pk(request,pk):
     try: 
         model_get = Numer_katalogowy.objects.get(pk=pk) 
@@ -626,7 +608,7 @@ def getNumer_katalogowy_pk(request,pk):
         model_get.delete() 
         return Response({'message': 'deleted successfully!'}, status=status.HTTP_200_OK)
 @api_view(['GET','PUT','DELETE'])
-# @permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 def getNumer_katalogowy_wybrany_pk(request,pk):
     try: 
         model_get = Numer_katalogowy.objects.all().filter(strona_katalog=pk) 
@@ -651,9 +633,8 @@ def getNumer_katalogowy_wybrany_pk(request,pk):
 
     
 @api_view(['GET', 'POST'])
-# @permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 def getCzesc(request):
-    # user=request.producent
     if request.method == 'GET':
         model_get=Czesc.objects.all()
         serializer=CzescSerializer(model_get,many=True)
@@ -694,9 +675,8 @@ def getCzesc_pk(request,pk):
 
     
 @api_view(['GET', 'POST'])
-# @permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 def getNumer_katalogowy_Czesc(request):
-    # user=request.producent
     if request.method == 'GET':
         model_get=Numer_katalogowy_Czesc.objects.all()
         serializer=Numer_katalogowy_CzescSerializer(model_get,many=True)
@@ -712,7 +692,7 @@ def getNumer_katalogowy_Czesc(request):
        
 
 @api_view(['GET','PUT','DELETE'])
-# @permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 def getNumer_katalogowy_Czesc_pk(request,pk):
     try: 
         model_get = Numer_katalogowy_Czesc.objects.get(pk=pk) 
@@ -733,7 +713,7 @@ def getNumer_katalogowy_Czesc_pk(request,pk):
         model_get.delete() 
         return Response({'message': 'deleted successfully!'}, status=status.HTTP_200_OK)
 @api_view(['GET','PUT','DELETE'])
-# @permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 def getNumer_katalogowy_Czesc_wybrany_pk(request,pk):
     try: 
         model_get = Numer_katalogowy_Czesc.objects.all().filter(numer_katalogowy=pk) 
@@ -755,7 +735,7 @@ def getNumer_katalogowy_Czesc_wybrany_pk(request,pk):
         return Response({'message': 'deleted successfully!'}, status=status.HTTP_200_OK)
            
 @api_view(['GET', 'POST'])
-# @permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 def getZdjecie(request):
     
     if request.method == 'GET':
@@ -778,7 +758,7 @@ def getZdjecie(request):
         else:
             return Response({'message': 'blad validaci','data':data,'error':serializer.errors}, status=status.HTTP_400_BAD_REQUEST) 
 @api_view(['GET','PUT','DELETE'])
-# @permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 def getZdjecie_pk(request,pk):
     try: 
         model_get = Zdjecie.objects.get(pk=pk) 
@@ -806,7 +786,6 @@ def getZdjecie_pk(request,pk):
 def getLista(request):
     
     user=request.user.id
-    # user=request.producent
     if request.method == 'GET':
         model_get=Lista.objects.filter(user=user)
         serializer=ListaSerializer(model_get,many=True)
@@ -823,7 +802,7 @@ def getLista(request):
        
 
 @api_view(['GET','PUT','DELETE'])
-# @permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 def getLista_pk(request,pk):
     try: 
         model_get = Lista.objects.get(pk=pk) 
@@ -864,7 +843,7 @@ def getNumer_katalogowy_Lista(request):
        
 
 @api_view(['GET','PUT','DELETE'])
-# @permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 def getNumer_katalogowy_Lista_pk(request,pk):
     try: 
         model_get = Numer_katalogowy_Lista.objects.get(pk=pk) 
@@ -886,7 +865,7 @@ def getNumer_katalogowy_Lista_pk(request,pk):
         return Response({'message': 'deleted successfully!'}, status=status.HTTP_200_OK)
 
 @api_view(['GET','PUT','DELETE'])
-# @permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 
 def getNumer_katalogowy_Lista_wybrany_pk(request,pk):
     try: 

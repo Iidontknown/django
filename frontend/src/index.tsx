@@ -12,7 +12,6 @@ import ProtectedRoutes from "./routes/ProtectedRoutes";
 import GrupaLista from "./components/GrupaLista";
 import MenuBar from "./routes/MenuBar";
 import Dodaj from "./components/katalog/Dodaj";
-import Manage from "./components/katalog/Manage";
 import KatalogMenu from "./components/katalog/KatalogMenu";
 import StronaKatalog from "./components/katalog/StronaKatalog";
 import Wyszukaj from "./routes/Wyszukaj";
@@ -43,7 +42,6 @@ root.render(
           <Route path="wyszukaj" element={<Wyszukaj />} />
           <Route path="wyszukaj/:tekst/" element={<Wyszukaj />} />
           <Route path="wyszukaj/:id/:idstrona/" element={<Wyszukaj />} />
-          <Route path="manage" element={<Manage />} />
           <Route path="katalog" element={<Katalog />} />
           <Route path="katalog/:id" element={<KatalogMenu />} />
           <Route path="katalog/:id/:idstrona/" element={<StronaKatalog />} />

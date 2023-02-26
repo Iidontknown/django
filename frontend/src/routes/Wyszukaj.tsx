@@ -43,9 +43,7 @@ const Wyszukaj: React.FC = () => {
     <>
     <Container><Row ><div className="input-group rounded mt-3">
   <input type="search" className="form-control rounded" placeholder="Wyszukaj" value={wyszukajinput} onChange={wyszukajonchange}/>
-  {/* <button  className="input-group-text border-0" onClick={wyszukajonclick}>
-    Wyszukaj
-    </button > */}
+ 
 </div>
       </Row>
       <hr></hr>

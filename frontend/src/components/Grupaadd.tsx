@@ -37,15 +37,7 @@ const Grupaadd: React.FC = () => {
       default:
         break;
     }
-    // let errors =
-    // switch (name) {
-    //   case 'nazwa_grupa':
-    //      errors['nazwa_grupa'] = value.length < 5 ? 'Username must be 5 characters long!': '';
-    //      break;
-
-    //   default:
-    //     break;
-    // }
+  
   };
 
   const addGrupa = (event:  React.FormEvent<HTMLFormElement>) => {
@@ -75,9 +67,6 @@ const Grupaadd: React.FC = () => {
               id="nazwa_grupa"
               onChange={handleChange}
               value={nazwa_grupa}
-              // className={`form-control ${
-              //   Error_nazwa_grupa != "" ? "is-invalid" : ""
-              // }`}
             />
             <div className="invalid-feedback">{Error_nazwa_grupa}</div>
           </div>

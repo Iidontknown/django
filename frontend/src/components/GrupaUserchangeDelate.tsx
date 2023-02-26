@@ -2,7 +2,6 @@ import React, { useEffect, ChangeEvent, useState } from "react";
 import GrupaUserService from "../services/GrupaUserService";
 import GrupaData from "../types/grupa";
 import GrupaUserData from "../types/grupauser";
-import { Row } from "react-bootstrap";
 
 
 function GrupaUserchangeDelate( val : GrupaData ) {

@@ -4,7 +4,6 @@ import { Row, Form, Col, Button, Card, Container, FormGroup } from "react-bootst
 import ProducentService from "../../services/ProducentService";
 import ProducentData from "../../types/producent";
 import Select, { SingleValue } from "react-select";
-import ModellData from "../../types/modell";
 import { CardColumns } from "reactstrap";
 import { Link, useParams } from "react-router-dom";
 import { getCurrentUser } from "../../services/auth.service";

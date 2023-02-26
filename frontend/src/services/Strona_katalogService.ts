@@ -7,7 +7,7 @@ async function getall() {
     const grupy = axios.get(API_URL + "strona_katalog/", { headers: authHeader() })
     return grupy
   } catch (error) {
-    console.log("alaasd")
+    
     throw new Error('błąd');
   }
   }
@@ -17,7 +17,7 @@ async function getall() {
       const grupy = axios.get(API_URL + "strona_katalog_wybrany/"+id, { headers: authHeader() })
       return grupy
     } catch (error) {
-      console.log("alaasd")
+      
       throw new Error('błąd');
     }
     }
@@ -27,7 +27,7 @@ async function getall() {
    
       return grupy
     } catch (error) {
-      console.log("alaasd")
+      
       throw new Error('błąd');
     }
     }

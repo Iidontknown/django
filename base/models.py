@@ -3,7 +3,6 @@ from django.contrib.auth.models import User
 from PIL import ImageFont
 from PIL import ImageDraw
 import uuid
-# importing the library
 from PIL import Image
 import matplotlib.pyplot as plt
 import numpy as np
@@ -13,13 +12,13 @@ from imagekit.processors import ResizeToFill
 
 
 class Grupa(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     nazwa_grupa = models.TextField()
 
 
 class GrupaUser(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
-    grupa = models.ForeignKey(Grupa, on_delete=models.CASCADE, null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    grupa = models.ForeignKey(Grupa, on_delete=models.CASCADE)
     allow = models.BooleanField()
 
 

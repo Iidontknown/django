@@ -141,11 +141,6 @@ const Konto: React.FC = () => {
             Witaj: <strong>{currentUser.username}</strong>
           </h3>
         </header>
-        {/* <p>{refresh}</p>  
-       <strong>{access}</strong>  */}
-        {/* <p>
-        <strong>Id:</strong> {currentUser.user_id}
-      </p> */}
         <p>
           <strong>Email:</strong> {currentUser.email}
         </p>

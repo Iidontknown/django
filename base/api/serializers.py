@@ -42,12 +42,12 @@ class GrupaSerializer(ModelSerializer):
         fields = ('id', 'nazwa_grupa', 'user')
 
     def create(self, validated_data):
-        producent = Grupa.objects.create(
+        model_temp = Grupa.objects.create(
             nazwa_grupa=validated_data['nazwa_grupa'],
             user=validated_data['user'],
         )
-        producent.save()
-        return producent
+        model_temp.save()
+        return model_temp
 
 
 class GrupaUserSerializer(ModelSerializer):
@@ -224,20 +224,6 @@ class ZdjecieSerializer(ModelSerializer):
         model = Zdjecie
         fields = ('id', 'wlasciciel', 'opis_zdjecie',
                   'image', 'image_Thumbnails')
-
-    # def create(self, validated_data):
-    #     model_temp = Numer_katalogowy_Czesc.objects.create(
-    #         wlasciciel=validated_data['wlasciciel'],
-    #         opis_zdjecie=validated_data['opis_zdjecie'],
-    #         image_url=validated_data['image_url'],
-    #     )
-    #     model_temp.save()
-    #     return model_temp
-    # def save(self, *args, **kwargs):
-    #     if self.instance.image:
-    #         self.instance.image.delete()
-    #     return super().save(*args, **kwargs)
-
 
 class ListaSerializer(ModelSerializer):
     class Meta:
